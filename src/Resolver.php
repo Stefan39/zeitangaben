@@ -91,7 +91,7 @@ final class Resolver
     public function resolve(string $text, Context $context = new Context()): Result
     {
         $source = Normalizer::withOffsets($text);
-        $normalized = YearToken::mask($source, $this->stripGreetings($source->text));
+        $normalized = YearToken::mask($this->stripGreetings($source->text));
         $states = State::allFromText($normalized);
         $context = self::contextWith($states, $context);
 

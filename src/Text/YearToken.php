@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Stejac\Zeitangaben\Text;
 
-use Stejac\Zeitangaben\Calendar\Months;
-
 /**
  * The one definition of how a year is written next to an expression.
  *
  * Four digits count only inside the window 2000 to 2099. Two digits are read as 20xx, and only directly
- * after a numeric date or at the very end of the input or a clause. A number followed by a unit or by a
- * capitalised word is a quantity, not a year; such numbers are masked before any rule runs.
+ * after a numeric date or at the very end of the input or a clause. A number followed by a unit is a quantity,
+ * not a year; such numbers are masked before any rule runs. Any other word after a year changes nothing:
+ * dropping a stated year would be a silently wrong answer.
  *
  * @internal
  */
@@ -53,14 +52,9 @@ final class YearToken
     public const string ATTACHED_NAMED = '(?:\s+20\d\d)?';
 
     /** Words that describe a quantity when they follow a number. */
-    private const string UNIT = '~^\s*(?:euro|eur|€|%|prozent|personen|person|gaeste|gast|leute|kinder|erwachsene|km|m|qm|uhr|tage|naechte|wochen|monate|stunden|zimmer)(?![a-z])~';
+    private const string UNIT = '~^\s*(?:euro|eur|€|%|prozent|personen|person|gaeste|gast|leute|kinder|erwachsene|km|m|qm|uhr|tage|naechte|wochen|monate|stunden|zimmer|stueck|stk)(?![a-z])~';
 
     private const string CAPITALISED_WORD = '~^\s+([a-z])~';
-
-    /** A capitalised word after the year that is itself a time expression, as in "2028 Sommerferien". */
-    private const string TIME_TERM = '~^\s+(?:anfang|mitte|ende|kw|kalenderwoche|silvester|neujahr|heiligabend|weihnachten|ostern|pfingsten|karfreitag|ostermontag|pfingstmontag|himmelfahrt|fronleichnam|allerheiligen|[a-z]*ferien|'.Months::PATTERN.')\b~';
-
-    private const string COMPLETE_DATE_BEFORE = '~\d\.\s?(?:\d{1,2}\.|(?:'.Months::PATTERN.'))\s+$~';
 
     /**
      * Wraps a rule pattern with the optional leading and trailing year.
@@ -74,11 +68,11 @@ final class YearToken
      * Blanks every four-digit number in the window that is a quantity rather than a year.
      * Offsets stay valid, so the text still lines up with the original input.
      */
-    public static function mask(NormalizedText $source, string $text): string
+    public static function mask(string $text): string
     {
         preg_match_all('~(?<![\w.,/-])20\d\d(?!\d)~', $text, $numbers, PREG_OFFSET_CAPTURE);
         foreach ($numbers[0] as [, $offset]) {
-            if (self::isQuantity($source, $text, $offset)) {
+            if (1 === preg_match(self::UNIT, substr($text, $offset + 4))) {
                 $text = substr_replace($text, '    ', $offset, 4);
             }
         }
@@ -122,18 +116,6 @@ final class YearToken
     public static function fromDigits(string $digits): int
     {
         return 2000 + (int) $digits % 100;
-    }
-
-    private static function isQuantity(NormalizedText $source, string $text, int $offset): bool
-    {
-        $end = $offset + 4;
-        if (1 === preg_match(self::UNIT, substr($text, $end))) {
-            return true;
-        }
-
-        return self::isFollowedByCapital($source, $text, $end)
-            && 1 !== preg_match(self::TIME_TERM, substr($text, $end))
-            && 1 !== preg_match(self::COMPLETE_DATE_BEFORE, substr($text, 0, $offset));
     }
 
     private static function isFollowedByCapital(NormalizedText $source, string $text, int $end): bool

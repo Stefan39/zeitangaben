@@ -12,7 +12,7 @@ use Stejac\Zeitangaben\Context;
 use Stejac\Zeitangaben\NoExpression;
 use Stejac\Zeitangaben\Resolved;
 use Stejac\Zeitangaben\Resolver;
-use Stejac\Zeitangaben\Text\Normalizer;
+use Stejac\Zeitangaben\State;
 use Stejac\Zeitangaben\Text\YearToken;
 
 final class YearTokenTest extends TestCase
@@ -31,8 +31,10 @@ final class YearTokenTest extends TestCase
         yield 'range with relative year' => ['vom 12. bis 19. Oktober nächstes Jahr', '2027-10-12', 'vom 12. bis 19. Oktober nächstes Jahr'];
         yield 'leading year before a feast' => ['2028 Silvester', '2028-12-31', '2028 Silvester'];
         yield 'end of a clause' => ['im Juli 28, danach nicht', '2028-07-01', 'im Juli 28'];
-        yield 'capital noun after a named date keeps the year' => ['am 12. Juni 2028 Anreise', '2028-06-12', '12. Juni 2028'];
-        yield 'capital noun takes the number' => ['Silvester 2028 Raketen', '2026-12-31', 'Silvester'];
+        yield 'capital noun after a named date' => ['am 12. Juni 2028 Anreise', '2028-06-12', '12. Juni 2028'];
+        yield 'ordinary word after a stated year' => ['Silvester 2028 Party', '2028-12-31', 'Silvester 2028'];
+        yield 'unit after a number' => ['Silvester 2000 Euro', '2026-12-31', 'Silvester'];
+        yield 'counted pieces' => ['Silvester 2030 Stück', '2026-12-31', 'Silvester'];
         yield 'quantity before' => ['2028 Personen im Mai', '2027-05-01', 'im Mai'];
         yield 'currency sign' => ['im Oktober 2000€', '2026-10-01', 'im Oktober'];
         yield 'percent sign' => ['im Oktober 2030 %', '2026-10-01', 'im Oktober'];
@@ -77,11 +79,18 @@ final class YearTokenTest extends TestCase
         self::assertSame(ClarificationReason::MissingReferenceDate, $result->reason);
     }
 
+    public function testStatedYearOfASchoolHolidayStaysInFrontOfAnOrdinaryWord(): void
+    {
+        $result = Resolver::create()->resolve('Sommerferien 2028 Anreise', new Context(new \DateTimeImmutable('2026-10-30'), State::NI));
+
+        self::assertInstanceOf(Resolved::class, $result);
+        self::assertSame('2028-07-20', $result->period->start->format('Y-m-d'));
+        self::assertSame('2028-08-30', $result->period->end->format('Y-m-d'));
+    }
+
     public function testMaskKeepsOffsetsAndOnlyBlanksQuantities(): void
     {
-        $source = Normalizer::withOffsets('Silvester 2000 Euro, Neujahr 2028');
-
-        self::assertSame('silvester      euro, neujahr 2028', YearToken::mask($source, $source->text));
+        self::assertSame('silvester      euro, neujahr 2028', YearToken::mask('silvester 2000 euro, neujahr 2028'));
     }
 
     public function testOfWithoutYearGroupsIsNull(): void
