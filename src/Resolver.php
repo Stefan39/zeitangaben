@@ -20,6 +20,7 @@ use Stejac\Zeitangaben\Rule\MonthRule;
 use Stejac\Zeitangaben\Rule\PentecostRule;
 use Stejac\Zeitangaben\Rule\RelativeDayRule;
 use Stejac\Zeitangaben\Rule\RelativeToFeastRule;
+use Stejac\Zeitangaben\Rule\RelativeWeekNameRule;
 use Stejac\Zeitangaben\Rule\RelativeWeekRule;
 use Stejac\Zeitangaben\Rule\Rule;
 use Stejac\Zeitangaben\Rule\RuleMatch;
@@ -33,6 +34,7 @@ use Stejac\Zeitangaben\Rule\WeekdayRule;
 use Stejac\Zeitangaben\Rule\WeekendRule;
 use Stejac\Zeitangaben\School\BundledSchoolHolidays;
 use Stejac\Zeitangaben\School\SchoolHolidayProvider;
+use Stejac\Zeitangaben\Text\NormalizedText;
 use Stejac\Zeitangaben\Text\Normalizer;
 
 final class Resolver
@@ -63,6 +65,7 @@ final class Resolver
             new WeekendRule(),
             new MonthPartRule(),
             new SeasonRule(),
+            new RelativeWeekNameRule(),
             new RelativeWeekRule(),
             new RelativeDayRule(),
             new MonthRule(),
@@ -77,13 +80,14 @@ final class Resolver
 
     public function resolve(string $text, Context $context = new Context()): Result
     {
-        $normalized = $this->stripGreetings(Normalizer::normalize($text));
+        $source = Normalizer::withOffsets($text);
+        $normalized = $this->stripGreetings($source->text);
         $state = State::fromText($normalized);
         if (null !== $state) {
             $context = $context->withState($state);
         }
 
-        $found = $this->findExpressions($normalized);
+        $found = $this->findExpressions($normalized, $source);
         if ([] === $found) {
             return new NoExpression();
         }
@@ -110,11 +114,11 @@ final class Resolver
      *
      * @return array<string, array{Rule, RuleMatch}> keyed by rule class and expression, in text order
      */
-    private function findExpressions(string $text): array
+    private function findExpressions(string $text, NormalizedText $source): array
     {
         $found = [];
         foreach ($this->rules as $rule) {
-            foreach ($this->matchesOf($rule, $text) as $match) {
+            foreach ($this->matchesOf($rule, $text, $source) as $match) {
                 $text = substr_replace($text, str_repeat(' ', strlen($match->expression)), $match->offset, strlen($match->expression));
                 $found[$rule::class.'|'.$match->expression] ??= [$rule, $match];
             }
@@ -127,7 +131,7 @@ final class Resolver
     /**
      * @return list<RuleMatch>
      */
-    private function matchesOf(Rule $rule, string $text): array
+    private function matchesOf(Rule $rule, string $text, NormalizedText $source): array
     {
         if (false === preg_match_all('~'.$rule->pattern().'~', $text, $sets, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
             throw new InvalidRulePatternException(sprintf('Pattern of %s is not a valid regular expression.', $rule::class));
@@ -142,7 +146,7 @@ final class Resolver
                 }
             }
             [$expression, $offset] = $set[0];
-            $matches[] = new RuleMatch($expression, $groups, $offset);
+            $matches[] = new RuleMatch($expression, $source->originalOf($offset, strlen($expression)), $groups, $offset);
         }
 
         return $matches;
@@ -153,7 +157,7 @@ final class Resolver
      */
     private function multipleExpressions(array $found): Clarification
     {
-        $expressions = array_values(array_map(static fn (array $f): string => $f[1]->expression, $found));
+        $expressions = array_values(array_map(static fn (array $f): string => $f[1]->original, $found));
         $quoted = implode(', ', array_map(static fn (string $e): string => sprintf('„%s“', $e), $expressions));
 
         return new Clarification(

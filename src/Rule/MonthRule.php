@@ -27,13 +27,13 @@ final class MonthRule implements Rule
         if (isset($match->groups['year'])) {
             $period = self::monthOf((int) $match->groups['year'], Months::number($match->groups['month']));
 
-            return new Resolved($period, $match->expression);
+            return new Resolved($period, $match->original);
         }
         if (null === $context->referenceDate) {
-            return Clarifications::missingReferenceDate($match->expression);
+            return Clarifications::missingReferenceDate($match->original);
         }
 
-        return new Resolved($this->upcomingPeriod($match, $context->referenceDate), $match->expression);
+        return new Resolved($this->upcomingPeriod($match, $context->referenceDate), $match->original);
     }
 
     private function upcomingPeriod(RuleMatch $match, \DateTimeImmutable $reference): Period

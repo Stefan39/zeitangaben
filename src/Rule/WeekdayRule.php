@@ -23,8 +23,8 @@ final class WeekdayRule implements Rule
     {
         return new Clarification(
             ClarificationReason::Ambiguous,
-            sprintf('Welches Datum meinen Sie mit „%s“? Ein Wochentag allein nennt keinen bestimmten Tag.', $match->expression),
-            $match->expression,
+            sprintf('Welches Datum meinen Sie mit „%s“? Ein Wochentag allein nennt keinen bestimmten Tag.', $match->original),
+            $match->original,
         );
     }
 }

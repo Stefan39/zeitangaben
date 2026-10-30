@@ -28,12 +28,12 @@ final class LongWeekendRule implements Rule
     public function pattern(): string
     {
         return '\b(?:(?:am|ein|das)\s+)?(?:verlaengertes|verlaengerten|langes|langen)\s+wochenende\b'
-            .'(?:\s+im\s+(?<month>'.Months::PATTERN.')\b)?';
+            .'(?:\s+im\s+(?<month>'.Months::PATTERN.')\b'.FeastPeriod::YEAR_PATTERN.')?';
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
     {
-        $expression = $match->expression;
+        $expression = $match->original;
         if (!isset($match->groups['month'])) {
             return new Clarification(
                 ClarificationReason::Vague,
@@ -51,6 +51,7 @@ final class LongWeekendRule implements Rule
             sprintf('Welches Wochenende meinen Sie mit „%s“? Bitte nennen Sie das Datum.', $expression),
             static fn (int $year): Period => new Period(YearlyDate::on($year, $month, 1), YearlyDate::on($year, $month, 1)->modify('last day of this month')),
             fn (int $year): array => $this->candidatesIn($year, $month, $context),
+            FeastPeriod::yearOf($match),
         );
     }
 

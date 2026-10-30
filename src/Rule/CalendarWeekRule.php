@@ -24,11 +24,11 @@ final class CalendarWeekRule implements Rule
     {
         $week = (int) $match->groups['week'];
         if ($week < 1 || $week > 53) {
-            return Clarifications::invalidWeek($match->expression);
+            return Clarifications::invalidWeek($match->original);
         }
         $year = isset($match->groups['year']) ? (int) $match->groups['year'] : null;
         if (null === $year && null === $context->referenceDate) {
-            return Clarifications::missingReferenceDate($match->expression);
+            return Clarifications::missingReferenceDate($match->original);
         }
 
         $period = null === $year
@@ -36,8 +36,8 @@ final class CalendarWeekRule implements Rule
             : self::weekOf($year, $week);
 
         return null === $period
-            ? Clarifications::invalidWeek($match->expression)
-            : new Resolved($period, $match->expression);
+            ? Clarifications::invalidWeek($match->original)
+            : new Resolved($period, $match->original);
     }
 
     private static function weekOf(int $year, int $week): ?Period

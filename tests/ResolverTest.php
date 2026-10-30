@@ -62,8 +62,8 @@ final class ResolverTest extends TestCase
 
         self::assertInstanceOf(Clarification::class, $result);
         self::assertSame(ClarificationReason::MultipleExpressions, $result->reason);
-        self::assertStringContainsString('3. oktober', $result->question);
-        self::assertStringContainsString('5. oktober', $result->question);
+        self::assertStringContainsString('3. Oktober', $result->question);
+        self::assertStringContainsString('5. Oktober', $result->question);
     }
 
     public function testRepeatedIdenticalExpressionCountsOnce(): void
@@ -140,5 +140,39 @@ final class ResolverTest extends TestCase
 
         self::assertInstanceOf(NoExpression::class, Resolver::create()->resolve('Neujahrsfeier', $context));
         self::assertInstanceOf(NoExpression::class, Resolver::create()->resolve('Einheitsfeier', $context));
+    }
+
+    /**
+     * @return iterable<string, array{string, string}>
+     */
+    public static function quotedAsWritten(): iterable
+    {
+        yield 'umlaut' => ['Über Ostern', 'Über Ostern'];
+        yield 'upper case ascii' => ['UEBER OSTERN', 'UEBER OSTERN'];
+        yield 'decomposed umlaut' => ["Wir kommen im Fru\u{0308}hjahr", "im Fru\u{0308}hjahr"];
+        yield 'umlaut earlier in the text' => ['Für uns passt Übermorgen', 'Übermorgen'];
+        yield 'sharp s' => ['Wir kommen groß über Ostern', 'über Ostern'];
+    }
+
+    #[DataProvider('quotedAsWritten')]
+    public function testExpressionAndQuestionQuoteTheInputAsWritten(string $text, string $expected): void
+    {
+        $result = Resolver::create()->resolve($text, new Context(new \DateTimeImmutable('2026-09-16', new \DateTimeZone('UTC'))));
+
+        if ($result instanceof Clarification) {
+            self::assertSame($expected, $result->expression);
+            self::assertStringContainsString($expected, $result->question);
+        } else {
+            self::assertInstanceOf(Resolved::class, $result);
+            self::assertSame($expected, $result->expression);
+        }
+    }
+
+    public function testMultipleExpressionsAreQuotedAsWritten(): void
+    {
+        $result = Resolver::create()->resolve('Über Ostern oder im Frühjahr', new Context(new \DateTimeImmutable('2026-09-16', new \DateTimeZone('UTC'))));
+
+        self::assertInstanceOf(Clarification::class, $result);
+        self::assertStringContainsString('„Über Ostern“, „im Frühjahr“', $result->question);
     }
 }

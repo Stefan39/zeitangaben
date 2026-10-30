@@ -19,6 +19,7 @@ final class YearCandidates
     /**
      * @param callable(int): Period          $span       the span used to pick the year; it starts in that year
      * @param callable(int): list<Candidate> $candidates the candidates of the picked year
+     * @param ?int                           $year       an explicit year; then no reference date is needed
      */
     public static function clarify(
         string $expression,
@@ -27,16 +28,27 @@ final class YearCandidates
         string $question,
         callable $span,
         callable $candidates,
+        ?int $year = null,
     ): Clarification {
+        $picked = $year ?? self::pickYear($expression, $context, $span);
+        if ($picked instanceof Clarification) {
+            return $picked;
+        }
+
+        return new Clarification($reason, $question, $expression, $candidates($picked));
+    }
+
+    /**
+     * @param callable(int): Period $span
+     */
+    private static function pickYear(string $expression, Context $context, callable $span): int|Clarification
+    {
         if (null === $context->referenceDate) {
             return Clarifications::missingReferenceDate($expression);
         }
 
         $picked = NextOccurrence::of($context->referenceDate, $span);
-        if (null === $picked) {
-            return Clarifications::invalidDate($expression);
-        }
 
-        return new Clarification($reason, $question, $expression, $candidates((int) $picked->start->format('Y')));
+        return null === $picked ? Clarifications::invalidDate($expression) : (int) $picked->start->format('Y');
     }
 }

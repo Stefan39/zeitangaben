@@ -32,7 +32,7 @@ final class ExplicitDateRule implements Rule
 
     public function evaluate(RuleMatch $match, Context $context): Result
     {
-        $expression = $match->expression;
+        $expression = $match->original;
         if (isset($match->groups['date'])) {
             $date = self::parse($match->groups['date']);
 

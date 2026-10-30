@@ -23,8 +23,8 @@ final class RelativeToFeastRule implements Rule
     {
         return new Clarification(
             ClarificationReason::Vague,
-            sprintf('„%s“ ist kein genauer Zeitraum. Von welchem bis zu welchem Tag meinen Sie?', $match->expression),
-            $match->expression,
+            sprintf('„%s“ ist kein genauer Zeitraum. Von welchem bis zu welchem Tag meinen Sie?', $match->original),
+            $match->original,
         );
     }
 }

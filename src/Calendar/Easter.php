@@ -9,10 +9,13 @@ namespace Stejac\Zeitangaben\Calendar;
  */
 final class Easter
 {
+    public const int MAUNDY_THURSDAY = -3;
     public const int GOOD_FRIDAY = -2;
+    public const int EASTER_SUNDAY = 0;
     public const int EASTER_MONDAY = 1;
     public const int ASCENSION = 39;
     public const int PENTECOST_SATURDAY = 48;
+    public const int WHIT_SUNDAY = 49;
     public const int WHIT_MONDAY = 50;
     public const int CORPUS_CHRISTI = 60;
 

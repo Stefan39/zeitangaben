@@ -23,7 +23,7 @@ final class WeekendRule implements Rule
 
     public function evaluate(RuleMatch $match, Context $context): Result
     {
-        $expression = $match->expression;
+        $expression = $match->original;
         if (isset($match->groups['any'])) {
             return new Clarification(
                 ClarificationReason::Ambiguous,

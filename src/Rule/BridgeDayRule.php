@@ -26,7 +26,7 @@ final class BridgeDayRule implements Rule
 
     public function evaluate(RuleMatch $match, Context $context): Result
     {
-        $expression = $match->expression;
+        $expression = $match->original;
         $span = FeastPeriod::find(
             $expression,
             FeastPeriod::yearOf($match),

@@ -26,7 +26,7 @@ final class PentecostRule implements Rule
 
     public function evaluate(RuleMatch $match, Context $context): Result
     {
-        $expression = $match->expression;
+        $expression = $match->original;
         $feast = FeastPeriod::find(
             $expression,
             FeastPeriod::yearOf($match),

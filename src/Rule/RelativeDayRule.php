@@ -24,11 +24,11 @@ final class RelativeDayRule implements Rule
     public function evaluate(RuleMatch $match, Context $context): Result
     {
         if (null === $context->referenceDate) {
-            return Clarifications::missingReferenceDate($match->expression);
+            return Clarifications::missingReferenceDate($match->original);
         }
 
         $offset = self::OFFSETS[$match->groups['day']];
 
-        return new Resolved(Period::day($context->referenceDate->modify(sprintf('+%d days', $offset))), $match->expression);
+        return new Resolved(Period::day($context->referenceDate->modify(sprintf('+%d days', $offset))), $match->original);
     }
 }

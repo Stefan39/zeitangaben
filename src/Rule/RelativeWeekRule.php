@@ -26,7 +26,7 @@ final class RelativeWeekRule implements Rule
     public function evaluate(RuleMatch $match, Context $context): Result
     {
         if (null === $context->referenceDate) {
-            return Clarifications::missingReferenceDate($match->expression);
+            return Clarifications::missingReferenceDate($match->original);
         }
 
         $count = self::WORDS[$match->groups['count']] ?? (int) $match->groups['count'];
@@ -35,8 +35,8 @@ final class RelativeWeekRule implements Rule
 
         return new Clarification(
             ClarificationReason::Vague,
-            sprintf('„%s“ ist kein genauer Tag. Welchen Tag oder welche Tage meinen Sie?', $match->expression),
-            $match->expression,
+            sprintf('„%s“ ist kein genauer Tag. Welchen Tag oder welche Tage meinen Sie?', $match->original),
+            $match->original,
             [new Candidate($week, 'Kalenderwoche, Montag bis Sonntag')],
         );
     }

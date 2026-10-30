@@ -19,12 +19,12 @@ final class ChristmasRule implements Rule
     public function pattern(): string
     {
         return '\b(?:(?<between>zwischen\s+den\s+jahren)|(?<week>woche\s+vor\s+weihnachten)'
-            .'|(?<over>ueber\s+weihnachten)|(?<bare>(?<!vor\s)(?<!nach\s)weihnachten))\b';
+            .'|(?<over>ueber\s+weihnachten)|(?<bare>(?<!vor\s)(?<!nach\s)weihnachten))\b'.FeastPeriod::YEAR_PATTERN;
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
     {
-        $expression = $match->expression;
+        $expression = $match->original;
         $question = sprintf('Welchen Zeitraum meinen Sie mit „%s“? Es kommen zwei Zeiträume in Frage.', $expression);
         $candidates = match (true) {
             isset($match->groups['between']) => fn (int $y): array => $this->betweenTheYears($y),
@@ -39,6 +39,7 @@ final class ChristmasRule implements Rule
             $question,
             static fn (int $year): Period => new Period(YearlyDate::on($year, 12, 14), YearlyDate::on($year + 1, 1, 1)),
             $candidates,
+            FeastPeriod::yearOf($match),
         );
     }
 

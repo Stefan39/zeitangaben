@@ -19,4 +19,16 @@ final class NormalizerTest extends TestCase
     {
         self::assertSame('fruehjahr', Normalizer::normalize("Fru\u{0308}hjahr"));
     }
+
+    public function testOffsetsLeadBackToTheOriginalSpelling(): void
+    {
+        $text = "Fru\u{0308}hjahr für Straße";
+        $normalized = Normalizer::withOffsets($text);
+
+        self::assertSame(Normalizer::normalize($text), $normalized->text);
+        self::assertSame("Fru\u{0308}hjahr", $normalized->originalOf(0, 9));
+        self::assertSame('für', $normalized->originalOf(10, 4));
+        self::assertSame('Straße', $normalized->originalOf(15, 7));
+        self::assertSame('', $normalized->originalOf(0, 0));
+    }
 }

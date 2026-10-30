@@ -21,7 +21,7 @@ final class MonthPartRule implements Rule
 
     public function pattern(): string
     {
-        return '\b(?<part>anfang|mitte|ende)\s+(?<month>'.Months::PATTERN.')\b';
+        return '\b(?<part>anfang|mitte|ende)\s+(?<month>'.Months::PATTERN.')\b'.FeastPeriod::YEAR_PATTERN;
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
@@ -30,12 +30,13 @@ final class MonthPartRule implements Rule
         $month = Months::number($match->groups['month']);
 
         return YearCandidates::clarify(
-            $match->expression,
+            $match->original,
             $context,
             ClarificationReason::Vague,
-            sprintf('„%s“ ist kein genauer Zeitraum. Von welchem bis zu welchem Tag meinen Sie?', $match->expression),
+            sprintf('„%s“ ist kein genauer Zeitraum. Von welchem bis zu welchem Tag meinen Sie?', $match->original),
             fn (int $year): Period => $this->spanOf($part, $year, $month),
             fn (int $year): array => [$this->candidate($part, $year, $month)],
+            FeastPeriod::yearOf($match),
         );
     }
 

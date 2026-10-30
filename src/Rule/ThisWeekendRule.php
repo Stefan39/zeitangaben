@@ -22,11 +22,11 @@ final class ThisWeekendRule implements Rule
     public function evaluate(RuleMatch $match, Context $context): Result
     {
         if (null === $context->referenceDate) {
-            return Clarifications::missingReferenceDate($match->expression);
+            return Clarifications::missingReferenceDate($match->original);
         }
 
         $monday = $context->referenceDate->modify('monday this week');
 
-        return new Resolved(new Period($monday->modify('+4 days'), $monday->modify('+6 days')), $match->expression);
+        return new Resolved(new Period($monday->modify('+4 days'), $monday->modify('+6 days')), $match->original);
     }
 }

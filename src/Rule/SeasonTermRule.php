@@ -21,12 +21,10 @@ final class SeasonTermRule implements Rule
 
     public function evaluate(RuleMatch $match, Context $context): Result
     {
-        $term = ucfirst($match->expression);
-
         return new Clarification(
             ClarificationReason::NotACalendarTerm,
-            sprintf('„%s“ ist kein Kalenderbegriff. Welchen Zeitraum meinen Sie?', $term),
-            $match->expression,
+            sprintf('„%s“ ist kein Kalenderbegriff. Welchen Zeitraum meinen Sie?', $match->original),
+            $match->original,
         );
     }
 }

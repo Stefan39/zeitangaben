@@ -33,7 +33,7 @@ final class SchoolHolidayRule implements Rule
 
     public function evaluate(RuleMatch $match, Context $context): Result
     {
-        $expression = $match->expression;
+        $expression = $match->original;
         $state = $context->state;
         $year = FeastPeriod::yearOf($match);
         if (null === $state || (null === $year && null === $context->referenceDate)) {

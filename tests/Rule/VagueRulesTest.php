@@ -157,4 +157,113 @@ final class VagueRulesTest extends TestCase
         self::assertInstanceOf(Resolved::class, $result);
         self::assertSame('2026-09-19', $result->period->start->format('Y-m-d'));
     }
+
+    /**
+     * @return iterable<string, array{string}>
+     */
+    public static function yearlyExpressions(): iterable
+    {
+        yield 'christmas' => ['Weihnachten 2028'];
+        yield 'over christmas' => ['über Weihnachten 2028'];
+        yield 'week before christmas' => ['die Woche vor Weihnachten 2028'];
+        yield 'between the years' => ['zwischen den Jahren 2028'];
+        yield 'month part' => ['Ende Februar 2028'];
+        yield 'spring' => ['im Frühjahr 2028'];
+        yield 'summer' => ['im Sommer 2028'];
+        yield 'autumn' => ['im Herbst 2028'];
+        yield 'winter' => ['im Winter 2028'];
+        yield 'long weekend' => ['am langen Wochenende im Oktober 2028'];
+    }
+
+    #[DataProvider('yearlyExpressions')]
+    public function testAnExplicitYearIsHonouredWithoutReferenceDate(string $text): void
+    {
+        foreach ([null, '2026-09-16', '2031-01-01'] as $reference) {
+            $result = $this->clarify($text, $reference, State::NI);
+
+            self::assertNotSame(ClarificationReason::MissingReferenceDate, $result->reason);
+            self::assertNotSame([], $result->candidates);
+            foreach ($result->candidates as $candidate) {
+                self::assertSame('2028', $candidate->period->start->format('Y'), $text);
+            }
+        }
+    }
+
+    public function testMonthWithYearKeepsTheYear(): void
+    {
+        $result = Resolver::create()->resolve('im Juli 2028', new Context(new \DateTimeImmutable('2031-01-01')));
+
+        self::assertInstanceOf(Resolved::class, $result);
+        self::assertSame('2028-07-01', $result->period->start->format('Y-m-d'));
+    }
+
+    /**
+     * @return iterable<string, array{string, string}>
+     */
+    public static function singleDays(): iterable
+    {
+        yield 'gruendonnerstag' => ['Gründonnerstag 2028', '2028-04-13'];
+        yield 'karfreitag' => ['Karfreitag 2028', '2028-04-14'];
+        yield 'ostersonntag' => ['Ostersonntag 2028', '2028-04-16'];
+        yield 'ostermontag' => ['Ostermontag 2028', '2028-04-17'];
+        yield 'pfingstsonntag' => ['Pfingstsonntag 2028', '2028-06-04'];
+        yield 'pfingstmontag' => ['Pfingstmontag 2028', '2028-06-05'];
+        yield 'heiligabend' => ['Heiligabend 2028', '2028-12-24'];
+        yield 'erster weihnachtstag' => ['erster Weihnachtstag 2028', '2028-12-25'];
+        yield 'ersten weihnachtstag' => ['am ersten Weihnachtstag 2028', '2028-12-25'];
+        yield 'zweiter weihnachtstag' => ['2. Weihnachtstag 2028', '2028-12-26'];
+    }
+
+    #[DataProvider('singleDays')]
+    public function testSingleFeastDaysResolve(string $text, string $day): void
+    {
+        $result = Resolver::create()->resolve($text, new Context());
+
+        self::assertInstanceOf(Resolved::class, $result);
+        self::assertSame($day, $result->period->start->format('Y-m-d'));
+        self::assertSame($day, $result->period->end->format('Y-m-d'));
+    }
+
+    public function testMaundyThursdayDoesNotReachTheWeekdayRule(): void
+    {
+        $result = Resolver::create()->resolve('am Gründonnerstag', new Context(new \DateTimeImmutable(self::REFERENCE)));
+
+        self::assertInstanceOf(Resolved::class, $result);
+    }
+
+    public function testSundaysOfEasterAndPentecostCarryNoHolidayNote(): void
+    {
+        $result = Resolver::create()->resolve('Ostersonntag 2028', new Context(null, State::NI));
+        self::assertInstanceOf(Resolved::class, $result);
+        self::assertSame([], $result->notes);
+
+        $result = Resolver::create()->resolve('Gründonnerstag 2028', new Context(null, State::NI));
+        self::assertInstanceOf(Resolved::class, $result);
+        self::assertNotSame([], $result->notes);
+    }
+
+    public function testWinterRunsIntoTheLeapDayOfTheNextYear(): void
+    {
+        $result = $this->clarify('im Winter 2027', null);
+
+        self::assertSame('2028-02-29', $result->candidates[0]->period->end->format('Y-m-d'));
+    }
+
+    public function testSeasonWordsInsideOtherWordsDoNotFire(): void
+    {
+        foreach (['Sommerreifen', 'Winterdienst', 'Herbstlaub'] as $text) {
+            self::assertInstanceOf(NoExpression::class, Resolver::create()->resolve($text, new Context(new \DateTimeImmutable(self::REFERENCE))), $text);
+        }
+    }
+
+    public function testRelativeWeekNames(): void
+    {
+        $context = new Context(new \DateTimeImmutable(self::REFERENCE));
+        foreach (['diese Woche' => '2026-09-14', 'kommende Woche' => '2026-09-21', 'übernächste Woche' => '2026-09-28'] as $text => $monday) {
+            $result = Resolver::create()->resolve($text, $context);
+            self::assertInstanceOf(Resolved::class, $result);
+            self::assertSame($monday, $result->period->start->format('Y-m-d'));
+        }
+        self::assertSame(ClarificationReason::MissingReferenceDate, $this->clarify('diese Woche', null)->reason);
+    }
 }

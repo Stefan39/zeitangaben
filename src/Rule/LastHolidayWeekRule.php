@@ -23,8 +23,8 @@ final class LastHolidayWeekRule implements Rule
     {
         return new Clarification(
             ClarificationReason::Ambiguous,
-            sprintf('Die „%s“ hängt von den Ferien ab. Welche Ferien meinen Sie?', $match->expression),
-            $match->expression,
+            sprintf('Die „%s“ hängt von den Ferien ab. Welche Ferien meinen Sie?', $match->original),
+            $match->original,
         );
     }
 }
