@@ -72,6 +72,22 @@ final class Clarifications
         );
     }
 
+    /**
+     * The expression depends on the state and the text names several.
+     *
+     * @param list<State> $states
+     */
+    public static function severalStates(string $expression, array $states): Clarification
+    {
+        $names = implode(' und ', array_map(static fn (State $state): string => $state->germanName(), $states));
+
+        return new Clarification(
+            ClarificationReason::MissingState,
+            sprintf('Für welches Bundesland gilt „%s“? Sie nennen %s.', $expression, $names),
+            $expression,
+        );
+    }
+
     public static function outOfData(string $expression, State $state): Clarification
     {
         return new Clarification(

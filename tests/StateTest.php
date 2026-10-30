@@ -15,13 +15,21 @@ final class StateTest extends TestCase
      */
     public static function texts(): iterable
     {
-        yield 'name' => ['bayern', State::BY];
-        yield 'abbreviation nrw' => ['nrw', State::NW];
-        yield 'long name' => ['nordrhein-westfalen', State::NW];
+        yield 'name' => ['in bayern', State::BY];
+        yield 'abbreviation nrw' => ['aus nrw', State::NW];
+        yield 'long name' => ['in nordrhein-westfalen', State::NW];
         yield 'in sentence' => ['herbstferien in niedersachsen', State::NI];
-        yield 'transliterated' => ['thueringen', State::TH];
-        yield 'two-word name' => ['baden-wuerttemberg', State::BW];
-        yield 'not a whole word' => ['bayernwerk', null];
+        yield 'transliterated' => ['fuer thueringen', State::TH];
+        yield 'two-word name' => ['nach baden wuerttemberg', State::BW];
+        yield 'with article' => ['aus dem saarland', State::SL];
+        yield 'contracted article' => ['im saarland', State::SL];
+        yield 'labelled' => ['bundesland: hessen', State::HE];
+        yield 'not a whole word' => ['in bayernwerk', null];
+        yield 'bare name' => ['bayern', null];
+        yield 'surname' => ['frau berlin', null];
+        yield 'club' => ['fc bayern', null];
+        yield 'bank' => ['bw bank', null];
+        yield 'longer alias wins' => ['in sachsen-anhalt', State::ST];
         yield 'no state' => ['morgen', null];
     }
 
@@ -29,6 +37,19 @@ final class StateTest extends TestCase
     public function testFromText(string $text, ?State $expected): void
     {
         self::assertSame($expected, State::fromText($text));
+    }
+
+    public function testAllFromTextFindsEveryDifferentState(): void
+    {
+        self::assertSame([State::BE, State::BY], State::allFromText('wir wohnen in berlin, fahren aber nach bayern'));
+        self::assertSame([State::HE, State::SN], State::allFromText('in hessen und sachsen'));
+        self::assertSame([State::BY], State::allFromText('in bayern oder aus bayern'));
+    }
+
+    public function testLocativeUsesTheRightPreposition(): void
+    {
+        self::assertSame('in Bayern', State::BY->locative());
+        self::assertSame('im Saarland', State::SL->locative());
     }
 
     public function testEveryStateHasGermanName(): void

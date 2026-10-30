@@ -72,9 +72,12 @@ final class PeriodTest extends TestCase
         $resolved = new Resolved(Period::of('2026-10-12', '2026-10-24'), 'Herbstferien', ['Note']);
 
         self::assertSame(
-            ['type' => 'resolved', 'start' => '2026-10-12', 'end' => '2026-10-24', 'expression' => 'Herbstferien', 'notes' => ['Note']],
+            ['type' => 'resolved', 'start' => '2026-10-12', 'end' => '2026-10-24', 'expression' => 'Herbstferien', 'notes' => ['Note'], 'state' => null],
             $resolved->jsonSerialize(),
         );
+
+        $withState = new Resolved(Period::of('2026-10-12', '2026-10-24'), 'Herbstferien', state: State::NI);
+        self::assertSame('NI', $withState->jsonSerialize()['state']);
     }
 
     public function testClarificationJsonShape(): void

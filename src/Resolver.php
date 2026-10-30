@@ -92,10 +92,8 @@ final class Resolver
     {
         $source = Normalizer::withOffsets($text);
         $normalized = YearToken::mask($source, $this->stripGreetings($source->text));
-        $state = State::fromText($normalized);
-        if (null !== $state) {
-            $context = $context->withState($state);
-        }
+        $states = State::allFromText($normalized);
+        $context = self::contextWith($states, $context);
 
         $guard = new ContextGuard($source, $normalized);
         [$found, $unclaimed] = $this->findExpressions($normalized, $source, $guard);
@@ -108,7 +106,31 @@ final class Resolver
 
         [$rule, $match] = reset($found);
 
-        return $guard->clarificationFor($match, $unclaimed) ?? $this->evaluate($rule, $match, $context);
+        return $guard->clarificationFor($match, $unclaimed) ?? self::namingStates($this->evaluate($rule, $match, $context), $states);
+    }
+
+    /**
+     * A state named in the text wins over the context; two named states leave it open.
+     *
+     * @param list<State> $states
+     */
+    private static function contextWith(array $states, Context $context): Context
+    {
+        return match (count($states)) {
+            0 => $context,
+            1 => $context->withState($states[0]),
+            default => new Context($context->referenceDate),
+        };
+    }
+
+    /**
+     * @param list<State> $states
+     */
+    private static function namingStates(Result $result, array $states): Result
+    {
+        return count($states) > 1 && $result instanceof Clarification && ClarificationReason::MissingState === $result->reason
+            ? Clarifications::severalStates($result->expression, $states)
+            : $result;
     }
 
     private function evaluate(Rule $rule, RuleMatch $match, Context $context): Result

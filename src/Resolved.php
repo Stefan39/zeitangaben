@@ -13,17 +13,19 @@ final readonly class Resolved implements Result
         public Period $period,
         public string $expression,
         public array $notes = [],
+        public ?State $state = null,
     ) {
     }
 
     /**
-     * @return array{type: string, start: string, end: string, expression: string, notes: list<string>}
+     * @return array{type: string, start: string, end: string, expression: string, notes: list<string>, state: ?string}
      */
     public function jsonSerialize(): array
     {
         return ['type' => 'resolved'] + $this->period->toArray() + [
             'expression' => $this->expression,
             'notes' => $this->notes,
+            'state' => $this->state?->value,
         ];
     }
 }

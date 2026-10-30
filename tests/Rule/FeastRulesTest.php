@@ -124,7 +124,7 @@ final class FeastRulesTest extends TestCase
 
     public function testHamburgOffersSpringHolidaysOnlyAndInventsNoEasterHolidays(): void
     {
-        $result = Resolver::create()->resolve('Osterferien Hamburg', $this->context());
+        $result = Resolver::create()->resolve('Osterferien in Hamburg', $this->context());
 
         self::assertInstanceOf(Clarification::class, $result);
         self::assertStringContainsString('Hamburg', $result->question);

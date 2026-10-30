@@ -52,7 +52,7 @@ final class SchoolHolidayRule implements Rule
 
         return null === $holiday
             ? Clarifications::outOfData($expression, $state)
-            : new Resolved($holiday->period, $expression);
+            : new Resolved($holiday->period, $expression, state: $state);
     }
 
     /**
@@ -106,7 +106,7 @@ final class SchoolHolidayRule implements Rule
 
         return new Clarification(
             ClarificationReason::Ambiguous,
-            sprintf('In %s gibt es keine Osterferien, sondern Frühjahrsferien. Meinen Sie diese?', $state->germanName()),
+            sprintf('%s gibt es keine Osterferien, sondern Frühjahrsferien. Meinen Sie diese?', ucfirst($state->locative())),
             $expression,
             [new Candidate($spring->period, 'Frühjahrsferien')],
         );

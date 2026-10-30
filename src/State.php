@@ -24,25 +24,36 @@ enum State: string
     case TH = 'TH';
 
     /**
-     * Finds a state name or common abbreviation as a whole word in lowercase,
-     * umlaut-transliterated text. Hyphens count as part of a word, so "sachsen"
-     * does not match inside "sachsen-anhalt".
+     * The first state mentioned in lowercase, umlaut-transliterated text.
+     *
+     * @internal
      */
     public static function fromText(string $normalized): ?self
     {
-        $matches = [];
-        foreach (self::aliases() as $alias => $state) {
-            $pattern = '/(?<![a-z0-9-])'.preg_quote($alias, '/').'(?![a-z0-9-])/';
-            if (1 === preg_match($pattern, $normalized)) {
-                $matches[$alias] = $state;
+        return self::allFromText($normalized)[0] ?? null;
+    }
+
+    /**
+     * All different states mentioned in lowercase, umlaut-transliterated text, in text order.
+     * Hyphens count as part of a word, so "sachsen" does not match inside "sachsen-anhalt".
+     *
+     * @internal
+     *
+     * @return list<self>
+     */
+    public static function allFromText(string $normalized): array
+    {
+        preg_match_all('~'.self::mentionPattern().'~', $normalized, $mentions);
+        $aliases = self::aliases();
+        $states = [];
+        foreach ($mentions['states'] as $mention) {
+            preg_match_all('~(?<![a-z0-9-])(?:'.self::aliasPattern().')(?![a-z0-9-])~', $mention, $names);
+            foreach ($names[0] as $name) {
+                $states[$aliases[$name]->value] = $aliases[$name];
             }
         }
-        if ([] === $matches) {
-            return null;
-        }
-        uksort($matches, static fn (string $a, string $b): int => strlen($b) <=> strlen($a));
 
-        return reset($matches);
+        return array_values($states);
     }
 
     /**
@@ -53,12 +64,18 @@ enum State: string
      */
     public static function mentionPattern(): string
     {
-        $aliases = array_keys(self::aliases());
-        usort($aliases, static fn (string $a, string $b): int => strlen($b) <=> strlen($a));
-        $name = '(?:'.implode('|', $aliases).')(?![a-z0-9-])';
+        $name = '(?:'.self::aliasPattern().')(?![a-z0-9-])';
 
         return '(?<![a-z0-9-])(?:in|im|aus|nach|fuer|von|vom|bundesland:?|land)\s+(?:(?:dem|das|den)\s+)?'
             .'(?<states>'.$name.'(?:(?:\s*[,/]\s*|\s+und\s+|\s+oder\s+)'.$name.')*)';
+    }
+
+    /**
+     * The state with the preposition it takes in a sentence: "in Bayern", "im Saarland".
+     */
+    public function locative(): string
+    {
+        return (self::SL === $this ? 'im ' : 'in ').$this->germanName();
     }
 
     public function germanName(): string
@@ -81,6 +98,14 @@ enum State: string
             self::ST => 'Sachsen-Anhalt',
             self::TH => 'Thüringen',
         };
+    }
+
+    private static function aliasPattern(): string
+    {
+        $aliases = array_keys(self::aliases());
+        usort($aliases, static fn (string $a, string $b): int => strlen($b) <=> strlen($a));
+
+        return implode('|', $aliases);
     }
 
     /**
