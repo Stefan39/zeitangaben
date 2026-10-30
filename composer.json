@@ -2,7 +2,7 @@
     "name": "stejac/zeitangaben",
     "description": "Resolves colloquial German time expressions such as Herbstferien, ueber Ostern or morgen to a period or a reasoned clarification.",
     "type": "library",
-    "license": "MIT",
+    "license": "(MIT and ODbL-1.0)",
     "keywords": [
         "php",
         "german",

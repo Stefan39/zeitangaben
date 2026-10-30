@@ -57,7 +57,7 @@ Output:
 12.10.2026 bis 24.10.2026
 ```
 
-The reference date is required for relative terms ("morgen", "nächstes Wochenende", "im Herbst") and for deciding which year is meant. It is a parameter on purpose: a message that is read a day later must still resolve to the same date. If it is missing, the result is a `Clarification` with the reason `missing_reference_date`. A state named in the text ("Herbstferien in Bayern") takes precedence over the state in the context.
+The reference date is required for relative terms ("morgen", "nächstes Wochenende", "im Herbst") and for deciding which year is meant. It is a parameter on purpose: a message that is read a day later must still resolve to the same date. If it is missing, the result is a `Clarification` with the reason `missing_reference_date`. A state named in the text after a word such as "in", "aus" or "nach" ("Herbstferien in Bayern") takes precedence over the state in the context; a bare name ("Frau Berlin", "FC Bayern") does not count, and two different states ask which one is meant.
 
 ### Handling a clarification
 
@@ -101,6 +101,19 @@ ambiguous: Meinen Sie bei „über Ostern“ die Feiertage (26.03. bis 29.03.202
 }
 ```
 
+A resolved school holiday also says which state it was read for; `state` is `null` for everything else:
+
+```json
+{
+    "type": "resolved",
+    "start": "2026-10-12",
+    "end": "2026-10-24",
+    "expression": "Herbstferien",
+    "notes": [],
+    "state": "NI"
+}
+```
+
 ### Command line
 
 ```bash
@@ -108,7 +121,7 @@ vendor/bin/zeitangaben "in den Herbstferien" --state=NI --date=2026-09-16
 vendor/bin/zeitangaben "Sommerferien" --date=2026-09-16 --json
 ```
 
-Options: `--state=<code>` (two-letter state code such as `NI`, `BY`, `NW`), `--date=YYYY-MM-DD` (reference date), `--json`. Exit code 0 for every result including a clarification, 2 for invalid arguments. The human-readable output is German.
+Options: `--state=<code>` (two-letter state code such as `NI`, `BY`, `NW`), `--date=YYYY-MM-DD` (reference date), `--json`, `--help`. Exit code 0 for every result including a clarification, 2 for invalid arguments. The human-readable output is German.
 
 ## What a result can be
 
@@ -130,26 +143,32 @@ Options: `--state=<code>` (two-letter state code such as `NI`, `BY`, `NW`), `--d
 
 `NoExpression` (`{"type": "none"}`) means the text was **not recognised**, not that it contains no date. Recognition is rule-based and has gaps. Not recognised for now, for example: „erste Juliwoche“, „Ende des Monats“, „in 3 Monaten“. Treat `none` as "ask the user or fall back", never as proof that no time was meant.
 
+A sentence can also hold more than the library recognised: a result covers the expressions it found, not everything the sentence says. Past tense is not modelled, so „Ostern war schön“ still asks about the next Easter.
+
+## Public API
+
+These types are the public API and follow semantic versioning: `Resolver`, `Context`, `State` (without `fromText`), `Result` with `Resolved`, `Clarification` and `NoExpression`, `ClarificationReason`, `Candidate`, `Period`, `InvalidPeriodException`, and the provider interfaces `School\SchoolHolidayProvider` and `Holiday\PublicHolidayProvider` with their value types. Everything marked `@internal` (`Rule\*`, `Calendar\*`, `Text\*`, `Cli\*`) can change in any release.
+
 ## Features
 
 | Feature | Status |
 | --- | --- |
-| Explicit dates and calendar weeks ("am 3. Oktober", "KW 42") | stable |
-| Relative days, weeks and weekends ("morgen", "nächste Woche") | stable |
-| Months and parts of months, seasons | stable |
-| Feasts and long weekends (Ostern, Pfingsten, Weihnachten, Brückentage) | stable |
-| School holidays per state, 2026 to 2029 | stable |
-| Clarifications with reason, question and candidates | stable |
+| Explicit dates and calendar weeks ("am 3. Oktober", "KW 42") | beta |
+| Relative days, weeks and weekends ("morgen", "nächste Woche") | beta |
+| Months and parts of months, seasons | beta |
+| Feasts and long weekends (Ostern, Pfingsten, Weihnachten, Brückentage) | beta |
+| School holidays per state, 2026 to 2029 | beta |
+| Clarifications with reason, question and candidates | beta |
 | MCP tool for use from LLM clients | planned |
 | Stay length ("eine Woche im Herbst") | out of scope |
 
-The rules are covered by unit tests and by a corpus test with 132 expressions (`tests/Corpus/`).
+The rules are covered by unit tests and by a corpus test with 235 expressions (`tests/Corpus/`).
 
 ## Data
 
 School holidays come from the [OpenHolidays API](https://www.openholidaysapi.org) and are bundled in `data/school-holidays-de.json`. Public holidays are computed by [Yasumi](https://github.com/azuyalabs/yasumi).
 
-- Complete for 2026 through 2029, partial for 2030. Later years give `out_of_data`.
+- Complete through 2029 for Easter (not Hamburg), summer, autumn and Christmas holidays. Pentecost and winter holidays exist only where the state has them, and gaps are possible. 2030 is partial; a gap or a later year gives `out_of_data`.
 - Mecklenburg-Vorpommern: dates of general schools. Schleswig-Holstein: dates of the mainland (not Sylt, Föhr, Amrum, Helgoland and the Halligen).
 - Hamburg has Frühjahrsferien instead of Osterferien; they are kept apart from Easter.
 
@@ -173,4 +192,4 @@ Built and maintained by [Stefan Jacomeit](https://www.jacomeit.de), freelance PH
 
 ## License
 
-Code: [MIT](LICENSE). Data in `data/`: [ODbL 1.0](data/LICENSE).
+Code: [MIT](LICENSE). Data in `data/`: [ODbL 1.0](data/LICENSE), see [NOTICE](NOTICE).

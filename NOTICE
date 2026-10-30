@@ -1,0 +1,10 @@
+zeitangaben
+Copyright (c) 2026 Stefan Jacomeit
+
+The code of this package is licensed under the MIT License, see LICENSE.
+
+The contents of the directory data/ are not covered by the MIT License. The file
+data/school-holidays-de.json is a derived database made available under the Open
+Database License (ODbL) v1.0, see data/LICENSE.
+
+Source of the data: OpenHolidays API, https://www.openholidaysapi.org

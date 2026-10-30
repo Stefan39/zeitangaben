@@ -10,7 +10,6 @@ permissions:
 
 jobs:
   tests:
-    if: github.repository != 'Stefan39/php-repo-template'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -38,7 +37,6 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   static:
-    if: github.repository != 'Stefan39/php-repo-template'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

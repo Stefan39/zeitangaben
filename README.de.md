@@ -46,9 +46,9 @@ Ausgabe:
 12.10.2026 bis 24.10.2026
 ```
 
-Das Bezugsdatum ist für relative Angaben („morgen“, „nächstes Wochenende“, „im Herbst“) und für die Wahl des Jahres erforderlich. Es wird bewusst übergeben und nicht aus der Systemuhr gelesen: Eine Nachricht, die einen Tag später verarbeitet wird, muss dasselbe Datum ergeben. Fehlt es, ist das Ergebnis eine `Clarification` mit dem Grund `missing_reference_date`. Ein im Text genanntes Bundesland („Herbstferien in Bayern“) hat Vorrang vor dem Bundesland im Kontext.
+Das Bezugsdatum ist für relative Angaben („morgen“, „nächstes Wochenende“, „im Herbst“) und für die Wahl des Jahres erforderlich. Es wird bewusst übergeben und nicht aus der Systemuhr gelesen: Eine Nachricht, die einen Tag später verarbeitet wird, muss dasselbe Datum ergeben. Fehlt es, ist das Ergebnis eine `Clarification` mit dem Grund `missing_reference_date`. Ein im Text nach einem Wort wie „in“, „aus“ oder „nach“ genanntes Bundesland („Herbstferien in Bayern“) hat Vorrang vor dem Bundesland im Kontext; ein bloßer Name („Frau Berlin“, „FC Bayern“) zählt nicht, und bei zwei verschiedenen Bundesländern kommt eine Rückfrage.
 
-Eine Rückfrage lässt sich so weiterverarbeiten: `question` kann unverändert angezeigt werden, `candidates` sind die zulässigen Antworten und eignen sich als Auswahl oder als erlaubte Optionen für ein Sprachmodell. Bei `missing_state` gibt es keine Vorschläge; nach der Antwort wird `resolve()` mit einem `Context` samt Bundesland erneut aufgerufen. Alle Ergebnisse sind mit `json_encode($result)` serialisierbar. Ein vollständiges Beispiel mit Ausgabe steht in der [englischen README](README.md#handling-a-clarification).
+Eine Rückfrage lässt sich so weiterverarbeiten: `question` kann unverändert angezeigt werden, `candidates` sind die zulässigen Antworten und eignen sich als Auswahl oder als erlaubte Optionen für ein Sprachmodell. Bei `missing_state` gibt es keine Vorschläge; nach der Antwort wird `resolve()` mit einem `Context` samt Bundesland erneut aufgerufen. Alle Ergebnisse sind mit `json_encode($result)` serialisierbar; aufgelöste Schulferien nennen dabei unter `state` das verwendete Bundesland. Ein vollständiges Beispiel mit Ausgabe steht in der [englischen README](README.md#handling-a-clarification).
 
 Kommandozeile:
 
@@ -57,7 +57,7 @@ vendor/bin/zeitangaben "in den Herbstferien" --state=NI --date=2026-09-16
 vendor/bin/zeitangaben "Sommerferien" --date=2026-09-16 --json
 ```
 
-Exit-Code 0 bei jedem Ergebnis (auch bei einer Rückfrage), 2 bei ungültigen Argumenten.
+Optionen: `--state`, `--date`, `--json`, `--help`. Exit-Code 0 bei jedem Ergebnis (auch bei einer Rückfrage), 2 bei ungültigen Argumenten.
 
 ## Gründe für eine Rückfrage
 
@@ -77,6 +77,12 @@ Exit-Code 0 bei jedem Ergebnis (auch bei einer Rückfrage), 2 bei ungültigen Ar
 
 `NoExpression` (`{"type": "none"}`) heißt: Der Text wurde **nicht erkannt**, nicht „im Text steht kein Datum“. Die Erkennung ist regelbasiert und hat Lücken. Vorerst nicht erkannt werden zum Beispiel „erste Juliwoche“, „Ende des Monats“ und „in 3 Monaten“. `none` sollte daher als „nachfragen oder auf andere Weise behandeln“ gelesen werden, nie als Beleg, dass keine Zeit gemeint war.
 
+Ein Satz kann außerdem mehr enthalten, als die Bibliothek erkannt hat: Ein Ergebnis gilt für die gefundenen Angaben, nicht für alles, was im Satz steht. Die Vergangenheit wird nicht ausgewertet, „Ostern war schön“ führt also weiterhin zu einer Rückfrage zum nächsten Osterfest.
+
+## Öffentliche API
+
+Zur öffentlichen API gehören `Resolver`, `Context`, `State` (ohne `fromText`), `Result` mit `Resolved`, `Clarification` und `NoExpression`, `ClarificationReason`, `Candidate`, `Period`, `InvalidPeriodException` sowie die Schnittstellen `School\SchoolHolidayProvider` und `Holiday\PublicHolidayProvider` mit ihren Werttypen. Alles mit `@internal` (`Rule\*`, `Calendar\*`, `Text\*`, `Cli\*`) kann sich mit jeder Version ändern.
+
 ## Unterschied zu anderen Lösungen
 
 Soweit bekannt, kennt keiner der gängigen Parser Schulferien nach Bundesland: Duckling kennt nur gesetzliche Feiertage, und in der Dokumentation von dateparser und chrono kommen Feiertage nicht vor. Diese Bibliothek kombiniert Feiertage, Schulferien und Alltagsausdrücke und liefert bei Unsicherheit eine begründete Rückfrage statt einer geratenen Antwort. Sie liest keine Systemuhr und braucht zur Laufzeit keinen Netzzugriff.
@@ -85,12 +91,12 @@ Soweit bekannt, kennt keiner der gängigen Parser Schulferien nach Bundesland: D
 
 | Funktion | Status |
 | --- | --- |
-| Konkrete Daten und Kalenderwochen | stabil |
-| Relative Tage, Wochen und Wochenenden | stabil |
-| Monate, Monatsabschnitte, Jahreszeiten | stabil |
-| Feste und lange Wochenenden (Ostern, Pfingsten, Weihnachten, Brückentage) | stabil |
-| Schulferien je Bundesland, 2026 bis 2029 | stabil |
-| Rückfragen mit Grund, Fragesatz und Vorschlägen | stabil |
+| Konkrete Daten und Kalenderwochen | beta |
+| Relative Tage, Wochen und Wochenenden | beta |
+| Monate, Monatsabschnitte, Jahreszeiten | beta |
+| Feste und lange Wochenenden (Ostern, Pfingsten, Weihnachten, Brückentage) | beta |
+| Schulferien je Bundesland, 2026 bis 2029 | beta |
+| Rückfragen mit Grund, Fragesatz und Vorschlägen | beta |
 | MCP-Tool für KI-Clients | geplant |
 | Aufenthaltsdauer („eine Woche im Herbst“) | nicht vorgesehen |
 
@@ -98,7 +104,7 @@ Soweit bekannt, kennt keiner der gängigen Parser Schulferien nach Bundesland: D
 
 Die Schulferien stammen aus der [OpenHolidays API](https://www.openholidaysapi.org) und liegen in `data/school-holidays-de.json`. Gesetzliche Feiertage berechnet [Yasumi](https://github.com/azuyalabs/yasumi).
 
-- Vollständig für 2026 bis 2029, teilweise für 2030. Spätere Jahre ergeben `out_of_data`.
+- Vollständig bis 2029 für Oster- (außer Hamburg), Sommer-, Herbst- und Weihnachtsferien. Pfingst- und Winterferien gibt es nur dort, wo das Bundesland sie hat, Lücken sind möglich. 2030 ist unvollständig; eine Lücke oder ein späteres Jahr ergibt `out_of_data`.
 - Mecklenburg-Vorpommern: Termine der allgemeinbildenden Schulen. Schleswig-Holstein: Termine des Festlands (ohne Sylt, Föhr, Amrum, Helgoland und die Halligen).
 - Hamburg hat Frühjahrsferien statt Osterferien.
 
@@ -110,4 +116,4 @@ Entwickelt und gepflegt von [Stefan Jacomeit](https://www.jacomeit.de) aus Breme
 
 ## Lizenz
 
-Code: [MIT](LICENSE). Daten in `data/`: [ODbL 1.0](data/LICENSE). Die englische README ist maßgeblich.
+Code: [MIT](LICENSE). Daten in `data/`: [ODbL 1.0](data/LICENSE), siehe [NOTICE](NOTICE). Die englische README ist maßgeblich.
