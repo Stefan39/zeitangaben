@@ -31,7 +31,7 @@ final readonly class SchoolHolidayLookup
     }
 
     /**
-     * The first entry that has not ended before the reference date.
+     * The first entry that has not ended before the reference date, if it starts by the year after the reference year.
      */
     public function upcoming(State $state, SchoolHolidayType $type, Context $context): ?SchoolHoliday
     {
@@ -41,11 +41,19 @@ final readonly class SchoolHolidayLookup
         $today = $context->referenceDate->format('Y-m-d');
         foreach ($this->provider->forState($state, $type) as $holiday) {
             if ($holiday->period->end->format('Y-m-d') >= $today) {
-                return $holiday;
+                return self::startsTooLate($holiday, $context->referenceDate) ? null : $holiday;
             }
         }
 
         return null;
+    }
+
+    /**
+     * A gap in the data: answering with an entry years away would hide that the next one is unknown.
+     */
+    private static function startsTooLate(SchoolHoliday $holiday, \DateTimeImmutable $reference): bool
+    {
+        return (int) $holiday->period->start->format('Y') > (int) $reference->format('Y') + 1;
     }
 
     public function has(State $state, SchoolHolidayType $type): bool

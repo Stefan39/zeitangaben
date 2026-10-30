@@ -111,15 +111,53 @@ final class FeastRulesTest extends TestCase
         self::assertSame(['In Niedersachsen kein gesetzlicher Feiertag.'], $result->notes);
     }
 
-    public function testSchoolHolidayAliasesShareTheWinterEntry(): void
+    public function testWinterferienIsTheUmbrellaTermForAnyWinterEntry(): void
     {
         $resolver = Resolver::create();
         $winter = $resolver->resolve('Winterferien', $this->context(State::BY));
-        $carnival = $resolver->resolve('Faschingsferien', $this->context(State::BY));
+        $named = $resolver->resolve('Frühjahrsferien', $this->context(State::BY));
 
         self::assertInstanceOf(Resolved::class, $winter);
-        self::assertInstanceOf(Resolved::class, $carnival);
-        self::assertEquals($winter->period, $carnival->period);
+        self::assertInstanceOf(Resolved::class, $named);
+        self::assertEquals($winter->period, $named->period);
+        self::assertSame(State::BY, $winter->state);
+    }
+
+    public function testASpecificBreakUnderAnotherNameIsOfferedWithItsRealName(): void
+    {
+        $result = Resolver::create()->resolve('Faschingsferien', $this->context(State::BY));
+
+        self::assertInstanceOf(Clarification::class, $result);
+        self::assertSame(ClarificationReason::Ambiguous, $result->reason);
+        self::assertSame('Frühjahrsferien', $result->candidates[0]->label);
+        self::assertStringContainsString('In Bayern', $result->question);
+    }
+
+    public function testFaschingAndFastnachtNameTheSameBreak(): void
+    {
+        $resolver = Resolver::create();
+        $fasching = $resolver->resolve('Faschingsferien', $this->context(State::SL));
+        $fastnacht = $resolver->resolve('Fastnachtsferien', $this->context(State::SL));
+
+        self::assertInstanceOf(Resolved::class, $fasching);
+        self::assertInstanceOf(Resolved::class, $fastnacht);
+        self::assertEquals($fastnacht->period, $fasching->period);
+    }
+
+    public function testASpecificBreakIsNotInAStateWithoutWinterHolidays(): void
+    {
+        $result = Resolver::create()->resolve('Halbjahresferien', $this->context(State::BW));
+
+        self::assertInstanceOf(Clarification::class, $result);
+        self::assertSame(ClarificationReason::NotInState, $result->reason);
+    }
+
+    public function testPartlyStatutoryFeastUsesTheLocative(): void
+    {
+        $result = Resolver::create()->resolve('Fronleichnam', $this->context(State::TH));
+
+        self::assertInstanceOf(Resolved::class, $result);
+        self::assertSame(['In Thüringen nur in einem Teil der Gemeinden gesetzlicher Feiertag.'], $result->notes);
     }
 
     public function testHamburgOffersSpringHolidaysOnlyAndInventsNoEasterHolidays(): void

@@ -13,6 +13,7 @@ use Stejac\Zeitangaben\Result;
 use Stejac\Zeitangaben\School\SchoolHoliday;
 use Stejac\Zeitangaben\School\SchoolHolidayType;
 use Stejac\Zeitangaben\State;
+use Stejac\Zeitangaben\Text\Normalizer;
 use Stejac\Zeitangaben\Text\YearToken;
 
 /**
@@ -20,6 +21,9 @@ use Stejac\Zeitangaben\Text\YearToken;
  */
 final class SchoolHolidayRule implements Rule
 {
+    /** The source calls these Fastnachtsferien; both words name the same break. */
+    private const array NAME_SYNONYMS = ['faschingsferien' => 'fastnachtsferien'];
+
     public function __construct(private readonly SchoolHolidayLookup $lookup)
     {
     }
@@ -28,7 +32,7 @@ final class SchoolHolidayRule implements Rule
     {
         return YearToken::around('\b(?:(?<autumn>herbstferien)|(?<summer>sommerferien)|(?<easter>osterschulferien|osterferien)'
             .'|(?<pentecost>pfingstferien)|(?<christmas>weihnachtsferien)'
-            .'|(?<winter>winterferien|halbjahresferien|fastnachtsferien|faschingsferien)|(?<spring>fruehjahrsferien))\b');
+            .'|(?<winter>winterferien)|(?<named>halbjahresferien|fastnachtsferien|faschingsferien|fruehjahrsferien))\b');
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
@@ -43,16 +47,43 @@ final class SchoolHolidayRule implements Rule
         }
 
         $type = $this->typeOf($match, $state);
-        $unavailable = $this->unavailable($expression, $state, $type, $year, $context);
-        if (null !== $unavailable) {
-            return $unavailable;
+
+        return $this->unavailable($expression, $state, $type, $year, $context)
+            ?? $this->answer($match, $this->find($state, $type, $year, $context), $state);
+    }
+
+    private function answer(RuleMatch $match, ?SchoolHoliday $holiday, State $state): Result
+    {
+        if (null === $holiday) {
+            return Clarifications::outOfData($match->original, $state);
         }
 
-        $holiday = $this->find($state, $type, $year, $context);
+        return $this->isOtherName($match, $holiday)
+            ? $this->underOtherName($match->original, $holiday)
+            : new Resolved($holiday->period, $match->original, state: $state);
+    }
 
-        return null === $holiday
-            ? Clarifications::outOfData($expression, $state)
-            : new Resolved($holiday->period, $expression, state: $state);
+    /**
+     * Whether the user named a specific break, but the state's break of that season is called something else.
+     */
+    private function isOtherName(RuleMatch $match, SchoolHoliday $holiday): bool
+    {
+        if (!isset($match->groups['named'])) {
+            return false;
+        }
+        $wanted = self::NAME_SYNONYMS[$match->groups['named']] ?? $match->groups['named'];
+
+        return Normalizer::normalize($holiday->name) !== $wanted;
+    }
+
+    private function underOtherName(string $expression, SchoolHoliday $holiday): Clarification
+    {
+        return new Clarification(
+            ClarificationReason::Ambiguous,
+            sprintf('%s heißen diese Ferien „%s“. Meinen Sie bei „%s“ diese?', ucfirst($holiday->state->locative()), $holiday->name, $expression),
+            $expression,
+            [new Candidate($holiday->period, $holiday->name)],
+        );
     }
 
     /**
@@ -89,7 +120,7 @@ final class SchoolHolidayRule implements Rule
             isset($match->groups['easter']) => SchoolHolidayType::Easter,
             isset($match->groups['pentecost']) => SchoolHolidayType::Pentecost,
             isset($match->groups['christmas']) => SchoolHolidayType::Christmas,
-            isset($match->groups['spring']) && $this->lookup->has($state, SchoolHolidayType::Spring) => SchoolHolidayType::Spring,
+            'fruehjahrsferien' === ($match->groups['named'] ?? '') && $this->lookup->has($state, SchoolHolidayType::Spring) => SchoolHolidayType::Spring,
             default => SchoolHolidayType::Winter,
         };
     }

@@ -11,6 +11,7 @@ use Stejac\Zeitangaben\Holiday\PublicHolidayProvider;
 use Stejac\Zeitangaben\Period;
 use Stejac\Zeitangaben\Resolved;
 use Stejac\Zeitangaben\Result;
+use Stejac\Zeitangaben\State;
 use Stejac\Zeitangaben\Text\YearToken;
 
 /**
@@ -25,6 +26,17 @@ final class SingleFeastRule implements Rule
         'ostermontag' => Easter::EASTER_MONDAY,
         'pfingstsonntag' => Easter::WHIT_SUNDAY,
         'pfingstmontag' => Easter::WHIT_MONDAY,
+    ];
+
+    /** Statutory only in the communities with a Catholic majority or tradition. */
+    private const array PARTLY_STATUTORY = [
+        'mary' => [State::BY],
+        'corpus' => [State::SN, State::TH],
+    ];
+
+    /** Statutory across the state, which the holiday provider does not list. */
+    private const array ALSO_STATUTORY = [
+        'mary' => [State::SL],
     ];
 
     public function __construct(private readonly PublicHolidayProvider $holidays)
@@ -74,10 +86,29 @@ final class SingleFeastRule implements Rule
     private function notes(RuleMatch $match, Period $period, Context $context): array
     {
         $state = $context->state;
-        if (null === $state || in_array($match->groups['easterday'] ?? '', ['ostersonntag', 'pfingstsonntag'], true) || $this->holidays->isStatutory($period->start, $state)) {
+        if (null === $state || in_array($match->groups['easterday'] ?? '', ['ostersonntag', 'pfingstsonntag'], true)) {
             return [];
         }
+        if (self::isListed(self::PARTLY_STATUTORY, $match, $state)) {
+            return [sprintf('%s nur in einem Teil der Gemeinden gesetzlicher Feiertag.', ucfirst($state->locative()))];
+        }
 
-        return [sprintf('In %s kein gesetzlicher Feiertag.', $state->germanName())];
+        return self::isListed(self::ALSO_STATUTORY, $match, $state) || $this->holidays->isStatutory($period->start, $state)
+            ? []
+            : [sprintf('%s kein gesetzlicher Feiertag.', ucfirst($state->locative()))];
+    }
+
+    /**
+     * @param array<string, list<State>> $table
+     */
+    private static function isListed(array $table, RuleMatch $match, State $state): bool
+    {
+        foreach ($table as $feast => $states) {
+            if (isset($match->groups[$feast]) && in_array($state, $states, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
