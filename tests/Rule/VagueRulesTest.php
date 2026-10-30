@@ -90,8 +90,9 @@ final class VagueRulesTest extends TestCase
     {
         $result = Resolver::create()->resolve('Frühjahrsferien', new Context(new \DateTimeImmutable(self::REFERENCE), State::HH));
 
-        self::assertNotInstanceOf(NoExpression::class, $result);
-        self::assertFalse($result instanceof Clarification && ClarificationReason::Vague === $result->reason);
+        self::assertInstanceOf(Resolved::class, $result);
+        self::assertSame('2027-03-01', $result->period->start->format('Y-m-d'));
+        self::assertSame('2027-03-12', $result->period->end->format('Y-m-d'));
     }
 
     public function testLongWeekendListsAWeekendFormedByTwoHolidaysOnce(): void
@@ -265,5 +266,74 @@ final class VagueRulesTest extends TestCase
             self::assertSame($monday, $result->period->start->format('Y-m-d'));
         }
         self::assertSame(ClarificationReason::MissingReferenceDate, $this->clarify('diese Woche', null)->reason);
+    }
+
+    /**
+     * @return iterable<string, array{string, string, string, string}>
+     */
+    public static function yearCrossingSpans(): iterable
+    {
+        yield 'winter running in january' => ['im Winter', '2027-01-15', '2026-12-01', '2027-02-28'];
+        yield 'winter after it ended' => ['im Winter', '2027-03-01', '2027-12-01', '2028-02-29'];
+        yield 'winter on its last day' => ['im Winter', '2027-02-28', '2026-12-01', '2027-02-28'];
+    }
+
+    #[DataProvider('yearCrossingSpans')]
+    public function testSpansCrossingNewYearAreKeptWhileRunning(string $text, string $reference, string $start, string $end): void
+    {
+        $period = $this->clarify($text, $reference)->candidates[0]->period;
+
+        self::assertSame($start, $period->start->format('Y-m-d'));
+        self::assertSame($end, $period->end->format('Y-m-d'));
+    }
+
+    public function testBetweenTheYearsOnNewYearsDayStillCountsTheRunningSpan(): void
+    {
+        $candidates = $this->clarify('zwischen den Jahren', '2027-01-01')->candidates;
+
+        self::assertSame('2026-12-27', $candidates[0]->period->start->format('Y-m-d'));
+        self::assertSame('2026-12-25', $candidates[1]->period->start->format('Y-m-d'));
+        self::assertSame('2027-01-01', $candidates[1]->period->end->format('Y-m-d'));
+        self::assertSame('2027-12-25', $this->clarify('zwischen den Jahren', '2027-01-02')->candidates[1]->period->start->format('Y-m-d'));
+    }
+
+    public function testSingleDaysAcrossNewYearAreNotPulledBack(): void
+    {
+        $silvester = Resolver::create()->resolve('Silvester', new Context(new \DateTimeImmutable('2027-01-01')));
+        $neujahr = Resolver::create()->resolve('Neujahr', new Context(new \DateTimeImmutable('2026-12-31')));
+
+        self::assertInstanceOf(Resolved::class, $silvester);
+        self::assertInstanceOf(Resolved::class, $neujahr);
+        self::assertSame('2027-12-31', $silvester->period->start->format('Y-m-d'));
+        self::assertSame('2027-01-01', $neujahr->period->start->format('Y-m-d'));
+    }
+
+    public function testDoubleSpaceDoesNotDefeatTheLookbehind(): void
+    {
+        $result = $this->clarify('vor  Weihnachten');
+
+        self::assertSame(ClarificationReason::Vague, $result->reason);
+        self::assertSame('vor  Weihnachten', $result->expression);
+    }
+
+    public function testPlainHolidaysAskWhichOnes(): void
+    {
+        foreach (['Ferien', 'in den Ferien'] as $text) {
+            $result = $this->clarify($text);
+            self::assertSame(ClarificationReason::Ambiguous, $result->reason);
+            self::assertSame([], $result->candidates);
+            self::assertSame(sprintf('Welche Ferien meinen Sie mit „%s“?', $text), $result->question);
+        }
+        foreach (['Ferienwohnung', 'Feriengäste'] as $text) {
+            self::assertInstanceOf(NoExpression::class, Resolver::create()->resolve($text, new Context()));
+        }
+    }
+
+    public function testLabourDayTakesAYear(): void
+    {
+        $result = Resolver::create()->resolve('Tag der Arbeit 2028', new Context());
+
+        self::assertInstanceOf(Resolved::class, $result);
+        self::assertSame('2028-05-01', $result->period->start->format('Y-m-d'));
     }
 }

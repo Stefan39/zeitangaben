@@ -11,7 +11,8 @@ final class NextOccurrence
     private const int LOOKAHEAD_YEARS = 8;
 
     /**
-     * Returns the first period, from the reference year on, whose end is on or after
+     * Returns the first period, from the year before the reference year on (a span may cross New Year
+     * and still be running), whose end is on or after
      * the reference date. A year for which the callback returns null is skipped.
      *
      * @param callable(int): ?Period $forYear
@@ -23,8 +24,8 @@ final class NextOccurrence
         }
 
         $today = $reference->format('Y-m-d');
-        $firstYear = (int) $reference->format('Y');
-        for ($year = $firstYear; $year <= $firstYear + self::LOOKAHEAD_YEARS; ++$year) {
+        $referenceYear = (int) $reference->format('Y');
+        for ($year = $referenceYear - 1; $year <= $referenceYear + self::LOOKAHEAD_YEARS; ++$year) {
             $period = $forYear($year);
             if (null !== $period && $period->end->format('Y-m-d') >= $today) {
                 return $period;

@@ -31,4 +31,13 @@ final class NormalizerTest extends TestCase
         self::assertSame('Straße', $normalized->originalOf(15, 7));
         self::assertSame('', $normalized->originalOf(0, 0));
     }
+
+    public function testWhitespaceRunsCollapseAndMapBackToTheWholeRun(): void
+    {
+        $normalized = Normalizer::withOffsets("vor \t Ostern");
+
+        self::assertSame('vor ostern', $normalized->text);
+        self::assertSame("vor \t Ostern", $normalized->originalOf(0, 10));
+        self::assertSame(Normalizer::normalize("vor \t Ostern"), $normalized->text);
+    }
 }

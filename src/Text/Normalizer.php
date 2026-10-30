@@ -10,6 +10,7 @@ namespace Stejac\Zeitangaben\Text;
  */
 final class Normalizer
 {
+    /** Longer (decomposed) sequences come first so they win over their single-letter parts. */
     private const array TRANSLITERATIONS = [
         "a\u{0308}" => 'ae',
         "o\u{0308}" => 'oe',
@@ -29,7 +30,7 @@ final class Normalizer
 
     public static function normalize(string $text): string
     {
-        return strtolower(strtr($text, self::TRANSLITERATIONS));
+        return strtolower(preg_replace('/\s+/', ' ', strtr($text, self::TRANSLITERATIONS)) ?? '');
     }
 
     /**
@@ -37,16 +38,13 @@ final class Normalizer
      */
     public static function withOffsets(string $text): NormalizedText
     {
-        $keys = array_keys(self::TRANSLITERATIONS);
-        usort($keys, static fn (string $a, string $b): int => strlen($b) <=> strlen($a));
-
         $normalized = '';
         $starts = [];
         $ends = [];
         $length = strlen($text);
         for ($position = 0; $position < $length;) {
-            $source = self::sourceAt($text, $position, $keys);
-            $replacement = strtolower(self::TRANSLITERATIONS[$source] ?? $source);
+            $source = self::sourceAt($text, $position);
+            $replacement = '' === trim($source) ? ' ' : strtolower(self::TRANSLITERATIONS[$source] ?? $source);
             for ($i = 0, $n = strlen($replacement); $i < $n; ++$i) {
                 $starts[] = $position;
                 $ends[] = $position + strlen($source);
@@ -59,14 +57,17 @@ final class Normalizer
     }
 
     /**
-     * @param list<string> $keys transliterated sequences, longest first
+     * The unit of the original text at a position: a transliterated sequence, a whitespace run or one byte.
      */
-    private static function sourceAt(string $text, int $position, array $keys): string
+    private static function sourceAt(string $text, int $position): string
     {
-        foreach ($keys as $key) {
+        foreach (array_keys(self::TRANSLITERATIONS) as $key) {
             if (0 === substr_compare($text, $key, $position, strlen($key))) {
                 return $key;
             }
+        }
+        if (1 === preg_match('/\G\s+/', $text, $run, 0, $position)) {
+            return $run[0];
         }
 
         return $text[$position];

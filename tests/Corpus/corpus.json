@@ -121,6 +121,8 @@
   {"id":"uebernaechste-woche","group":"explicit","text":"übernächste Woche","reference":"2026-09-16","expect":{"type":"resolved","start":"2026-09-28","end":"2026-10-04"}},
   {"id":"naechste-woche-ohne-bezug","group":"explicit","text":"nächste Woche","expect":{"type":"clarification","reason":"missing_reference_date","candidates":[]}},
   {"id":"wort-sommerreifen","group":"traps","text":"Wir brauchen Sommerreifen","reference":"2026-09-16","expect":{"type":"none"}},
+  {"id":"in-den-ferien","group":"vague","text":"in den Ferien","reference":"2026-09-16","state":"NI","expect":{"type":"clarification","reason":"ambiguous","candidates":[]}},
+  {"id":"tag-der-arbeit","group":"explicit","text":"Tag der Arbeit","reference":"2026-09-16","expect":{"type":"resolved","start":"2027-05-01","end":"2027-05-01"}},
   {"id":"gruss-guten-morgen","group":"traps","text":"Guten Morgen, wir möchten im Juli kommen.","reference":"2026-09-16","expect":{"type":"resolved","start":"2027-07-01","end":"2027-07-31"}},
   {"id":"gruss-allein","group":"traps","text":"Guten Morgen zusammen","reference":"2026-09-16","expect":{"type":"none"}},
   {"id":"wort-morgenstern","group":"traps","text":"Familie Morgenstern","reference":"2026-09-16","expect":{"type":"none"}},
