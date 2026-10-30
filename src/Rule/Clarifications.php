@@ -10,6 +10,8 @@ use Stejac\Zeitangaben\State;
 
 /**
  * Builds the clarifications shared by several rules.
+ *
+ * @internal
  */
 final class Clarifications
 {

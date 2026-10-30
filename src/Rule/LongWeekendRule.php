@@ -19,6 +19,8 @@ use Stejac\Zeitangaben\Text\YearToken;
 /**
  * "verlängertes Wochenende", "am langen Wochenende im Oktober": lists the long weekends of the month;
  * two holidays that form the same weekend (25 and 26 December) count once.
+ *
+ * @internal
  */
 final class LongWeekendRule implements Rule
 {

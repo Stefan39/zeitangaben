@@ -6,6 +6,9 @@ namespace Stejac\Zeitangaben\Calendar;
 
 use Stejac\Zeitangaben\Period;
 
+/**
+ * @internal
+ */
 final class NextOccurrence
 {
     private const int LOOKAHEAD_YEARS = 8;

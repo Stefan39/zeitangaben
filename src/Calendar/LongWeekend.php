@@ -8,6 +8,8 @@ use Stejac\Zeitangaben\Period;
 
 /**
  * The stretch of days off that a public holiday creates together with the weekend.
+ *
+ * @internal
  */
 final class LongWeekend
 {

@@ -14,6 +14,8 @@ use Stejac\Zeitangaben\School\SchoolHoliday;
 
 /**
  * Shared year selection and wording for the feast rules.
+ *
+ * @internal
  */
 final class FeastPeriod
 {

@@ -18,6 +18,8 @@ use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "Herbstferien", "Sommerferien 2027" and the like, answered from the school holiday snapshot.
+ *
+ * @internal
  */
 final class SchoolHolidayRule implements Rule
 {

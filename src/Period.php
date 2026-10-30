@@ -14,16 +14,13 @@ final readonly class Period
         $this->start = self::toMidnightUtc($start);
         $this->end = self::toMidnightUtc($end);
         if ($this->end < $this->start) {
-            throw new \InvalidArgumentException('The end of a period must not be before its start.');
+            throw new InvalidPeriodException('The end of a period must not be before its start.');
         }
     }
 
     public static function of(string $start, string $end): self
     {
-        return new self(
-            new \DateTimeImmutable($start, new \DateTimeZone('UTC')),
-            new \DateTimeImmutable($end, new \DateTimeZone('UTC')),
-        );
+        return new self(self::strictDate($start), self::strictDate($end));
     }
 
     public static function day(\DateTimeImmutable $day): self
@@ -40,6 +37,16 @@ final readonly class Period
             'start' => $this->start->format('Y-m-d'),
             'end' => $this->end->format('Y-m-d'),
         ];
+    }
+
+    private static function strictDate(string $text): \DateTimeImmutable
+    {
+        $date = \DateTimeImmutable::createFromFormat('!Y-m-d', $text, new \DateTimeZone('UTC'));
+        if (false === $date || $date->format('Y-m-d') !== $text) {
+            throw new InvalidPeriodException(sprintf('"%s" is not a date in the form YYYY-MM-DD.', $text));
+        }
+
+        return $date;
     }
 
     /**

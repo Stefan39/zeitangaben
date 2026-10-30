@@ -15,6 +15,8 @@ use Stejac\Zeitangaben\Text\YearToken;
 /**
  * "im Frühjahr", "im Sommer", "im Herbst", "im Winter": the meteorological seasons.
  * "Frühjahrsferien" is a school holiday and not matched here.
+ *
+ * @internal
  */
 final class SeasonRule implements Rule
 {

@@ -16,6 +16,8 @@ use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * Himmelfahrt, Mariä Himmelfahrt, Fronleichnam, Allerheiligen and the single days around Easter and Pentecost, with a note where the day is no statutory holiday.
+ *
+ * @internal
  */
 final class SingleFeastRule implements Rule
 {

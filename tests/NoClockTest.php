@@ -10,6 +10,8 @@ final class NoClockTest extends TestCase
 {
     private const array FORBIDDEN = [
         "'now'" => "~'now'~",
+        '"now"' => '~"now"~',
+        'new DateTime' => '~new\s+\\\\?DateTime\s*(?:\(|;)~',
         'new DateTimeImmutable() without arguments' => '~new\s+\\\\?DateTimeImmutable\s*\(\s*\)~',
         'time()' => '~(?<![\w>:$])time\s*\(~',
         'date(' => '~(?<![\w>:$])date\s*\(~',

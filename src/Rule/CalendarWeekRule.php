@@ -13,6 +13,8 @@ use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "KW 42", "Kalenderwoche 42 2027": an ISO week, Monday to Sunday.
+ *
+ * @internal
  */
 final class CalendarWeekRule implements Rule
 {

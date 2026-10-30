@@ -12,6 +12,8 @@ use Stejac\Zeitangaben\Rule\Clarifications;
 
 /**
  * Resolves a calendar day given as month and day with an optional year.
+ *
+ * @internal
  */
 final class YearlyDate
 {

@@ -14,6 +14,8 @@ use Stejac\Zeitangaben\Result;
 
 /**
  * "am Wochenende", "nächstes Wochenende", "übernächstes Wochenende". "dieses Wochenende" belongs to ThisWeekendRule.
+ *
+ * @internal
  */
 final class WeekendRule implements Rule
 {

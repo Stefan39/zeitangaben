@@ -7,6 +7,9 @@ namespace Stejac\Zeitangaben\Rule;
 use Stejac\Zeitangaben\Context;
 use Stejac\Zeitangaben\Result;
 
+/**
+ * @internal
+ */
 interface Rule
 {
     /**

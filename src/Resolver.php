@@ -52,8 +52,8 @@ final class Resolver
     private readonly array $rules;
 
     public function __construct(
-        public readonly SchoolHolidayProvider $schoolHolidays,
-        public readonly PublicHolidayProvider $publicHolidays,
+        SchoolHolidayProvider $schoolHolidays,
+        PublicHolidayProvider $publicHolidays,
     ) {
         $lookup = new SchoolHolidayLookup($schoolHolidays);
         $this->rules = [

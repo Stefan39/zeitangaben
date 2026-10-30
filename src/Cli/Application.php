@@ -16,10 +16,24 @@ use Stejac\Zeitangaben\State;
 /**
  * Thin command line layer: parses arguments, calls the resolver, prints the result.
  * It contains no date logic of its own.
+ *
+ * @internal
  */
 final class Application
 {
-    private const string USAGE = 'Aufruf: zeitangaben "<text>" [--state=NI] [--date=JJJJ-MM-TT] [--json]';
+    private const string USAGE = 'Aufruf: zeitangaben "<text>" [--state=NI] [--date=JJJJ-MM-TT] [--json] [--help]';
+
+    private const string HELP = <<<'TEXT'
+
+        Wandelt eine deutsche Zeitangabe in einen Zeitraum um oder gibt eine Rückfrage aus.
+
+          --state=NI          Bundesland als Kürzel, zum Beispiel NI, BY oder NW
+          --date=JJJJ-MM-TT   Bezugsdatum für relative Angaben; die Systemuhr wird nie gelesen
+          --json              Ergebnis als JSON ausgeben
+          --help, -h          Diese Hilfe anzeigen
+
+        Exit-Code 0 bei jedem Ergebnis, auch bei einer Rückfrage, 2 bei ungültigen Argumenten.
+        TEXT;
 
     /**
      * @param list<string> $argv   the raw argument vector, program name first
@@ -28,8 +42,15 @@ final class Application
      */
     public function run(array $argv, $stdout, $stderr): int
     {
+        $args = array_slice($argv, 1);
+        if (in_array('--help', $args, true) || in_array('-h', $args, true)) {
+            fwrite($stdout, self::USAGE."\n".self::HELP."\n");
+
+            return 0;
+        }
+
         try {
-            $input = $this->parse(array_slice($argv, 1));
+            $input = $this->parse($args);
         } catch (InvalidArgumentException $e) {
             fwrite($stderr, $e->getMessage()."\n".self::USAGE."\n");
 

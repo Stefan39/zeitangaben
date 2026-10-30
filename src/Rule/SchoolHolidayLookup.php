@@ -12,6 +12,8 @@ use Stejac\Zeitangaben\State;
 
 /**
  * Picks one entry from the school holiday snapshot; never extrapolates beyond it.
+ *
+ * @internal
  */
 final readonly class SchoolHolidayLookup
 {

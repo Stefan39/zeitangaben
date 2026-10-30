@@ -7,6 +7,8 @@ namespace Stejac\Zeitangaben\Text;
 /**
  * Brings input into the form every rule pattern is written against:
  * lowercase ASCII for German letters, umlauts transliterated.
+ *
+ * @internal
  */
 final class Normalizer
 {

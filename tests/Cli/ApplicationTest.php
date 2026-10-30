@@ -29,6 +29,18 @@ final class ApplicationTest extends TestCase
         return [$code, (string) stream_get_contents($stdout), (string) stream_get_contents($stderr)];
     }
 
+    public function testHelpPrintsUsageAndExitsWithZero(): void
+    {
+        foreach (['--help', '-h'] as $flag) {
+            [$code, $out, $err] = $this->invoke([$flag]);
+
+            self::assertSame(0, $code);
+            self::assertStringContainsString('Aufruf: zeitangaben', $out);
+            self::assertStringContainsString('--state=NI', $out);
+            self::assertSame('', $err);
+        }
+    }
+
     public function testPrintsResolvedPeriodInGerman(): void
     {
         [$code, $out] = $this->invoke(['in den Herbstferien', '--state=NI', '--date=2026-09-16']);

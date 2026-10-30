@@ -11,6 +11,8 @@ use Stejac\Zeitangaben\Result;
 
 /**
  * "Nebensaison", "Hauptsaison": tourism jargon, not a calendar term.
+ *
+ * @internal
  */
 final class SeasonTermRule implements Rule
 {

@@ -11,6 +11,8 @@ use Stejac\Zeitangaben\Result;
 
 /**
  * "dieses Wochenende": Friday to Sunday of the reference date's calendar week.
+ *
+ * @internal
  */
 final class ThisWeekendRule implements Rule
 {

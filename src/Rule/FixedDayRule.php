@@ -11,6 +11,8 @@ use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * Days with a fixed calendar date: Silvester, Neujahr, Tag der Deutschen Einheit, Tag der Arbeit, Heiligabend and the Christmas days.
+ *
+ * @internal
  */
 final class FixedDayRule implements Rule
 {

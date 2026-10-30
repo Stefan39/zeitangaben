@@ -13,6 +13,8 @@ use Stejac\Zeitangaben\Period;
 
 /**
  * Builds a clarification whose candidates lie in the next occurrence of a yearly span.
+ *
+ * @internal
  */
 final class YearCandidates
 {

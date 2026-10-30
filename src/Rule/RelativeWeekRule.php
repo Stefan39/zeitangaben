@@ -13,6 +13,8 @@ use Stejac\Zeitangaben\Result;
 
 /**
  * "in zwei Wochen": the calendar week that lies that many weeks after the reference week.
+ *
+ * @internal
  */
 final class RelativeWeekRule implements Rule
 {

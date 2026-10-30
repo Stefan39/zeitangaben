@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Stejac\Zeitangaben\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Stejac\Zeitangaben\Candidate;
 use Stejac\Zeitangaben\Clarification;
 use Stejac\Zeitangaben\ClarificationReason;
 use Stejac\Zeitangaben\Context;
+use Stejac\Zeitangaben\InvalidPeriodException;
 use Stejac\Zeitangaben\NoExpression;
 use Stejac\Zeitangaben\Period;
 use Stejac\Zeitangaben\Resolved;
@@ -18,9 +20,29 @@ final class PeriodTest extends TestCase
 {
     public function testEndBeforeStartThrows(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidPeriodException::class);
 
         Period::of('2026-10-02', '2026-10-01');
+    }
+
+    /**
+     * @return iterable<string, array{string}>
+     */
+    public static function notStrictDates(): iterable
+    {
+        yield 'relative word' => ['tomorrow'];
+        yield 'german format' => ['12.06.2027'];
+        yield 'with time' => ['2027-06-12 10:00'];
+        yield 'short month' => ['2027-6-12'];
+        yield 'does not exist' => ['2027-02-30'];
+    }
+
+    #[DataProvider('notStrictDates')]
+    public function testOfAcceptsOnlyStrictDates(string $date): void
+    {
+        $this->expectException(InvalidPeriodException::class);
+
+        Period::of($date, '2027-12-31');
     }
 
     public function testTimeAndTimezoneAreDropped(): void

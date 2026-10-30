@@ -13,6 +13,8 @@ use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "über Ostern": the bank holidays and, where the state is known, the Easter school holidays.
+ *
+ * @internal
  */
 final class EasterRule implements Rule
 {

@@ -6,6 +6,8 @@ namespace Stejac\Zeitangaben\Calendar;
 
 /**
  * Easter Sunday of the Gregorian calendar (Meeus/Jones/Butcher) and the movable feasts counted from it.
+ *
+ * @internal
  */
 final class Easter
 {

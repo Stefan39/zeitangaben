@@ -6,6 +6,8 @@ namespace Stejac\Zeitangaben\Text;
 
 /**
  * Normalised text that remembers where each byte came from, so a match can be quoted as the user wrote it.
+ *
+ * @internal
  */
 final readonly class NormalizedText
 {

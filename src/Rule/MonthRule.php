@@ -14,6 +14,8 @@ use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "im Juli [2027]" and "naechsten Monat": a whole calendar month.
+ *
+ * @internal
  */
 final class MonthRule implements Rule
 {

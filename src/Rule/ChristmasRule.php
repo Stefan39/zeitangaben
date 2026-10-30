@@ -14,6 +14,8 @@ use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "zwischen den Jahren", "über Weihnachten", "die Woche vor Weihnachten". Not the school Christmas holidays.
+ *
+ * @internal
  */
 final class ChristmasRule implements Rule
 {

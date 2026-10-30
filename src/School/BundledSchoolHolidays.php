@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Stejac\Zeitangaben\School;
 
+use Stejac\Zeitangaben\InvalidPeriodException;
 use Stejac\Zeitangaben\Period;
 use Stejac\Zeitangaben\State;
 
@@ -86,7 +87,7 @@ final class BundledSchoolHolidays implements SchoolHolidayProvider
                 $row['name'],
                 Period::of($row['start'], $row['end']),
             );
-        } catch (\ValueError|\InvalidArgumentException|\DateMalformedStringException $e) {
+        } catch (\ValueError|InvalidPeriodException $e) {
             throw new SchoolHolidayDataException('School holiday row has an invalid value.', 0, $e);
         }
     }

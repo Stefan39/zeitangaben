@@ -18,6 +18,8 @@ use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "Brückentag im Mai": the Friday after Himmelfahrt and the long weekend around 1 May.
+ *
+ * @internal
  */
 final class BridgeDayRule implements Rule
 {

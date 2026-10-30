@@ -11,6 +11,8 @@ use Stejac\Zeitangaben\Result;
 
 /**
  * "die letzte Ferienwoche" and plain "Ferien": depend on which holidays are meant.
+ *
+ * @internal
  */
 final class LastHolidayWeekRule implements Rule
 {

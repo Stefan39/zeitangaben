@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Stejac\Zeitangaben\Calendar;
 
+use Stejac\Zeitangaben\InvalidPeriodException;
+
 /**
  * German month names in normalised (umlaut-transliterated, lowercase) form.
+ *
+ * @internal
  */
 final class Months
 {
@@ -28,6 +32,6 @@ final class Months
 
     public static function number(string $name): int
     {
-        return self::NUMBERS[$name] ?? throw new \InvalidArgumentException(sprintf('Unknown month "%s".', $name));
+        return self::NUMBERS[$name] ?? throw new InvalidPeriodException(sprintf('Unknown month "%s".', $name));
     }
 }

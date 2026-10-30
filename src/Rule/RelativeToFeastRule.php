@@ -9,6 +9,8 @@ use Stejac\Zeitangaben\Result;
 
 /**
  * "nach Pfingsten", "vor Ostern": open-ended, so never mapped to the feast itself.
+ *
+ * @internal
  */
 final class RelativeToFeastRule implements Rule
 {

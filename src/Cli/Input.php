@@ -6,6 +6,9 @@ namespace Stejac\Zeitangaben\Cli;
 
 use Stejac\Zeitangaben\State;
 
+/**
+ * @internal
+ */
 final readonly class Input
 {
     public function __construct(

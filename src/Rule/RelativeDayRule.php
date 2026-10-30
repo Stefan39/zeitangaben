@@ -11,6 +11,8 @@ use Stejac\Zeitangaben\Result;
 
 /**
  * "heute", "morgen", "uebermorgen", relative to the reference date.
+ *
+ * @internal
  */
 final class RelativeDayRule implements Rule
 {

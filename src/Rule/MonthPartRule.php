@@ -15,6 +15,8 @@ use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "Anfang|Mitte|Ende Juli": a stretch of days that is deliberately not exact.
+ *
+ * @internal
  */
 final class MonthPartRule implements Rule
 {

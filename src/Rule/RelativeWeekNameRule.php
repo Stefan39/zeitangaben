@@ -11,6 +11,8 @@ use Stejac\Zeitangaben\Result;
 
 /**
  * "diese Woche", "nächste Woche", "übernächste Woche": the Monday to Sunday week around the reference date.
+ *
+ * @internal
  */
 final class RelativeWeekNameRule implements Rule
 {

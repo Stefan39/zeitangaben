@@ -11,6 +11,8 @@ use Stejac\Zeitangaben\Result;
 
 /**
  * A bare weekday ("am Samstag", "ab Freitag") names no date, whatever the reference date is.
+ *
+ * @internal
  */
 final class WeekdayRule implements Rule
 {

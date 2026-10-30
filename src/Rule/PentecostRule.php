@@ -13,6 +13,8 @@ use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "Pfingsten": the long weekend and, where the state is known and has them, the Pentecost school holidays.
+ *
+ * @internal
  */
 final class PentecostRule implements Rule
 {
