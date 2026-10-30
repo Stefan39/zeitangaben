@@ -287,14 +287,30 @@ final class VagueRulesTest extends TestCase
         self::assertSame($end, $period->end->format('Y-m-d'));
     }
 
-    public function testBetweenTheYearsOnNewYearsDayStillCountsTheRunningSpan(): void
+    /**
+     * @return iterable<string, array{string, string, list<array{string, string}>}>
+     */
+    public static function candidatesAcrossNewYear(): iterable
     {
-        $candidates = $this->clarify('zwischen den Jahren', '2027-01-01')->candidates;
+        yield 'week before christmas, both over' => ['die Woche vor Weihnachten', '2027-01-01', [['2027-12-13', '2027-12-19'], ['2027-12-20', '2027-12-24']]];
+        yield 'over christmas, one still running' => ['über Weihnachten', '2027-01-01', [['2026-12-24', '2027-01-01']]];
+        yield 'between the years, one still running' => ['zwischen den Jahren', '2027-01-01', [['2026-12-25', '2027-01-01']]];
+        yield 'between the years, both running' => ['zwischen den Jahren', '2026-12-29', [['2026-12-27', '2026-12-30'], ['2026-12-25', '2027-01-01']]];
+        yield 'explicit year keeps the past' => ['die Woche vor Weihnachten 2026', '2027-01-01', [['2026-12-14', '2026-12-20'], ['2026-12-21', '2026-12-24']]];
+    }
 
-        self::assertSame('2026-12-27', $candidates[0]->period->start->format('Y-m-d'));
-        self::assertSame('2026-12-25', $candidates[1]->period->start->format('Y-m-d'));
-        self::assertSame('2027-01-01', $candidates[1]->period->end->format('Y-m-d'));
-        self::assertSame('2027-12-25', $this->clarify('zwischen den Jahren', '2027-01-02')->candidates[1]->period->start->format('Y-m-d'));
+    /**
+     * @param list<array{string, string}> $expected
+     */
+    #[DataProvider('candidatesAcrossNewYear')]
+    public function testOnlyCandidatesNotYetOverAreListed(string $text, string $reference, array $expected): void
+    {
+        $actual = array_map(
+            static fn ($c): array => [$c->period->start->format('Y-m-d'), $c->period->end->format('Y-m-d')],
+            $this->clarify($text, $reference)->candidates,
+        );
+
+        self::assertSame($expected, $actual);
     }
 
     public function testSingleDaysAcrossNewYearAreNotPulledBack(): void
