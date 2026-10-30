@@ -24,6 +24,7 @@ use Stejac\Zeitangaben\Rule\RelativeDayRule;
 use Stejac\Zeitangaben\Rule\RelativeToFeastRule;
 use Stejac\Zeitangaben\Rule\RelativeWeekNameRule;
 use Stejac\Zeitangaben\Rule\RelativeWeekRule;
+use Stejac\Zeitangaben\Rule\RestOfText;
 use Stejac\Zeitangaben\Rule\Rule;
 use Stejac\Zeitangaben\Rule\RuleMatch;
 use Stejac\Zeitangaben\Rule\SchoolHolidayLookup;
@@ -45,8 +46,7 @@ final class Resolver
 {
     private const string GREETINGS = '~\bguten\s+(?:morgen|tag|abend)\b'
         .'|(?:^\s*|(?<=[.!?,;]\s))morgen\s+zusammen\b(?=\s*(?:[,.!?;:]|$))'
-        .'|\b(?:frohe|schoene|gesegnete)\s+(?:ostern|pfingsten|weihnachten)\b'
-        .'|\bschoenes\s+wochenende\b~';
+        .'|\b(?:frohe|schoene|gesegnete)\s+(?:ostern|pfingsten|weihnachten)\b~';
 
     /** @var list<Rule> most specific first */
     private readonly array $rules;
@@ -91,7 +91,8 @@ final class Resolver
     public function resolve(string $text, Context $context = new Context()): Result
     {
         $source = Normalizer::withOffsets($text);
-        $normalized = YearToken::mask($this->stripGreetings($source->text));
+        $withoutGreetings = $this->stripGreetings($source->text);
+        $normalized = YearToken::mask($withoutGreetings);
         $states = State::allFromText($normalized);
         $context = self::contextWith($states, $context);
 
@@ -106,7 +107,24 @@ final class Resolver
 
         [$rule, $match] = reset($found);
 
-        return $guard->clarificationFor($match, $unclaimed) ?? self::namingStates($this->evaluate($rule, $match, $context), $states);
+        $rest = new RestOfText($withoutGreetings, $match);
+        $result = $guard->clarificationFor($match, $unclaimed)
+            ?? self::namingStates($this->evaluate($rule, $match, $context), count($states) > 1 ? $states : $rest->states());
+
+        return $result instanceof Resolved ? self::checkedAgainst($rest, $result) : $result;
+    }
+
+    /**
+     * Resolved only stands when nothing else in the text could change it. Everything unknown turns it into a question.
+     */
+    private static function checkedAgainst(RestOfText $rest, Resolved $result): Result
+    {
+        $named = $rest->states();
+        if (null !== $result->state && [] !== $named) {
+            return Clarifications::namedStates($result->expression, $named);
+        }
+
+        return $rest->isHarmless() ? $result : Clarifications::unclearContext($result);
     }
 
     /**
@@ -128,8 +146,8 @@ final class Resolver
      */
     private static function namingStates(Result $result, array $states): Result
     {
-        return count($states) > 1 && $result instanceof Clarification && ClarificationReason::MissingState === $result->reason
-            ? Clarifications::severalStates($result->expression, $states)
+        return [] !== $states && $result instanceof Clarification && ClarificationReason::MissingState === $result->reason
+            ? Clarifications::namedStates($result->expression, $states)
             : $result;
     }
 
@@ -146,7 +164,7 @@ final class Resolver
     {
         return preg_replace_callback(
             self::GREETINGS,
-            static fn (array $m): string => str_repeat(' ', strlen($m[0])),
+            static fn (array $m): string => str_repeat(RestOfText::GREETING_MARK, strlen($m[0])),
             $normalized,
         ) ?? $normalized;
     }

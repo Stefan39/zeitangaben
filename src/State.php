@@ -44,13 +44,25 @@ enum State: string
     public static function allFromText(string $normalized): array
     {
         preg_match_all('~'.self::mentionPattern().'~', $normalized, $mentions);
+
+        return self::namedIn(implode(', ', $mentions['states']));
+    }
+
+    /**
+     * All different states whose name stands anywhere in lowercase, umlaut-transliterated text, with or without
+     * a word that makes it a state mention. A bare name proves nothing, but it does leave the state in doubt.
+     *
+     * @internal
+     *
+     * @return list<self>
+     */
+    public static function namedIn(string $normalized): array
+    {
+        preg_match_all('~(?<![a-z0-9-])(?:'.self::aliasPattern().')(?![a-z0-9-])~', $normalized, $names);
         $aliases = self::aliases();
         $states = [];
-        foreach ($mentions['states'] as $mention) {
-            preg_match_all('~(?<![a-z0-9-])(?:'.self::aliasPattern().')(?![a-z0-9-])~', $mention, $names);
-            foreach ($names[0] as $name) {
-                $states[$aliases[$name]->value] = $aliases[$name];
-            }
+        foreach ($names[0] as $name) {
+            $states[$aliases[$name]->value] = $aliases[$name];
         }
 
         return array_values($states);

@@ -7,18 +7,22 @@ namespace Stejac\Zeitangaben\Text;
 /**
  * The one definition of how a year is written next to an expression.
  *
- * Four digits count only inside the window 2000 to 2099. Two digits are read as 20xx, and only directly
- * after a numeric date or at the very end of the input or a clause. A number followed by a unit is a quantity,
- * not a year; such numbers are masked before any rule runs. Any other word after a year changes nothing:
- * dropping a stated year would be a silently wrong answer.
+ * Four digits count only inside the window 2000 to 2099. Two digits count only from 00 to 69 and are read as
+ * 20xx: directly after a numeric date, behind an apostrophe, or at the very end of the input. A number followed
+ * by a unit is a quantity, not a year; such numbers are masked before any rule runs. Any other word after a
+ * year changes nothing: dropping a stated year would be a silently wrong answer.
  *
  * @internal
  */
 final class YearToken
 {
-    private const string RELATIVE = 'naechstes|naechsten|kommendes|kommenden|letztes|letzten|voriges|vorigen|dieses|diesem';
+    private const string RELATIVE = 'uebernaechstes|uebernaechsten|naechstes|naechsten|kommendes|kommenden|letztes|letzten|voriges|vorigen|dieses|diesem';
+
+    private const string RELATIVE_NOUN = 'jahr(?:es)?\b';
 
     private const array RELATIVE_OFFSETS = [
+        'uebernaechstes' => 2,
+        'uebernaechsten' => 2,
         'naechstes' => 1,
         'naechsten' => 1,
         'kommendes' => 1,
@@ -33,9 +37,10 @@ final class YearToken
 
     private const string LONG = '(?:\s+im\s+jahr)?\s+(?<year>20\d\d)(?!\d|[.,]\d)'
         .'|\s*/\s*(?<slash>20\d\d)(?!\d)'
-        .'|\s+(?:(?:im|in)\s+)?(?<relative>'.self::RELATIVE.')\s+jahr\b';
+        .'|\s*(?:\'|’)(?<apostrophe>[0-6]\d)(?![\w.])'
+        .'|\s+(?:(?:im|in)\s+)?(?<relative>'.self::RELATIVE.')\s+'.self::RELATIVE_NOUN;
 
-    private const string SHORT = '|(?:\s+im\s+jahr)?\s+(?<short>\d\d)(?=\s*$|[.,;!?)](?:\s|$))';
+    private const string SHORT = '|(?:\s+im\s+jahr)?\s+(?<short>[0-6]\d)(?=\s*$)';
 
     /** Trailing year for months, feasts and holidays: all forms, including two digits at the end. */
     public const string TRAILING = '(?:'.self::LONG.self::SHORT.')?';
@@ -43,7 +48,7 @@ final class YearToken
     /** Trailing year for expressions that end in a number themselves, such as "KW 42": no two-digit form. */
     public const string TRAILING_LONG = '(?:'.self::LONG.')?';
 
-    public const string LEADING = '(?:(?<![\w.,/-])(?:(?<leadyear>20\d\d)\s+|(?:(?:im|in)\s+)?(?<leadrelative>'.self::RELATIVE.')\s+jahr\s+))?';
+    public const string LEADING = '(?:(?<![\w.,/-])(?:(?<leadyear>20\d\d)\s+|(?:(?:im|in)\s+)?(?<leadrelative>'.self::RELATIVE.')\s+'.self::RELATIVE_NOUN.'\s+))?';
 
     /** A year attached to a numeric date token, as in "12.06.2028", "12.06. 2028" or "12.06.28". */
     public const string ATTACHED_NUMERIC = '(?:\s?20\d\d|\d\d)?';
@@ -101,7 +106,7 @@ final class YearToken
      */
     public static function of(array $groups, ?\DateTimeImmutable $reference): ?int
     {
-        $digits = $groups['year'] ?? $groups['slash'] ?? $groups['leadyear'] ?? $groups['short'] ?? null;
+        $digits = $groups['year'] ?? $groups['slash'] ?? $groups['leadyear'] ?? $groups['short'] ?? $groups['apostrophe'] ?? null;
         if (null !== $digits) {
             return self::fromDigits($digits);
         }
@@ -111,6 +116,14 @@ final class YearToken
         return null === $relative || null === $reference
             ? null
             : (int) $reference->format('Y') + self::RELATIVE_OFFSETS[$relative];
+    }
+
+    /**
+     * Whether the date token ends in a two-digit year outside 00 to 69, as in "12.06.85".
+     */
+    public static function endsInOldShortYear(string $dateToken): bool
+    {
+        return 1 === preg_match('~\.[7-9]\d$~', $dateToken);
     }
 
     public static function fromDigits(string $digits): int

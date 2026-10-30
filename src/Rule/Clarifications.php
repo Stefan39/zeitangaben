@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Stejac\Zeitangaben\Rule;
 
+use Stejac\Zeitangaben\Candidate;
 use Stejac\Zeitangaben\Clarification;
 use Stejac\Zeitangaben\ClarificationReason;
+use Stejac\Zeitangaben\Resolved;
 use Stejac\Zeitangaben\State;
 
 /**
@@ -91,11 +93,11 @@ final class Clarifications
     }
 
     /**
-     * The expression depends on the state and the text names several.
+     * The expression depends on the state and the text names states without settling on one.
      *
-     * @param list<State> $states
+     * @param non-empty-list<State> $states
      */
-    public static function severalStates(string $expression, array $states): Clarification
+    public static function namedStates(string $expression, array $states): Clarification
     {
         $names = implode(' und ', array_map(static fn (State $state): string => $state->germanName(), $states));
 
@@ -103,6 +105,22 @@ final class Clarifications
             ClarificationReason::MissingState,
             sprintf('Für welches Bundesland gilt „%s“? Sie nennen %s.', $expression, $names),
             $expression,
+        );
+    }
+
+    /**
+     * The text says more than the expression, and what it says may change the meaning.
+     */
+    public static function unclearContext(Resolved $found): Clarification
+    {
+        $start = $found->period->start->format('d.m.Y');
+        $end = $found->period->end->format('d.m.Y');
+
+        return new Clarification(
+            ClarificationReason::UnclearContext,
+            sprintf('Meinen Sie „%s“, also %s?', $found->expression, $start === $end ? $start : $start.' bis '.$end),
+            $found->expression,
+            [new Candidate($found->period, $found->expression)],
         );
     }
 

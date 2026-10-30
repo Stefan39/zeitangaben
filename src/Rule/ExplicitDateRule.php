@@ -32,7 +32,18 @@ final class ExplicitDateRule implements Rule
         'sonntag' => 7,
     ];
 
-    private const string WEEKDAY = '(?:\b(?<%s>montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonnabend|sonntag)\s*,?\s*(?:(?:den|der)\s+)?)?';
+    private const array ABBREVIATED_WEEKDAYS = [
+        'mo' => 'montag',
+        'di' => 'dienstag',
+        'mi' => 'mittwoch',
+        'do' => 'donnerstag',
+        'fr' => 'freitag',
+        'sa' => 'samstag',
+        'so' => 'sonntag',
+    ];
+
+    private const string WEEKDAY = '(?:\b(?<%s>montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonnabend|sonntag|mo|di|mi|do|fr|sa|so)'
+        .'(?:(?<=\b(?:mo|di|mi|do|fr|sa|so))\.)?\s*,?\s*(?:(?:den|der)\s+)?)?';
 
     private const string DATE_TOKEN = '(?<![\d.])\d{1,2}\.\s?(?:\d{1,2}\.%s|(?:%s)\b%s)(?!\d|\.\d)';
 
@@ -57,6 +68,9 @@ final class ExplicitDateRule implements Rule
     public function evaluate(RuleMatch $match, Context $context): Result
     {
         $groups = $match->groups;
+        if (self::hasOldShortYear($groups)) {
+            return Clarifications::invalidDate($match->original);
+        }
         if (isset($groups['from'], $groups['to'])) {
             $result = $this->evaluateRange($match, $context);
 
@@ -67,6 +81,16 @@ final class ExplicitDateRule implements Rule
         $result = YearlyDate::resolve($match->original, $date['month'], $date['day'], $date['year'] ?? $match->year, $context);
 
         return $this->checkWeekdays($result, $match->original, $groups['dateday'] ?? null, null);
+    }
+
+    /**
+     * @param array<int|string, string> $groups
+     */
+    private static function hasOldShortYear(array $groups): bool
+    {
+        return YearToken::endsInOldShortYear($groups['date'] ?? '')
+            || YearToken::endsInOldShortYear($groups['from'] ?? '')
+            || YearToken::endsInOldShortYear($groups['to'] ?? '');
     }
 
     private function evaluateRange(RuleMatch $match, Context $context): Result
@@ -175,9 +199,14 @@ final class ExplicitDateRule implements Rule
 
     private static function weekdayConflict(string $expression, \DateTimeImmutable $date, ?string $weekday): ?Result
     {
-        return null === $weekday || self::WEEKDAYS[$weekday] === (int) $date->format('N')
+        if (null === $weekday) {
+            return null;
+        }
+        $name = self::ABBREVIATED_WEEKDAYS[$weekday] ?? $weekday;
+
+        return self::WEEKDAYS[$name] === (int) $date->format('N')
             ? null
-            : Clarifications::weekdayMismatch($expression, $date, $weekday);
+            : Clarifications::weekdayMismatch($expression, $date, $name);
     }
 
     /**

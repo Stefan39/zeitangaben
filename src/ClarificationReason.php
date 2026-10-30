@@ -15,4 +15,5 @@ enum ClarificationReason: string
     case NotInState = 'not_in_state';
     case InvalidDate = 'invalid_date';
     case MultipleExpressions = 'multiple_expressions';
+    case UnclearContext = 'unclear_context';
 }

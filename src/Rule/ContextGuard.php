@@ -12,20 +12,20 @@ use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * Looks at the text around a claimed span: a word that looks like a time expression may be part of a name,
- * a web address or a longer phrase the rules did not understand. All word lists live here.
+ * a web address or a longer phrase the rules did not understand. RestOfText looks at everything further away.
  *
  * @internal
  */
 final readonly class ContextGuard
 {
-    /** The word before makes a span that starts with a letter a name or a noun phrase: "Frau Morgen", "gestern Morgen". */
+    /** The word before makes a capitalised span a name or a noun phrase: "Frau Morgen", "gestern Morgen", but not "Hotel morgen". */
     private const array NAME_WORDS = [
-        'herr', 'frau', 'dr', 'prof', 'familie', 'fam', 'firma', 'hotel', 'pension',
+        'herr', 'herrn', 'hr', 'frau', 'fr', 'frl', 'dr', 'prof', 'familie', 'fam', 'firma', 'hotel', 'pension',
         'gestern', 'jeden', 'jede', 'fruehen', 'spaeten', 'schoenen',
     ];
 
-    /** Only "morgen" turns into a noun after this word: "diesen Morgen", but "diesen Montag" still names a day. */
-    private const string MORNING_WORD = 'diesen';
+    /** Only "morgen" turns into a noun after these words: "diesen Morgen", but "diesen Montag" still names a day. */
+    private const array MORNING_WORDS = ['diesen', 'am', 'naechsten', 'naechster', 'folgenden'];
 
     /** The word before makes a span that starts with a digit a reference number: "Paragraph 3.4.". */
     private const array NUMBER_WORDS = [
@@ -34,7 +34,7 @@ final readonly class ContextGuard
     ];
 
     /** These words may stand before a span with an abbreviation dot. */
-    private const array ABBREVIATIONS = ['dr', 'prof', 'fam', 'nr'];
+    private const array ABBREVIATIONS = ['dr', 'prof', 'fam', 'nr', 'hr', 'fr', 'frl'];
 
     /** Span openers that carry the meaning themselves, so "Hotel im Juli" is a hotel in July, not a name. */
     private const array PREPOSITIONS = ['im', 'am', 'ab', 'in', 'vom', 'von', 'ueber', 'uebers', 'zwischen', 'ein', 'das', 'nach', 'vor'];
@@ -44,7 +44,7 @@ final readonly class ContextGuard
 
     /** The span is only part of what is meant, so it must not be answered as if it stood alone. */
     private const array QUALIFIERS = [
-        'nach', 'vor', 'ab', 'bis', 'seit', 'nicht', 'kein', 'keine', 'keinen', 'ausser', 'ohne', 'statt', 'anstatt',
+        'nach', 'vor', 'vorm', 'ab', 'bis', 'seit', 'nicht', 'kein', 'keine', 'keinen', 'ausser', 'ohne', 'statt', 'anstatt',
         'anfang', 'mitte', 'ende', 'erste', 'ersten', 'erstes', 'erster', 'zweite', 'zweiten', 'dritte',
         'letzte', 'letzten', 'letztes', 'jedes',
         'um', 'gegen', 'ca', 'circa', 'zirka', 'etwa', 'ungefaehr', 'rund', 'spaetestens', 'fruehestens',
@@ -53,6 +53,9 @@ final readonly class ContextGuard
 
     /** Counts only next to the span or a qualifier: "drei im Mai" and "drei Tage im Mai" are vague, "4 Personen im Juli" is not. */
     private const string NUMBER = '~^(?:\d+|zwei|drei|vier|fuenf|sechs|sieben|acht|neun|zehn|elf|zwoelf)$~';
+
+    /** A number after this word counts people, not time: "Tisch für 4 morgen". */
+    private const string COUNT_OF_PEOPLE = 'fuer';
 
     /** Not a qualifier even with "vor" before it: "vor allem im Juli". */
     private const string IDIOM_END = 'allem';
@@ -133,9 +136,10 @@ final readonly class ContextGuard
             return in_array($word, self::NUMBER_WORDS, true);
         }
         $firstWord = strtok($match->expression, ' ');
+        $isName = in_array($word, self::NAME_WORDS, true) && $this->isCapitalised($match->offset);
 
         return !in_array($firstWord, self::PREPOSITIONS, true)
-            && (in_array($word, self::NAME_WORDS, true) || (self::MORNING_WORD === $word && 'morgen' === $match->expression));
+            && ($isName || (in_array($word, self::MORNING_WORDS, true) && 'morgen' === $match->expression));
     }
 
     /**
@@ -189,20 +193,30 @@ final readonly class ContextGuard
     {
         $start = null;
         $counted = 0;
-        foreach ($this->wordsBefore($match->offset) as [$word, $offset]) {
+        $words = $this->wordsBefore($match->offset);
+        foreach ($words as $index => [$word, $offset]) {
             if (in_array($word, self::FILLERS, true)) {
                 continue;
             }
             if (self::QUALIFIER_WINDOW === $counted || $this->blocksQualifier($word, $offset)) {
                 break;
             }
-            if (in_array($word, self::QUALIFIERS, true) || ((0 === $counted || null !== $start) && 1 === preg_match(self::NUMBER, $word))) {
+            if (in_array($word, self::QUALIFIERS, true) || ((0 === $counted || null !== $start) && self::isCount($words, $index))) {
                 $start = $offset;
             }
             ++$counted;
         }
 
         return $start;
+    }
+
+    /**
+     * @param list<array{string, int}> $words nearest first
+     */
+    private static function isCount(array $words, int $index): bool
+    {
+        return 1 === preg_match(self::NUMBER, $words[$index][0])
+            && self::COUNT_OF_PEOPLE !== ($words[$index + 1][0] ?? null);
     }
 
     /**
@@ -234,6 +248,11 @@ final readonly class ContextGuard
             return false;
         }
 
-        return self::IDIOM_END === $word || 1 === preg_match('/^\p{Lu}/u', $this->source->originalOf($offset, 1));
+        return self::IDIOM_END === $word || $this->isCapitalised($offset);
+    }
+
+    private function isCapitalised(int $offset): bool
+    {
+        return 1 === preg_match('/^\p{Lu}/u', $this->source->originalOf($offset, 1));
     }
 }

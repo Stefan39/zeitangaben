@@ -32,8 +32,17 @@ final class ContextGuardTest extends TestCase
         yield 'title' => ['Prof. Morgen'];
         yield 'good morning all' => ['Morgen zusammen!'];
         yield 'happy easter' => ['Frohe Ostern!'];
-        yield 'nice weekend' => ['Schönes Wochenende!'];
         yield 'noun morning' => ['diesen Morgen'];
+        yield 'morning after am' => ['Wir reisen am Morgen an'];
+        yield 'morning after am, lowercase' => ['am morgen'];
+        yield 'next morning' => ['am nächsten Morgen'];
+        yield 'next morning, masculine' => ['nächster Morgen'];
+        yield 'following morning' => ['am folgenden Morgen'];
+        yield 'herrn' => ['Bitte Herrn Morgen anrufen'];
+        yield 'abbreviated herr' => ['Hr. Morgen'];
+        yield 'abbreviated frau' => ['Fr. Morgen'];
+        yield 'abbreviated fraeulein' => ['Frl. Morgen'];
+        yield 'capitalised after a name word' => ['Hotel Morgen'];
     }
 
     #[DataProvider('noTimeExpression')]
@@ -42,10 +51,19 @@ final class ContextGuardTest extends TestCase
         self::assertInstanceOf(NoExpression::class, $this->resolve($text));
     }
 
+    public function testAStateAfterAPrepositionIsNoContextToAskAbout(): void
+    {
+        $result = $this->resolve('wir fahren nach bayern im juli');
+        self::assertInstanceOf(Resolved::class, $result);
+        self::assertSame('2027-07-01', $result->period->start->format('Y-m-d'));
+    }
+
     /**
+     * Sentences the qualifier search rightly lets through; the unknown words then make them ask.
+     *
      * @return iterable<string, array{string, string}>
      */
-    public static function plainExpressions(): iterable
+    public static function noQualifier(): iterable
     {
         yield 'hotel in july' => ['Wir suchen ein Hotel im Juli', '2027-07-01'];
         yield 'family in july' => ['Wir sind eine Familie im Juli', '2027-07-01'];
@@ -53,7 +71,6 @@ final class ContextGuardTest extends TestCase
         yield 'people counted' => ['Wir sind 4 Personen im Juli', '2027-07-01'];
         yield 'number with capital noun' => ['3 Zimmer im Juli', '2027-07-01'];
         yield 'place after preposition' => ['Wir fahren nach Usedom im Juli', '2027-07-01'];
-        yield 'state after preposition, lowercase' => ['wir fahren nach bayern im juli', '2027-07-01'];
         yield 'idiom' => ['vor allem im Juli', '2027-07-01'];
         yield 'noun between' => ['Tag der Anreise ist morgen', '2026-10-31'];
         yield 'other clause' => ['Das geht nicht. Im Juli passt es', '2027-07-01'];
@@ -63,14 +80,28 @@ final class ContextGuardTest extends TestCase
         yield 'time after comma' => ['morgen, 14:30', '2026-10-31'];
         yield 'count before comma' => ['Wir sind 4, morgen kommen wir', '2026-10-31'];
         yield 'morning together' => ['Wir kommen morgen zusammen an', '2026-10-31'];
+        yield 'count of people' => ['Tisch für 4 morgen', '2026-10-31'];
+        yield 'count of people with a date' => ['Tisch für vier am 12.06.', '2027-06-12'];
+        yield 'lowercase after a name word' => ['Hotel morgen', '2026-10-31'];
+        yield 'lowercase after a title' => ['Fr. morgen', '2026-10-31'];
+        yield 'lowercase after a noun word' => ['gestern morgen', '2026-10-31'];
     }
 
-    #[DataProvider('plainExpressions')]
-    public function testKeepsOrdinarySentences(string $text, string $start): void
+    #[DataProvider('noQualifier')]
+    public function testUnknownWordsAskWithTheFoundPeriod(string $text, string $start): void
     {
         $result = $this->resolve($text);
-        self::assertInstanceOf(Resolved::class, $result);
-        self::assertSame($start, $result->period->start->format('Y-m-d'));
+        self::assertInstanceOf(Clarification::class, $result);
+        self::assertSame(ClarificationReason::UnclearContext, $result->reason);
+        self::assertCount(1, $result->candidates);
+        self::assertSame($start, $result->candidates[0]->period->start->format('Y-m-d'));
+    }
+
+    public function testAWeekendWishIsNoGreeting(): void
+    {
+        $result = $this->resolve('Schönes Wochenende!');
+        self::assertInstanceOf(Clarification::class, $result);
+        self::assertSame(ClarificationReason::Ambiguous, $result->reason);
     }
 
     public function testQuotesFromTheOutermostQualifierToTheEndOfTheSpan(): void
@@ -91,6 +122,9 @@ final class ContextGuardTest extends TestCase
         yield 'approximately, abbreviated' => ['ca. 12.06.', 'ca. 12.06.'];
         yield 'around' => ['um den 12. Oktober', 'um den 12. Oktober'];
         yield 'not with a filler' => ['nicht in den Sommerferien', 'nicht in den Sommerferien'];
+        yield 'contracted before' => ['vorm 12.06.', 'vorm 12.06.'];
+        yield 'weekend in a month' => ['Wir suchen ein schönes Wochenende im Oktober', 'Wochenende im Oktober'];
+        yield 'time noun after a count of people' => ['für 4 Tage im Juli', 'Tage im Juli'];
     }
 
     #[DataProvider('qualified')]

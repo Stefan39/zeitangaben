@@ -21,6 +21,49 @@ final class ExplicitDateRangeTest extends TestCase
     }
 
     /**
+     * @return iterable<string, array{string, string}>
+     */
+    public static function matchingAbbreviations(): iterable
+    {
+        yield 'with comma' => ['Sa, 12.06.2027', '2027-06-12'];
+        yield 'with dot' => ['Sa. 12.06.2027', '2027-06-12'];
+        yield 'bare' => ['sa 12.06.2027', '2027-06-12'];
+        yield 'with article' => ['Fr., den 11.06.2027', '2027-06-11'];
+        yield 'monday' => ['Mo 14.06.2027', '2027-06-14'];
+        yield 'tuesday' => ['Di 15.06.2027', '2027-06-15'];
+        yield 'wednesday' => ['Mi 16.06.2027', '2027-06-16'];
+        yield 'thursday' => ['Do 17.06.2027', '2027-06-17'];
+        yield 'sunday' => ['So 20.06.2027', '2027-06-20'];
+        yield 'range' => ['Fr 11.06.2027 bis So 13.06.2027', '2027-06-11'];
+    }
+
+    #[DataProvider('matchingAbbreviations')]
+    public function testAbbreviatedWeekdayIsCheckedAndConsumed(string $text, string $start): void
+    {
+        $result = $this->resolve($text);
+
+        self::assertInstanceOf(Resolved::class, $result);
+        self::assertSame($start, $result->period->start->format('Y-m-d'));
+    }
+
+    public function testAbbreviatedWeekdayThatContradictsTheDateIsSpelledOutInTheQuestion(): void
+    {
+        $result = $this->resolve('Mo. 12.06.2027');
+
+        self::assertInstanceOf(Clarification::class, $result);
+        self::assertSame(ClarificationReason::InvalidDate, $result->reason);
+        self::assertSame('Der 12.06.2027 ist ein Samstag, kein Montag. Welches Datum meinen Sie?', $result->question);
+    }
+
+    public function testAbbreviationAtTheEndOfARangeIsChecked(): void
+    {
+        $result = $this->resolve('Fr 11.06.2027 bis Mo 13.06.2027');
+
+        self::assertInstanceOf(Clarification::class, $result);
+        self::assertSame(ClarificationReason::InvalidDate, $result->reason);
+    }
+
+    /**
      * @return iterable<string, array{string, string, string}>
      */
     public static function ranges(): iterable
