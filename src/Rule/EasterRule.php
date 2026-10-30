@@ -9,6 +9,7 @@ use Stejac\Zeitangaben\Context;
 use Stejac\Zeitangaben\Period;
 use Stejac\Zeitangaben\Result;
 use Stejac\Zeitangaben\School\SchoolHolidayType;
+use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "über Ostern": the bank holidays and, where the state is known, the Easter school holidays.
@@ -21,7 +22,7 @@ final class EasterRule implements Rule
 
     public function pattern(): string
     {
-        return '\b(?:ueber\s+)?ostern\b'.FeastPeriod::YEAR_PATTERN;
+        return YearToken::around('\b(?:ueber\s+)?ostern\b');
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
@@ -29,7 +30,7 @@ final class EasterRule implements Rule
         $expression = $match->original;
         $feast = FeastPeriod::find(
             $expression,
-            FeastPeriod::yearOf($match),
+            $match->year,
             $context,
             static fn (int $year): Period => new Period(
                 Easter::offset($year, Easter::GOOD_FRIDAY),

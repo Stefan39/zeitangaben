@@ -10,6 +10,7 @@ use Stejac\Zeitangaben\ClarificationReason;
 use Stejac\Zeitangaben\Context;
 use Stejac\Zeitangaben\Period;
 use Stejac\Zeitangaben\Result;
+use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "im Frühjahr", "im Sommer", "im Herbst", "im Winter": the meteorological seasons.
@@ -26,8 +27,7 @@ final class SeasonRule implements Rule
 
     public function pattern(): string
     {
-        return '\b(?:(?:im\s+)?(?<spring>fruehjahr|fruehling)|im\s+(?:(?<summer>sommer)|(?<autumn>herbst)|(?<winter>winter)))\b'
-            .FeastPeriod::YEAR_PATTERN;
+        return YearToken::around('\b(?:(?:im\s+)?(?<spring>fruehjahr|fruehling)|im\s+(?:(?<summer>sommer)|(?<autumn>herbst)|(?<winter>winter)))\b');
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
@@ -42,7 +42,7 @@ final class SeasonRule implements Rule
             sprintf('„%s“ ist kein genauer Zeitraum. Meinen Sie die ganze Jahreszeit (%s), oder einen bestimmten Abschnitt davon?', $match->original, self::LABELS[$season]),
             $span,
             static fn (int $year): array => [new Candidate($span($year), self::LABELS[$season])],
-            FeastPeriod::yearOf($match),
+            $match->year,
         );
     }
 

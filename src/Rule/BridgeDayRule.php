@@ -13,6 +13,7 @@ use Stejac\Zeitangaben\ClarificationReason;
 use Stejac\Zeitangaben\Context;
 use Stejac\Zeitangaben\Period;
 use Stejac\Zeitangaben\Result;
+use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "Brückentag im Mai": the Friday after Himmelfahrt and the long weekend around 1 May.
@@ -21,7 +22,7 @@ final class BridgeDayRule implements Rule
 {
     public function pattern(): string
     {
-        return '\bbrueckentag(?:e)?\s+im\s+mai\b'.FeastPeriod::YEAR_PATTERN;
+        return YearToken::around('\bbrueckentag(?:e)?\s+im\s+mai\b');
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
@@ -29,7 +30,7 @@ final class BridgeDayRule implements Rule
         $expression = $match->original;
         $span = FeastPeriod::find(
             $expression,
-            FeastPeriod::yearOf($match),
+            $match->year,
             $context,
             fn (int $year): Period => $this->spanOf($this->candidatesIn($year)),
         );

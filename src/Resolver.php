@@ -9,6 +9,7 @@ use Stejac\Zeitangaben\Holiday\YasumiPublicHolidays;
 use Stejac\Zeitangaben\Rule\BridgeDayRule;
 use Stejac\Zeitangaben\Rule\CalendarWeekRule;
 use Stejac\Zeitangaben\Rule\ChristmasRule;
+use Stejac\Zeitangaben\Rule\Clarifications;
 use Stejac\Zeitangaben\Rule\EasterRule;
 use Stejac\Zeitangaben\Rule\ExplicitDateRule;
 use Stejac\Zeitangaben\Rule\FixedDayRule;
@@ -36,6 +37,7 @@ use Stejac\Zeitangaben\School\BundledSchoolHolidays;
 use Stejac\Zeitangaben\School\SchoolHolidayProvider;
 use Stejac\Zeitangaben\Text\NormalizedText;
 use Stejac\Zeitangaben\Text\Normalizer;
+use Stejac\Zeitangaben\Text\YearToken;
 
 final class Resolver
 {
@@ -81,7 +83,7 @@ final class Resolver
     public function resolve(string $text, Context $context = new Context()): Result
     {
         $source = Normalizer::withOffsets($text);
-        $normalized = $this->stripGreetings($source->text);
+        $normalized = YearToken::mask($source, $this->stripGreetings($source->text));
         $state = State::fromText($normalized);
         if (null !== $state) {
             $context = $context->withState($state);
@@ -97,7 +99,16 @@ final class Resolver
 
         [$rule, $match] = reset($found);
 
-        return $rule->evaluate($match, $context);
+        return $this->evaluate($rule, $match, $context);
+    }
+
+    private function evaluate(Rule $rule, RuleMatch $match, Context $context): Result
+    {
+        if (null === $context->referenceDate && YearToken::needsReference($match->groups)) {
+            return Clarifications::missingReferenceDate($match->original);
+        }
+
+        return $rule->evaluate($match->withYear(YearToken::of($match->groups, $context->referenceDate)), $context);
     }
 
     private function stripGreetings(string $normalized): string

@@ -1,0 +1,147 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Stejac\Zeitangaben\Text;
+
+use Stejac\Zeitangaben\Calendar\Months;
+
+/**
+ * The one definition of how a year is written next to an expression.
+ *
+ * Four digits count only inside the window 2000 to 2099. Two digits are read as 20xx, and only directly
+ * after a numeric date or at the very end of the input or a clause. A number followed by a unit or by a
+ * capitalised word is a quantity, not a year; such numbers are masked before any rule runs.
+ *
+ * @internal
+ */
+final class YearToken
+{
+    private const string RELATIVE = 'naechstes|naechsten|kommendes|kommenden|letztes|letzten|voriges|vorigen|dieses|diesem';
+
+    private const array RELATIVE_OFFSETS = [
+        'naechstes' => 1,
+        'naechsten' => 1,
+        'kommendes' => 1,
+        'kommenden' => 1,
+        'letztes' => -1,
+        'letzten' => -1,
+        'voriges' => -1,
+        'vorigen' => -1,
+        'dieses' => 0,
+        'diesem' => 0,
+    ];
+
+    private const string LONG = '(?:\s+im\s+jahr)?\s+(?<year>20\d\d)(?!\d|[.,]\d)'
+        .'|\s*/\s*(?<slash>20\d\d)(?!\d)'
+        .'|\s+(?:(?:im|in)\s+)?(?<relative>'.self::RELATIVE.')\s+jahr\b';
+
+    private const string SHORT = '|(?:\s+im\s+jahr)?\s+(?<short>\d\d)(?=\s*$|[.,;!?)](?:\s|$))';
+
+    /** Trailing year for months, feasts and holidays: all forms, including two digits at the end. */
+    public const string TRAILING = '(?:'.self::LONG.self::SHORT.')?';
+
+    /** Trailing year for expressions that end in a number themselves, such as "KW 42": no two-digit form. */
+    public const string TRAILING_LONG = '(?:'.self::LONG.')?';
+
+    public const string LEADING = '(?:(?<![\w.,/-])(?:(?<leadyear>20\d\d)\s+|(?:(?:im|in)\s+)?(?<leadrelative>'.self::RELATIVE.')\s+jahr\s+))?';
+
+    /** A year attached to a numeric date token, as in "12.06.2028", "12.06. 2028" or "12.06.28". */
+    public const string ATTACHED_NUMERIC = '(?:\s?20\d\d|\d\d)?';
+
+    /** A year attached to a date token with a month name, as in "12. Juni 2028". */
+    public const string ATTACHED_NAMED = '(?:\s+20\d\d)?';
+
+    /** Words that describe a quantity when they follow a number. */
+    private const string UNIT = '~^\s*(?:euro|eur|€|%|prozent|personen|person|gaeste|gast|leute|kinder|erwachsene|km|m|qm|uhr|tage|naechte|wochen|monate|stunden|zimmer)(?![a-z])~';
+
+    private const string CAPITALISED_WORD = '~^\s+([a-z])~';
+
+    /** A capitalised word after the year that is itself a time expression, as in "2028 Sommerferien". */
+    private const string TIME_TERM = '~^\s+(?:anfang|mitte|ende|kw|kalenderwoche|silvester|neujahr|heiligabend|weihnachten|ostern|pfingsten|karfreitag|ostermontag|pfingstmontag|himmelfahrt|fronleichnam|allerheiligen|[a-z]*ferien|'.Months::PATTERN.')\b~';
+
+    private const string COMPLETE_DATE_BEFORE = '~\d\.\s?(?:\d{1,2}\.|(?:'.Months::PATTERN.'))\s+$~';
+
+    /**
+     * Wraps a rule pattern with the optional leading and trailing year.
+     */
+    public static function around(string $pattern, string $trailing = self::TRAILING): string
+    {
+        return self::LEADING.'(?:'.$pattern.')'.$trailing;
+    }
+
+    /**
+     * Blanks every four-digit number in the window that is a quantity rather than a year.
+     * Offsets stay valid, so the text still lines up with the original input.
+     */
+    public static function mask(NormalizedText $source, string $text): string
+    {
+        preg_match_all('~(?<![\w.,/-])20\d\d(?!\d)~', $text, $numbers, PREG_OFFSET_CAPTURE);
+        foreach ($numbers[0] as [, $offset]) {
+            if (self::isQuantity($source, $text, $offset)) {
+                $text = substr_replace($text, '    ', $offset, 4);
+            }
+        }
+
+        return $text;
+    }
+
+    /**
+     * Whether the word after the given offset shows that the number before it counts something.
+     */
+    public static function isFollowedByNoun(NormalizedText $source, string $text, int $end): bool
+    {
+        return 1 === preg_match(self::UNIT, substr($text, $end)) || self::isFollowedByCapital($source, $text, $end);
+    }
+
+    /**
+     * @param array<int|string, string> $groups
+     */
+    public static function needsReference(array $groups): bool
+    {
+        return isset($groups['relative']) || isset($groups['leadrelative']);
+    }
+
+    /**
+     * @param array<int|string, string> $groups
+     */
+    public static function of(array $groups, ?\DateTimeImmutable $reference): ?int
+    {
+        $digits = $groups['year'] ?? $groups['slash'] ?? $groups['leadyear'] ?? $groups['short'] ?? null;
+        if (null !== $digits) {
+            return self::fromDigits($digits);
+        }
+
+        $relative = $groups['relative'] ?? $groups['leadrelative'] ?? null;
+
+        return null === $relative || null === $reference
+            ? null
+            : (int) $reference->format('Y') + self::RELATIVE_OFFSETS[$relative];
+    }
+
+    public static function fromDigits(string $digits): int
+    {
+        return 2000 + (int) $digits % 100;
+    }
+
+    private static function isQuantity(NormalizedText $source, string $text, int $offset): bool
+    {
+        $end = $offset + 4;
+        if (1 === preg_match(self::UNIT, substr($text, $end))) {
+            return true;
+        }
+
+        return self::isFollowedByCapital($source, $text, $end)
+            && 1 !== preg_match(self::TIME_TERM, substr($text, $end))
+            && 1 !== preg_match(self::COMPLETE_DATE_BEFORE, substr($text, 0, $offset));
+    }
+
+    private static function isFollowedByCapital(NormalizedText $source, string $text, int $end): bool
+    {
+        if (1 !== preg_match(self::CAPITALISED_WORD, substr($text, $end), $word, PREG_OFFSET_CAPTURE)) {
+            return false;
+        }
+
+        return 1 === preg_match('/^\p{Lu}/u', $source->originalOf($end + $word[1][1], 1));
+    }
+}

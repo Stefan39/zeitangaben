@@ -13,6 +13,7 @@ use Stejac\Zeitangaben\Result;
 use Stejac\Zeitangaben\School\SchoolHoliday;
 use Stejac\Zeitangaben\School\SchoolHolidayType;
 use Stejac\Zeitangaben\State;
+use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "Herbstferien", "Sommerferien 2027" and the like, answered from the school holiday snapshot.
@@ -25,17 +26,16 @@ final class SchoolHolidayRule implements Rule
 
     public function pattern(): string
     {
-        return '\b(?:(?<autumn>herbstferien)|(?<summer>sommerferien)|(?<easter>osterschulferien|osterferien)'
+        return YearToken::around('\b(?:(?<autumn>herbstferien)|(?<summer>sommerferien)|(?<easter>osterschulferien|osterferien)'
             .'|(?<pentecost>pfingstferien)|(?<christmas>weihnachtsferien)'
-            .'|(?<winter>winterferien|halbjahresferien|fastnachtsferien|faschingsferien)|(?<spring>fruehjahrsferien))\b'
-            .FeastPeriod::YEAR_PATTERN;
+            .'|(?<winter>winterferien|halbjahresferien|fastnachtsferien|faschingsferien)|(?<spring>fruehjahrsferien))\b');
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
     {
         $expression = $match->original;
         $state = $context->state;
-        $year = FeastPeriod::yearOf($match);
+        $year = $match->year;
         if (null === $state || (null === $year && null === $context->referenceDate)) {
             return null === $state
                 ? Clarifications::missingState($expression)

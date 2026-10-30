@@ -9,6 +9,7 @@ use Stejac\Zeitangaben\Context;
 use Stejac\Zeitangaben\Period;
 use Stejac\Zeitangaben\Result;
 use Stejac\Zeitangaben\School\SchoolHolidayType;
+use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "Pfingsten": the long weekend and, where the state is known and has them, the Pentecost school holidays.
@@ -21,7 +22,7 @@ final class PentecostRule implements Rule
 
     public function pattern(): string
     {
-        return '\bpfingst(?:en|wochenende)\b'.FeastPeriod::YEAR_PATTERN;
+        return YearToken::around('\bpfingst(?:en|wochenende)\b');
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
@@ -29,7 +30,7 @@ final class PentecostRule implements Rule
         $expression = $match->original;
         $feast = FeastPeriod::find(
             $expression,
-            FeastPeriod::yearOf($match),
+            $match->year,
             $context,
             static fn (int $year): Period => new Period(
                 Easter::offset($year, Easter::PENTECOST_SATURDAY),

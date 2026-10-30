@@ -9,6 +9,7 @@ use Stejac\Zeitangaben\Context;
 use Stejac\Zeitangaben\Period;
 use Stejac\Zeitangaben\Resolved;
 use Stejac\Zeitangaben\Result;
+use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "KW 42", "Kalenderwoche 42 2027": an ISO week, Monday to Sunday.
@@ -17,7 +18,7 @@ final class CalendarWeekRule implements Rule
 {
     public function pattern(): string
     {
-        return '\b(?:kw|kalenderwoche)\s*(?<week>\d{1,2})\b(?:\s+(?<year>\d{4})\b)?';
+        return YearToken::around('\b(?:kw|kalenderwoche)\s*(?<week>\d{1,2})\b', YearToken::TRAILING_LONG);
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
@@ -26,7 +27,7 @@ final class CalendarWeekRule implements Rule
         if ($week < 1 || $week > 53) {
             return Clarifications::invalidWeek($match->original);
         }
-        $year = isset($match->groups['year']) ? (int) $match->groups['year'] : null;
+        $year = $match->year;
         if (null === $year && null === $context->referenceDate) {
             return Clarifications::missingReferenceDate($match->original);
         }

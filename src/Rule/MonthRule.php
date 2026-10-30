@@ -10,6 +10,7 @@ use Stejac\Zeitangaben\Context;
 use Stejac\Zeitangaben\Period;
 use Stejac\Zeitangaben\Resolved;
 use Stejac\Zeitangaben\Result;
+use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "im Juli [2027]" and "naechsten Monat": a whole calendar month.
@@ -18,16 +19,14 @@ final class MonthRule implements Rule
 {
     public function pattern(): string
     {
-        return '\bim\s+(?<month>'.Months::PATTERN.')\b(?:\s+(?<year>\d{4})\b)?'
+        return YearToken::around('\bim\s+(?<month>'.Months::PATTERN.')\b')
             .'|\b(?<next>naechsten|kommenden)\s+monat\b';
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
     {
-        if (isset($match->groups['year'])) {
-            $period = self::monthOf((int) $match->groups['year'], Months::number($match->groups['month']));
-
-            return new Resolved($period, $match->original);
+        if (null !== $match->year) {
+            return new Resolved(self::monthOf($match->year, Months::number($match->groups['month'])), $match->original);
         }
         if (null === $context->referenceDate) {
             return Clarifications::missingReferenceDate($match->original);

@@ -10,6 +10,7 @@ use Stejac\Zeitangaben\ClarificationReason;
 use Stejac\Zeitangaben\Context;
 use Stejac\Zeitangaben\Period;
 use Stejac\Zeitangaben\Result;
+use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "zwischen den Jahren", "über Weihnachten", "die Woche vor Weihnachten". Not the school Christmas holidays.
@@ -18,8 +19,8 @@ final class ChristmasRule implements Rule
 {
     public function pattern(): string
     {
-        return '\b(?:(?<between>zwischen\s+den\s+jahren)|(?<week>woche\s+vor\s+weihnachten)'
-            .'|(?<over>ueber\s+weihnachten)|(?<bare>(?<!vor\s)(?<!nach\s)weihnachten))\b'.FeastPeriod::YEAR_PATTERN;
+        return YearToken::around('\b(?:(?<between>zwischen\s+den\s+jahren)|(?<week>woche\s+vor\s+weihnachten)'
+            .'|(?<over>ueber\s+weihnachten)|(?<bare>(?<!vor\s)(?<!nach\s)weihnachten))\b');
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
@@ -39,7 +40,7 @@ final class ChristmasRule implements Rule
             $question,
             static fn (int $year): Period => new Period(YearlyDate::on($year, 12, 14), YearlyDate::on($year + 1, 1, 1)),
             $candidates,
-            FeastPeriod::yearOf($match),
+            $match->year,
         );
     }
 

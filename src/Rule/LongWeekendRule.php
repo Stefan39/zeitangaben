@@ -14,6 +14,7 @@ use Stejac\Zeitangaben\Context;
 use Stejac\Zeitangaben\Holiday\PublicHolidayProvider;
 use Stejac\Zeitangaben\Period;
 use Stejac\Zeitangaben\Result;
+use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "verlängertes Wochenende", "am langen Wochenende im Oktober": lists the long weekends of the month;
@@ -27,8 +28,8 @@ final class LongWeekendRule implements Rule
 
     public function pattern(): string
     {
-        return '\b(?:(?:am|ein|das)\s+)?(?:verlaengertes|verlaengerten|langes|langen)\s+wochenende\b'
-            .'(?:\s+im\s+(?<month>'.Months::PATTERN.')\b'.FeastPeriod::YEAR_PATTERN.')?';
+        return YearToken::around('\b(?:(?:am|ein|das)\s+)?(?:verlaengertes|verlaengerten|langes|langen)\s+wochenende\b'
+            .'(?:\s+im\s+(?<month>'.Months::PATTERN.')\b)?');
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
@@ -51,7 +52,7 @@ final class LongWeekendRule implements Rule
             sprintf('Welches Wochenende meinen Sie mit „%s“? Bitte nennen Sie das Datum.', $expression),
             static fn (int $year): Period => new Period(YearlyDate::on($year, $month, 1), YearlyDate::on($year, $month, 1)->modify('last day of this month')),
             fn (int $year): array => $this->candidatesIn($year, $month, $context),
-            FeastPeriod::yearOf($match),
+            $match->year,
         );
     }
 

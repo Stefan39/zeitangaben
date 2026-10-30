@@ -17,13 +17,6 @@ use Stejac\Zeitangaben\School\SchoolHoliday;
  */
 final class FeastPeriod
 {
-    public const string YEAR_PATTERN = '(?:\s+(?<year>(?:19|20)\d\d)\b)?';
-
-    public static function yearOf(RuleMatch $match): ?int
-    {
-        return isset($match->groups['year']) ? (int) $match->groups['year'] : null;
-    }
-
     /**
      * An explicit year wins; otherwise the next occurrence on or after the reference date.
      *

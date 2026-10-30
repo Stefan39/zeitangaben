@@ -11,6 +11,7 @@ use Stejac\Zeitangaben\ClarificationReason;
 use Stejac\Zeitangaben\Context;
 use Stejac\Zeitangaben\Period;
 use Stejac\Zeitangaben\Result;
+use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "Anfang|Mitte|Ende Juli": a stretch of days that is deliberately not exact.
@@ -21,7 +22,7 @@ final class MonthPartRule implements Rule
 
     public function pattern(): string
     {
-        return '\b(?<part>anfang|mitte|ende)\s+(?<month>'.Months::PATTERN.')\b'.FeastPeriod::YEAR_PATTERN;
+        return YearToken::around('\b(?<part>anfang|mitte|ende)\s+(?<month>'.Months::PATTERN.')\b');
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
@@ -36,7 +37,7 @@ final class MonthPartRule implements Rule
             sprintf('„%s“ ist kein genauer Zeitraum. Von welchem bis zu welchem Tag meinen Sie?', $match->original),
             fn (int $year): Period => $this->spanOf($part, $year, $month),
             fn (int $year): array => [$this->candidate($part, $year, $month)],
-            FeastPeriod::yearOf($match),
+            $match->year,
         );
     }
 

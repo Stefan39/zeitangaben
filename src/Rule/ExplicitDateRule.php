@@ -11,6 +11,7 @@ use Stejac\Zeitangaben\Context;
 use Stejac\Zeitangaben\Period;
 use Stejac\Zeitangaben\Resolved;
 use Stejac\Zeitangaben\Result;
+use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * "12.06.2027", "12.06.", "12. Juni [2027]" and ranges such as "vom 12. bis 19. Oktober".
@@ -19,15 +20,15 @@ final class ExplicitDateRule implements Rule
 {
     private const string WEEKDAY = '(?:\b(?:montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag)\s*,?\s*(?:den\s+)?)?';
 
-    private const string DATE_TOKEN = '(?<![\d.])\d{1,2}\.\s?(?:\d{1,2}\.|(?:%s)\b)(?:\s?\d{4}(?!\d))?';
+    private const string DATE_TOKEN = '(?<![\d.])\d{1,2}\.\s?(?:\d{1,2}\.%s|(?:%s)\b%s)(?!\d|\.\d)';
 
     public function pattern(): string
     {
-        $token = sprintf(self::DATE_TOKEN, Months::PATTERN);
+        $token = sprintf(self::DATE_TOKEN, YearToken::ATTACHED_NUMERIC, Months::PATTERN, YearToken::ATTACHED_NAMED);
 
         return '\b(?:vom|von)\s+'.self::WEEKDAY.'(?<from>'.$token.'|(?<![\d.])\d{1,2}\.)\s+bis\s+'
             .self::WEEKDAY.'(?<to>'.$token.')'
-            .'|'.self::WEEKDAY.'(?<date>'.$token.')';
+            .'|'.self::WEEKDAY.'(?<date>'.$token.')'.YearToken::TRAILING;
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
@@ -36,7 +37,7 @@ final class ExplicitDateRule implements Rule
         if (isset($match->groups['date'])) {
             $date = self::parse($match->groups['date']);
 
-            return YearlyDate::resolve($expression, $date['month'], $date['day'], $date['year'], $context);
+            return YearlyDate::resolve($expression, $date['month'], $date['day'], $date['year'] ?? $match->year, $context);
         }
 
         return $this->evaluateRange($expression, $match->groups['from'], $match->groups['to'], $context);
@@ -125,7 +126,7 @@ final class ExplicitDateRule implements Rule
      */
     private static function parse(string $text): array
     {
-        $pattern = '~^(?<day>\d{1,2})\.\s?(?:(?<num>\d{1,2})\.|(?<name>'.Months::PATTERN.'))(?:\s?(?<year>\d{4}))?$~';
+        $pattern = '~^(?<day>\d{1,2})\.\s?(?:(?<num>\d{1,2})\.|(?<name>'.Months::PATTERN.'))\s?(?<year>\d{2}|\d{4})?$~';
         if (1 !== preg_match($pattern, $text, $m)) {
             throw new \LogicException(sprintf('Date token "%s" does not match the rule pattern.', $text));
         }
@@ -133,7 +134,7 @@ final class ExplicitDateRule implements Rule
         return [
             'day' => (int) $m['day'],
             'month' => '' !== ($m['num'] ?? '') ? (int) $m['num'] : Months::number($m['name'] ?? ''),
-            'year' => isset($m['year']) ? (int) $m['year'] : null,
+            'year' => isset($m['year']) ? YearToken::fromDigits($m['year']) : null,
         ];
     }
 }

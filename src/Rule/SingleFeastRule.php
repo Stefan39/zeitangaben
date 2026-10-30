@@ -11,6 +11,7 @@ use Stejac\Zeitangaben\Holiday\PublicHolidayProvider;
 use Stejac\Zeitangaben\Period;
 use Stejac\Zeitangaben\Resolved;
 use Stejac\Zeitangaben\Result;
+use Stejac\Zeitangaben\Text\YearToken;
 
 /**
  * Himmelfahrt, Mariä Himmelfahrt, Fronleichnam, Allerheiligen and the single days around Easter and Pentecost, with a note where the day is no statutory holiday.
@@ -32,9 +33,8 @@ final class SingleFeastRule implements Rule
 
     public function pattern(): string
     {
-        return '\b(?:(?<mary>mariae\s+himmelfahrt)|(?<weekend>himmelfahrtswochenende)|(?<ascension>(?:christi\s+)?himmelfahrt)'
-            .'|(?<corpus>fronleichnam)|(?<saints>allerheiligen)|(?<easterday>karfreitag|gruendonnerstag|ostersonntag|ostermontag|pfingstsonntag|pfingstmontag))\b'
-            .FeastPeriod::YEAR_PATTERN;
+        return YearToken::around('\b(?:(?<mary>mariae\s+himmelfahrt)|(?<weekend>himmelfahrtswochenende)|(?<ascension>(?:christi\s+)?himmelfahrt)'
+            .'|(?<corpus>fronleichnam)|(?<saints>allerheiligen)|(?<easterday>karfreitag|gruendonnerstag|ostersonntag|ostermontag|pfingstsonntag|pfingstmontag))\b');
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
@@ -42,7 +42,7 @@ final class SingleFeastRule implements Rule
         $expression = $match->original;
         $period = FeastPeriod::find(
             $expression,
-            FeastPeriod::yearOf($match),
+            $match->year,
             $context,
             fn (int $year): Period => $this->periodIn($match, $year),
         );
