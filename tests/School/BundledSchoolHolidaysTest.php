@@ -28,6 +28,11 @@ final class BundledSchoolHolidaysTest extends TestCase
         $this->assertHasEntry(State::NW, SchoolHolidayType::Summer, '2027-07-19', '2027-08-31');
     }
 
+    public function testHamburgSpring2027(): void
+    {
+        $this->assertHasEntry(State::HH, SchoolHolidayType::Spring, '2027-03-01', '2027-03-12');
+    }
+
     public function testAutumn2030IsMissingForNiedersachsen(): void
     {
         $years = $this->startYears(State::NI, SchoolHolidayType::Autumn);
@@ -37,14 +42,14 @@ final class BundledSchoolHolidaysTest extends TestCase
 
     public function testEveryStateHasAllMainTypesThrough2029(): void
     {
-        $types = [
-            SchoolHolidayType::Easter,
-            SchoolHolidayType::Summer,
-            SchoolHolidayType::Autumn,
-            SchoolHolidayType::Christmas,
-        ];
         $missing = [];
         foreach (State::cases() as $state) {
+            $types = [
+                State::HH === $state ? SchoolHolidayType::Spring : SchoolHolidayType::Easter,
+                SchoolHolidayType::Summer,
+                SchoolHolidayType::Autumn,
+                SchoolHolidayType::Christmas,
+            ];
             foreach ($types as $type) {
                 $years = $this->startYears($state, $type);
                 foreach ([2026, 2027, 2028, 2029] as $year) {

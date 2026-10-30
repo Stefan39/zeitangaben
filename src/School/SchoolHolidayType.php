@@ -7,6 +7,7 @@ namespace Stejac\Zeitangaben\School;
 enum SchoolHolidayType: string
 {
     case Winter = 'winter';
+    case Spring = 'spring';
     case Easter = 'easter';
     case Pentecost = 'pentecost';
     case Summer = 'summer';

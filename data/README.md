@@ -19,7 +19,8 @@ The tool fetches 2026-01-01 to 2031-12-31 in windows of at most 1095 days, remov
 
 | API name | type |
 | --- | --- |
-| Winterferien, Halbjahresferien, Halbjahrespause, Fastnachtsferien, Frühjahrsferien | `winter` |
+| Winterferien, Halbjahresferien, Halbjahrespause, Fastnachtsferien, Frühjahrsferien (all states except Hamburg) | `winter` |
+| Frühjahrsferien (Hamburg only) | `spring` |
 | Osterferien | `easter` |
 | Pfingstferien | `pentecost` |
 | Sommerferien | `summer` |
@@ -30,4 +31,4 @@ Everything else (for example single bridge days) is dropped.
 
 ## Known gaps
 
-Hamburg publishes no separate Easter holidays; its spring break in March is mapped to `winter`.
+Hamburg publishes no Easter holidays; its March break (Frühjahrsferien) has the separate type `spring` and is not mapped to `easter`.

@@ -71,6 +71,18 @@ function fetch(string $from, string $to): array
 }
 
 /**
+ * Hamburg has no Easter holidays; its March break is kept apart as "spring".
+ */
+function typeFor(string $name, string $state): string
+{
+    if ('Frühjahrsferien' === $name && 'HH' === $state) {
+        return 'spring';
+    }
+
+    return TYPE_BY_NAME[$name];
+}
+
+/**
  * @param array<string, mixed> $entry
  */
 function germanName(array $entry): string
@@ -116,6 +128,7 @@ foreach ($byId as $entry) {
         continue;
     }
     foreach (states($entry) as $state) {
+        $type = typeFor($name, $state);
         $rows[] = [
             'state' => $state,
             'type' => $type,
