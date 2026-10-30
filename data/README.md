@@ -32,3 +32,5 @@ Everything else (for example single bridge days) is dropped.
 ## Known gaps
 
 Hamburg publishes no Easter holidays; its March break (Frühjahrsferien) has the separate type `spring` and is not mapped to `easter`.
+
+One period is kept per state, type and start. Two groups are left out because their dates can differ by about a week: vocational schools in Mecklenburg-Vorpommern (rows only for that group) and the North Sea islands (Sylt, Föhr, Amrum, Helgoland and the Halligen) in Schleswig-Holstein.

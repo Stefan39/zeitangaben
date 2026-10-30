@@ -1314,20 +1314,6 @@
         },
         {
             "state": "MV",
-            "type": "christmas",
-            "name": "Weihnachtsferien",
-            "start": "2025-12-22",
-            "end": "2026-01-03"
-        },
-        {
-            "state": "MV",
-            "type": "winter",
-            "name": "Winterferien",
-            "start": "2026-02-09",
-            "end": "2026-02-14"
-        },
-        {
-            "state": "MV",
             "type": "winter",
             "name": "Winterferien",
             "start": "2026-02-09",
@@ -1342,24 +1328,10 @@
         },
         {
             "state": "MV",
-            "type": "easter",
-            "name": "Osterferien",
-            "start": "2026-03-30",
-            "end": "2026-04-10"
-        },
-        {
-            "state": "MV",
             "type": "pentecost",
             "name": "Pfingstferien",
             "start": "2026-05-22",
             "end": "2026-05-26"
-        },
-        {
-            "state": "MV",
-            "type": "summer",
-            "name": "Sommerferien",
-            "start": "2026-07-13",
-            "end": "2026-08-29"
         },
         {
             "state": "MV",
@@ -1377,20 +1349,6 @@
         },
         {
             "state": "MV",
-            "type": "autumn",
-            "name": "Herbstferien",
-            "start": "2026-10-19",
-            "end": "2026-10-24"
-        },
-        {
-            "state": "MV",
-            "type": "christmas",
-            "name": "Weihnachtsferien",
-            "start": "2026-12-19",
-            "end": "2027-01-02"
-        },
-        {
-            "state": "MV",
             "type": "christmas",
             "name": "Weihnachtsferien",
             "start": "2026-12-21",
@@ -1401,21 +1359,7 @@
             "type": "winter",
             "name": "Winterferien",
             "start": "2027-02-08",
-            "end": "2027-02-13"
-        },
-        {
-            "state": "MV",
-            "type": "winter",
-            "name": "Winterferien",
-            "start": "2027-02-08",
             "end": "2027-02-19"
-        },
-        {
-            "state": "MV",
-            "type": "easter",
-            "name": "Osterferien",
-            "start": "2027-03-22",
-            "end": "2027-04-02"
         },
         {
             "state": "MV",
@@ -1440,23 +1384,9 @@
         },
         {
             "state": "MV",
-            "type": "summer",
-            "name": "Sommerferien",
-            "start": "2027-07-12",
-            "end": "2027-08-28"
-        },
-        {
-            "state": "MV",
             "type": "autumn",
             "name": "Herbstferien",
             "start": "2027-10-14",
-            "end": "2027-10-23"
-        },
-        {
-            "state": "MV",
-            "type": "autumn",
-            "name": "Herbstferien",
-            "start": "2027-10-16",
             "end": "2027-10-23"
         },
         {
@@ -1468,24 +1398,10 @@
         },
         {
             "state": "MV",
-            "type": "christmas",
-            "name": "Weihnachtsferien",
-            "start": "2027-12-22",
-            "end": "2027-12-31"
-        },
-        {
-            "state": "MV",
             "type": "winter",
             "name": "Winterferien",
             "start": "2028-02-05",
             "end": "2028-02-17"
-        },
-        {
-            "state": "MV",
-            "type": "winter",
-            "name": "Winterferien",
-            "start": "2028-02-05",
-            "end": "2028-02-12"
         },
         {
             "state": "MV",
@@ -1510,24 +1426,10 @@
         },
         {
             "state": "MV",
-            "type": "summer",
-            "name": "Sommerferien",
-            "start": "2028-07-17",
-            "end": "2028-09-02"
-        },
-        {
-            "state": "MV",
             "type": "autumn",
             "name": "Herbstferien",
             "start": "2028-10-23",
             "end": "2028-10-28"
-        },
-        {
-            "state": "MV",
-            "type": "christmas",
-            "name": "Weihnachtsferien",
-            "start": "2028-12-21",
-            "end": "2029-01-02"
         },
         {
             "state": "MV",
@@ -1542,13 +1444,6 @@
             "name": "Winterferien",
             "start": "2029-02-05",
             "end": "2029-02-16"
-        },
-        {
-            "state": "MV",
-            "type": "winter",
-            "name": "Winterferien",
-            "start": "2029-02-05",
-            "end": "2029-02-10"
         },
         {
             "state": "MV",
@@ -1573,13 +1468,6 @@
         },
         {
             "state": "MV",
-            "type": "summer",
-            "name": "Sommerferien",
-            "start": "2029-07-16",
-            "end": "2029-09-01"
-        },
-        {
-            "state": "MV",
             "type": "autumn",
             "name": "Herbstferien",
             "start": "2029-10-22",
@@ -1601,13 +1489,6 @@
         },
         {
             "state": "MV",
-            "type": "winter",
-            "name": "Winterferien",
-            "start": "2030-02-04",
-            "end": "2030-02-09"
-        },
-        {
-            "state": "MV",
             "type": "easter",
             "name": "Osterferien",
             "start": "2030-04-17",
@@ -1626,13 +1507,6 @@
             "name": "Sommerferien",
             "start": "2030-07-01",
             "end": "2030-08-10"
-        },
-        {
-            "state": "MV",
-            "type": "summer",
-            "name": "Sommerferien",
-            "start": "2030-07-15",
-            "end": "2030-08-31"
         },
         {
             "state": "NI",
@@ -2147,20 +2021,6 @@
         },
         {
             "state": "SH",
-            "type": "summer",
-            "name": "Sommerferien",
-            "start": "2026-07-04",
-            "end": "2026-08-08"
-        },
-        {
-            "state": "SH",
-            "type": "autumn",
-            "name": "Herbstferien",
-            "start": "2026-10-05",
-            "end": "2026-10-24"
-        },
-        {
-            "state": "SH",
             "type": "autumn",
             "name": "Herbstferien",
             "start": "2026-10-12",
@@ -2186,20 +2046,6 @@
             "name": "Sommerferien",
             "start": "2027-07-03",
             "end": "2027-08-14"
-        },
-        {
-            "state": "SH",
-            "type": "summer",
-            "name": "Sommerferien",
-            "start": "2027-07-03",
-            "end": "2027-08-07"
-        },
-        {
-            "state": "SH",
-            "type": "autumn",
-            "name": "Herbstferien",
-            "start": "2027-10-04",
-            "end": "2027-10-23"
         },
         {
             "state": "SH",
@@ -2231,20 +2077,6 @@
         },
         {
             "state": "SH",
-            "type": "summer",
-            "name": "Sommerferien",
-            "start": "2028-06-24",
-            "end": "2028-07-28"
-        },
-        {
-            "state": "SH",
-            "type": "autumn",
-            "name": "Herbstferien",
-            "start": "2028-10-09",
-            "end": "2028-10-30"
-        },
-        {
-            "state": "SH",
             "type": "autumn",
             "name": "Herbstferien",
             "start": "2028-10-16",
@@ -2269,21 +2101,7 @@
             "type": "summer",
             "name": "Sommerferien",
             "start": "2029-06-23",
-            "end": "2029-07-27"
-        },
-        {
-            "state": "SH",
-            "type": "summer",
-            "name": "Sommerferien",
-            "start": "2029-06-23",
             "end": "2029-08-03"
-        },
-        {
-            "state": "SH",
-            "type": "autumn",
-            "name": "Herbstferien",
-            "start": "2029-09-28",
-            "end": "2029-10-19"
         },
         {
             "state": "SH",
@@ -2311,21 +2129,7 @@
             "type": "summer",
             "name": "Sommerferien",
             "start": "2030-07-08",
-            "end": "2030-08-10"
-        },
-        {
-            "state": "SH",
-            "type": "summer",
-            "name": "Sommerferien",
-            "start": "2030-07-08",
             "end": "2030-08-17"
-        },
-        {
-            "state": "SH",
-            "type": "autumn",
-            "name": "Herbstferien",
-            "start": "2030-10-07",
-            "end": "2030-10-25"
         },
         {
             "state": "SH",

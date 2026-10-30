@@ -13,6 +13,17 @@ use Stejac\Zeitangaben\State;
 
 final class BundledSchoolHolidaysTest extends TestCase
 {
+    /** @var list<string> */
+    private array $tempFiles = [];
+
+    protected function tearDown(): void
+    {
+        foreach ($this->tempFiles as $file) {
+            @unlink($file);
+        }
+        parent::tearDown();
+    }
+
     public function testNiedersachsenAutumn2026(): void
     {
         $this->assertHasEntry(State::NI, SchoolHolidayType::Autumn, '2026-10-12', '2026-10-24');
@@ -31,6 +42,35 @@ final class BundledSchoolHolidaysTest extends TestCase
     public function testHamburgSpring2027(): void
     {
         $this->assertHasEntry(State::HH, SchoolHolidayType::Spring, '2027-03-01', '2027-03-12');
+    }
+
+    public function testMvWinter2027IsGeneralSchools(): void
+    {
+        $this->assertHasEntry(State::MV, SchoolHolidayType::Winter, '2027-02-08', '2027-02-19');
+    }
+
+    public function testShSummer2027IsMainland(): void
+    {
+        $this->assertHasEntry(State::SH, SchoolHolidayType::Summer, '2027-07-03', '2027-08-14');
+    }
+
+    public function testNoStateHasTwoPeriodsWithTheSameTypeAndStart(): void
+    {
+        $provider = new BundledSchoolHolidays();
+        $duplicates = [];
+        foreach (State::cases() as $state) {
+            foreach (SchoolHolidayType::cases() as $type) {
+                $starts = array_map(
+                    static fn (SchoolHoliday $h): string => $h->period->start->format('Y-m-d'),
+                    $provider->forState($state, $type),
+                );
+                foreach (array_keys(array_filter(array_count_values($starts), static fn (int $n): bool => $n > 1)) as $start) {
+                    $duplicates[] = sprintf('%s %s %s', $state->value, $type->value, $start);
+                }
+            }
+        }
+
+        self::assertSame([], $duplicates);
     }
 
     public function testAutumn2030IsMissingForNiedersachsen(): void
@@ -116,7 +156,8 @@ final class BundledSchoolHolidaysTest extends TestCase
     {
         $provider = new BundledSchoolHolidays('/nonexistent/holidays.json');
 
-        self::assertInstanceOf(BundledSchoolHolidays::class, $provider);
+        $this->expectException(SchoolHolidayDataException::class);
+        $provider->forState(State::NI, SchoolHolidayType::Autumn);
     }
 
     private function assertHasEntry(State $state, SchoolHolidayType $type, string $start, string $end): void
@@ -149,15 +190,5 @@ final class BundledSchoolHolidaysTest extends TestCase
         $this->tempFiles[] = $path;
 
         return $path;
-    }
-
-    /** @var list<string> */
-    private array $tempFiles = [];
-
-    protected function tearDown(): void
-    {
-        foreach ($this->tempFiles as $file) {
-            @unlink($file);
-        }
     }
 }

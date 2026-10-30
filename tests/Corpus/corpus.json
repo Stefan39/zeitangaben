@@ -37,6 +37,8 @@
   {"id":"fruehjahrsferien-by","group":"school","text":"Frühjahrsferien","reference":"2026-09-16","state":"BY","expect":{"type":"resolved","start":"2027-02-08","end":"2027-02-12"}},
   {"id":"winterferien-hh","group":"school","text":"Winterferien","reference":"2026-09-16","state":"HH","expect":{"type":"resolved","start":"2027-01-29","end":"2027-01-29"}},
   {"id":"ostern-ueber-hh","group":"feast","text":"über Ostern","reference":"2026-09-16","state":"HH","expect":{"type":"clarification","reason":"ambiguous","candidates":[["2027-03-26","2027-03-29"]]}},
+  {"id":"winterferien-mv-allgemeinbildend","group":"school","text":"Winterferien","reference":"2026-09-16","state":"MV","expect":{"type":"resolved","start":"2027-02-08","end":"2027-02-19"}},
+  {"id":"sommerferien-sh-festland","group":"school","text":"Sommerferien","reference":"2026-09-16","state":"SH","expect":{"type":"resolved","start":"2027-07-03","end":"2027-08-14"}},
   {"id":"ausserhalb-daten-2030","group":"school","text":"Herbstferien 2030","state":"NI","expect":{"type":"clarification","reason":"out_of_data","candidates":[]}},
   {"id":"ausserhalb-daten-2035","group":"school","text":"Sommerferien 2035","state":"NI","expect":{"type":"clarification","reason":"out_of_data","candidates":[]}},
   {"id":"ausserhalb-daten-2025","group":"school","text":"Sommerferien 2024","state":"NI","expect":{"type":"clarification","reason":"out_of_data","candidates":[]}},

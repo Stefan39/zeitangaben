@@ -120,11 +120,47 @@ foreach (windows() as $window) {
     }
 }
 
+/**
+ * @param array<string, mixed> $entry
+ */
+function isExcluded(array $entry): bool
+{
+    $groups = [];
+    foreach ((array) ($entry['groups'] ?? []) as $group) {
+        if (is_array($group) && is_string($group['code'] ?? null)) {
+            $groups[] = $group['code'];
+        }
+    }
+    $vocationalOnly = in_array('DE-MV-BBS', $groups, true) && !in_array('DE-MV-ABS', $groups, true);
+
+    return $vocationalOnly || [] !== ($entry['comment'] ?? []);
+}
+
+/**
+ * @param array<string, mixed> $entry
+ */
+function commentText(array $entry): string
+{
+    foreach ((array) ($entry['comment'] ?? []) as $comment) {
+        if (is_array($comment) && 'DE' === ($comment['language'] ?? null)) {
+            return (string) ($comment['text'] ?? '');
+        }
+    }
+
+    return '';
+}
+
 $rows = [];
+$droppedComments = [];
 foreach ($byId as $entry) {
     $name = germanName($entry);
-    $type = TYPE_BY_NAME[$name] ?? null;
-    if (null === $type) {
+    if (!isset(TYPE_BY_NAME[$name])) {
+        continue;
+    }
+    if (isExcluded($entry)) {
+        if ('' !== commentText($entry)) {
+            $droppedComments[commentText($entry)] = true;
+        }
         continue;
     }
     foreach (states($entry) as $state) {
@@ -152,4 +188,7 @@ file_put_contents(
     __DIR__.'/../data/school-holidays-de.json',
     json_encode($document, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR)."\n",
 );
+foreach (array_keys($droppedComments) as $comment) {
+    fwrite(STDOUT, "Dropped by comment: $comment\n");
+}
 fwrite(STDOUT, count($rows)." rows written\n");
