@@ -13,6 +13,8 @@ use Stejac\Zeitangaben\State;
  */
 final class Clarifications
 {
+    private const array WEEKDAY_NAMES = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
+
     public static function missingReferenceDate(string $expression): Clarification
     {
         return new Clarification(
@@ -27,6 +29,20 @@ final class Clarifications
         return new Clarification(
             ClarificationReason::InvalidDate,
             sprintf('„%s“ ist kein gültiges Datum. Welches Datum meinen Sie?', $expression),
+            $expression,
+        );
+    }
+
+    public static function weekdayMismatch(string $expression, \DateTimeImmutable $date, string $stated): Clarification
+    {
+        return new Clarification(
+            ClarificationReason::InvalidDate,
+            sprintf(
+                'Der %s ist ein %s, kein %s. Welches Datum meinen Sie?',
+                $date->format('d.m.Y'),
+                self::WEEKDAY_NAMES[(int) $date->format('N') - 1],
+                ucfirst($stated),
+            ),
             $expression,
         );
     }
