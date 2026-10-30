@@ -12,5 +12,6 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), ver
 - Explicit dates, calendar weeks, relative days, weeks and weekends, months, parts of months and seasons.
 - Feasts and long weekends (Easter, Pentecost, Christmas, bridge days) with public holidays from Yasumi.
 - School holidays per state through 2029 (partial for 2030, gaps possible for Pentecost and winter holidays) from the OpenHolidays API, bundled under the ODbL 1.0.
-- Nine clarification reasons with a German question and candidate periods: `missing_state`, `missing_reference_date`, `ambiguous`, `vague`, `not_a_calendar_term`, `out_of_data`, `not_in_state`, `invalid_date`, `multiple_expressions`.
+- Ten clarification reasons with a German question and candidate periods: `missing_state`, `missing_reference_date`, `ambiguous`, `vague`, `not_a_calendar_term`, `out_of_data`, `not_in_state`, `invalid_date`, `multiple_expressions`, `unclear_context`.
+- `Resolved` only when everything else in the input is known to be harmless; any other word or number asks with the found period as the candidate.
 - Command line interface `bin/zeitangaben` with `--state`, `--date` and `--json`.

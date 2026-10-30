@@ -57,7 +57,20 @@ Output:
 12.10.2026 bis 24.10.2026
 ```
 
-The reference date is required for relative terms ("morgen", "nächstes Wochenende", "im Herbst") and for deciding which year is meant. It is a parameter on purpose: a message that is read a day later must still resolve to the same date. If it is missing, the result is a `Clarification` with the reason `missing_reference_date`. A state named in the text after a word such as "in", "aus" or "nach" ("Herbstferien in Bayern") takes precedence over the state in the context; a bare name ("Frau Berlin", "FC Bayern") does not count, and two different states ask which one is meant.
+The reference date is required for relative terms ("morgen", "nächstes Wochenende", "im Herbst") and for deciding which year is meant. It is a parameter on purpose: a message that is read a day later must still resolve to the same date. If it is missing, the result is a `Clarification` with the reason `missing_reference_date`. A state named in the text after a word such as "in", "aus" or "nach" ("Herbstferien in Bayern") takes precedence over the state in the context. A bare name ("Frau Berlin", "FC Bayern") is not read as the state: if the answer depends on the state, the library asks, and it also asks when two different states are named.
+
+### Sentences or expressions?
+
+Pass the time expression alone wherever you can, for example one extracted by an LLM. That gives the most answers, because `Resolved` means certain: it stands only if everything else in the input is known to be harmless. The input may hold a greeting, a state mention and a closed list of function words and common verbs ("Wir möchten gerne im Juli anreisen"). Any other word or number turns the result into a question with reason `unclear_context` and the found period as its only candidate, because the library cannot know what that word does to the meaning. With the reference date 2026-10-30:
+
+| Input | Result |
+| --- | --- |
+| `im Juli` | `Resolved` |
+| `Wir möchten gerne im Juli anreisen` | `Resolved` |
+| `Keine Termine im Juli` | `unclear_context`: „Meinen Sie „im Juli“, also 01.07.2027 bis 31.07.2027?“ |
+| `Silvester 2000 Euro` | `unclear_context`: „Meinen Sie „Silvester“, also 31.12.2026?“ |
+
+The list holds no negations, no numbers and no nouns that could name something else. A year next to the expression belongs to the expression. Two digits count as a year only from 00 to 69, and only directly after a numeric date, behind an apostrophe ("im Juli '27") or at the very end of the input.
 
 ### Handling a clarification
 
@@ -136,18 +149,19 @@ Options: `--state=<code>` (two-letter state code such as `NI`, `BY`, `NW`), `--d
 | `not_a_calendar_term` | The term is jargon, not a calendar term ("Nebensaison"). |
 | `out_of_data` | School holidays are requested for a year the bundled data does not cover. |
 | `not_in_state` | The state has no such holidays, for example Pfingstferien in Hessen. |
-| `invalid_date` | The date does not exist ("31.2.", a calendar week 60). |
+| `invalid_date` | The date does not exist ("31.2.", a calendar week 60), the weekday contradicts it ("Mo, 12.06.2027") or a range runs backwards ("vom 19. bis 12. Oktober"). |
 | `multiple_expressions` | The text contains several time expressions; the question names them. |
+| `unclear_context` | One expression was found, but the input holds a word or number the library does not know to be harmless ("Keine Termine im Juli"). The only candidate is the found period; see [Sentences or expressions?](#sentences-or-expressions) |
 
 ### What `none` means
 
 `NoExpression` (`{"type": "none"}`) means the text was **not recognised**, not that it contains no date. Recognition is rule-based and has gaps. Not recognised for now, for example: „erste Juliwoche“, „Ende des Monats“, „in 3 Monaten“. Treat `none` as "ask the user or fall back", never as proof that no time was meant.
 
-A sentence can also hold more than the library recognised: a result covers the expressions it found, not everything the sentence says. Past tense is not modelled, so „Ostern war schön“ still asks about the next Easter.
+Past tense is not modelled, so „Ostern war schön“ still asks about the next Easter.
 
 ## Public API
 
-These types are the public API and follow semantic versioning: `Resolver`, `Context`, `State` (without `fromText`), `Result` with `Resolved`, `Clarification` and `NoExpression`, `ClarificationReason`, `Candidate`, `Period`, `InvalidPeriodException`, and the provider interfaces `School\SchoolHolidayProvider` and `Holiday\PublicHolidayProvider` with their value types. Everything marked `@internal` (`Rule\*`, `Calendar\*`, `Text\*`, `Cli\*`) can change in any release.
+These types are the public API and follow semantic versioning: `Resolver`, `Context`, `State` (its cases, `germanName()` and `locative()`; the methods marked `@internal` are excluded), `Result` with `Resolved`, `Clarification` and `NoExpression`, `ClarificationReason`, `Candidate`, `Period`, `InvalidPeriodException`, and the provider interfaces `School\SchoolHolidayProvider` and `Holiday\PublicHolidayProvider` with their value types. Everything marked `@internal` (`Rule\*`, `Calendar\*`, `Text\*`, `Cli\*`) can change in any release.
 
 ## Features
 
@@ -162,7 +176,7 @@ These types are the public API and follow semantic versioning: `Resolver`, `Cont
 | MCP tool for use from LLM clients | planned |
 | Stay length ("eine Woche im Herbst") | out of scope |
 
-The rules are covered by unit tests and by a corpus test with 235 expressions (`tests/Corpus/`).
+The rules are covered by unit tests and by a corpus test with 273 expressions (`tests/Corpus/`).
 
 ## Data
 
