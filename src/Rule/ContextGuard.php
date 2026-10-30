@@ -48,10 +48,10 @@ final readonly class ContextGuard
         'anfang', 'mitte', 'ende', 'erste', 'ersten', 'erstes', 'erster', 'zweite', 'zweiten', 'dritte',
         'letzte', 'letzten', 'letztes', 'jedes',
         'um', 'gegen', 'ca', 'circa', 'zirka', 'etwa', 'ungefaehr', 'rund', 'spaetestens', 'fruehestens',
-        'tag', 'tage', 'nacht', 'naechte', 'woche', 'wochen', 'monat', 'monate', 'stunden', 'wochenende', 'brueckentag',
+        'jahr', 'tag', 'tage', 'nacht', 'naechte', 'woche', 'wochen', 'monat', 'monate', 'stunden', 'wochenende', 'brueckentag',
     ];
 
-    /** Counts only directly before the span: "drei im Mai" is vague, "4 Personen im Juli" is not. */
+    /** Counts only next to the span or a qualifier: "drei im Mai" and "drei Tage im Mai" are vague, "4 Personen im Juli" is not. */
     private const string NUMBER = '~^(?:\d+|zwei|drei|vier|fuenf|sechs|sieben|acht|neun|zehn|elf|zwoelf)$~';
 
     /** Not a qualifier even with "vor" before it: "vor allem im Juli". */
@@ -196,7 +196,7 @@ final readonly class ContextGuard
             if (self::QUALIFIER_WINDOW === $counted || $this->blocksQualifier($word, $offset)) {
                 break;
             }
-            if (in_array($word, self::QUALIFIERS, true) || (0 === $counted && 1 === preg_match(self::NUMBER, $word))) {
+            if (in_array($word, self::QUALIFIERS, true) || ((0 === $counted || null !== $start) && 1 === preg_match(self::NUMBER, $word))) {
                 $start = $offset;
             }
             ++$counted;

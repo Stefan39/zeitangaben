@@ -152,6 +152,40 @@ final class FeastRulesTest extends TestCase
         self::assertSame(ClarificationReason::NotInState, $result->reason);
     }
 
+    public function testGapInTheDataIsOutOfDataWithoutAYearAndWithOne(): void
+    {
+        $context = new Context(new \DateTimeImmutable('2027-06-01'), State::NW);
+        $withoutYear = Resolver::create()->resolve('Pfingstferien', $context);
+        $withYear = Resolver::create()->resolve('Pfingstferien 2029', $context);
+
+        self::assertInstanceOf(Clarification::class, $withoutYear);
+        self::assertSame(ClarificationReason::OutOfData, $withoutYear->reason);
+        self::assertInstanceOf(Resolved::class, $withYear);
+        self::assertSame(State::NW, $withYear->state);
+    }
+
+    public function testTwoStatesAreNamedInTheQuestion(): void
+    {
+        $result = Resolver::create()->resolve('Herbstferien in Bayern und Hessen', $this->context());
+
+        self::assertInstanceOf(Clarification::class, $result);
+        self::assertSame(ClarificationReason::MissingState, $result->reason);
+        self::assertStringContainsString('Bayern und Hessen', $result->question);
+    }
+
+    public function testTwoStatesDoNotMatterWhenTheExpressionDoesNotDependOnThem(): void
+    {
+        self::assertInstanceOf(Resolved::class, Resolver::create()->resolve('Von Bremen nach Bayern morgen', $this->context()));
+    }
+
+    public function testSaarlandQuestionUsesTheRightPreposition(): void
+    {
+        $result = Resolver::create()->resolve('Halbjahresferien', $this->context(State::SL));
+
+        self::assertInstanceOf(Clarification::class, $result);
+        self::assertStringContainsString('Im Saarland', $result->question);
+    }
+
     public function testPartlyStatutoryFeastUsesTheLocative(): void
     {
         $result = Resolver::create()->resolve('Fronleichnam', $this->context(State::TH));

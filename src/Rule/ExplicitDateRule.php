@@ -42,7 +42,7 @@ final class ExplicitDateRule implements Rule
 
     private const string RANGE_START = '(?:\b(?:vom|von|ab)\s+|\b(?<between>zwischen)\s+(?:dem\s+)?)?';
 
-    private const string RANGE_SEPARATOR = '(?(<between>)\s+und\s+(?:dem\s+)?|(?:\s+bis\s+(?:(?:zum|einschliesslich)\s+)?|\s*[-–—]\s*))';
+    private const string RANGE_SEPARATOR = '(?(<between>)\s+und\s+(?:dem\s+)?|(?:\s+bis\s+(?:(?:zum|einschliesslich)\s+)?|\s*(?:-|–|—)\s*))';
 
     public function pattern(): string
     {

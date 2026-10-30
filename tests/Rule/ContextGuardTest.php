@@ -81,6 +81,28 @@ final class ContextGuardTest extends TestCase
         self::assertSame('erste Woche im Mai', $result->expression);
     }
 
+    /**
+     * @return iterable<string, array{string, string}>
+     */
+    public static function qualified(): iterable
+    {
+        yield 'number with a time noun' => ['zwei Nächte im August', 'zwei Nächte im August'];
+        yield 'every year' => ['jedes Jahr im Juli', 'jedes Jahr im Juli'];
+        yield 'approximately, abbreviated' => ['ca. 12.06.', 'ca. 12.06.'];
+        yield 'around' => ['um den 12. Oktober', 'um den 12. Oktober'];
+        yield 'not with a filler' => ['nicht in den Sommerferien', 'nicht in den Sommerferien'];
+    }
+
+    #[DataProvider('qualified')]
+    public function testQualifierAsks(string $text, string $expression): void
+    {
+        $result = $this->resolve($text);
+        self::assertInstanceOf(Clarification::class, $result);
+        self::assertSame(ClarificationReason::Vague, $result->reason);
+        self::assertSame($expression, $result->expression);
+        self::assertStringContainsString($expression, $result->question);
+    }
+
     public function testDirectNumberBeforeTheSpanIsAQualifier(): void
     {
         $result = $this->resolve('am 3 im Mai');
