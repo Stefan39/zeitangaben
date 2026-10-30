@@ -4,14 +4,22 @@ declare(strict_types=1);
 
 namespace Stejac\Zeitangaben;
 
+use Stejac\Zeitangaben\Holiday\PublicHolidayProvider;
+use Stejac\Zeitangaben\Holiday\YasumiPublicHolidays;
+use Stejac\Zeitangaben\Rule\BridgeDayRule;
 use Stejac\Zeitangaben\Rule\CalendarWeekRule;
+use Stejac\Zeitangaben\Rule\EasterRule;
 use Stejac\Zeitangaben\Rule\ExplicitDateRule;
 use Stejac\Zeitangaben\Rule\FixedDayRule;
 use Stejac\Zeitangaben\Rule\InvalidRulePatternException;
 use Stejac\Zeitangaben\Rule\MonthRule;
+use Stejac\Zeitangaben\Rule\PentecostRule;
 use Stejac\Zeitangaben\Rule\RelativeDayRule;
 use Stejac\Zeitangaben\Rule\Rule;
 use Stejac\Zeitangaben\Rule\RuleMatch;
+use Stejac\Zeitangaben\Rule\SchoolHolidayLookup;
+use Stejac\Zeitangaben\Rule\SchoolHolidayRule;
+use Stejac\Zeitangaben\Rule\SingleFeastRule;
 use Stejac\Zeitangaben\Rule\ThisWeekendRule;
 use Stejac\Zeitangaben\School\BundledSchoolHolidays;
 use Stejac\Zeitangaben\School\SchoolHolidayProvider;
@@ -22,11 +30,19 @@ final class Resolver
     /** @var list<Rule> most specific first */
     private readonly array $rules;
 
-    public function __construct(public readonly SchoolHolidayProvider $schoolHolidays)
-    {
+    public function __construct(
+        public readonly SchoolHolidayProvider $schoolHolidays,
+        public readonly PublicHolidayProvider $publicHolidays,
+    ) {
+        $lookup = new SchoolHolidayLookup($schoolHolidays);
         $this->rules = [
             new ExplicitDateRule(),
             new CalendarWeekRule(),
+            new SchoolHolidayRule($lookup),
+            new BridgeDayRule(),
+            new SingleFeastRule($publicHolidays),
+            new EasterRule($lookup),
+            new PentecostRule($lookup),
             new FixedDayRule(),
             new ThisWeekendRule(),
             new RelativeDayRule(),
@@ -36,7 +52,7 @@ final class Resolver
 
     public static function create(): self
     {
-        return new self(new BundledSchoolHolidays());
+        return new self(new BundledSchoolHolidays(), new YasumiPublicHolidays());
     }
 
     public function resolve(string $text, Context $context = new Context()): Result

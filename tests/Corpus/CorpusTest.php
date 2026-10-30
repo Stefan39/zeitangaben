@@ -15,7 +15,7 @@ use Stejac\Zeitangaben\State;
 
 final class CorpusTest extends TestCase
 {
-    private const array ENABLED_GROUPS = ['explicit'];
+    private const array ENABLED_GROUPS = ['explicit', 'school', 'feast'];
 
     private const array KNOWN_EXPECT_KEYS = ['type', 'start', 'end', 'note_contains', 'no_notes', 'reason', 'candidates'];
 
