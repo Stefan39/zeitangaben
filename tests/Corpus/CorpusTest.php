@@ -15,8 +15,6 @@ use Stejac\Zeitangaben\State;
 
 final class CorpusTest extends TestCase
 {
-    private const array ENABLED_GROUPS = ['explicit', 'school', 'feast'];
-
     private const array KNOWN_EXPECT_KEYS = ['type', 'start', 'end', 'note_contains', 'no_notes', 'reason', 'candidates'];
 
     /**
@@ -31,9 +29,6 @@ final class CorpusTest extends TestCase
 
         foreach ($entries as $entry) {
             self::assertIsArray($entry);
-            if (!in_array($entry['group'], self::ENABLED_GROUPS, true)) {
-                continue;
-            }
             yield (string) $entry['id'] => [$entry];
         }
     }

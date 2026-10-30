@@ -8,19 +8,29 @@ use Stejac\Zeitangaben\Holiday\PublicHolidayProvider;
 use Stejac\Zeitangaben\Holiday\YasumiPublicHolidays;
 use Stejac\Zeitangaben\Rule\BridgeDayRule;
 use Stejac\Zeitangaben\Rule\CalendarWeekRule;
+use Stejac\Zeitangaben\Rule\ChristmasRule;
 use Stejac\Zeitangaben\Rule\EasterRule;
 use Stejac\Zeitangaben\Rule\ExplicitDateRule;
 use Stejac\Zeitangaben\Rule\FixedDayRule;
 use Stejac\Zeitangaben\Rule\InvalidRulePatternException;
+use Stejac\Zeitangaben\Rule\LastHolidayWeekRule;
+use Stejac\Zeitangaben\Rule\LongWeekendRule;
+use Stejac\Zeitangaben\Rule\MonthPartRule;
 use Stejac\Zeitangaben\Rule\MonthRule;
 use Stejac\Zeitangaben\Rule\PentecostRule;
 use Stejac\Zeitangaben\Rule\RelativeDayRule;
+use Stejac\Zeitangaben\Rule\RelativeToFeastRule;
+use Stejac\Zeitangaben\Rule\RelativeWeekRule;
 use Stejac\Zeitangaben\Rule\Rule;
 use Stejac\Zeitangaben\Rule\RuleMatch;
 use Stejac\Zeitangaben\Rule\SchoolHolidayLookup;
 use Stejac\Zeitangaben\Rule\SchoolHolidayRule;
+use Stejac\Zeitangaben\Rule\SeasonRule;
+use Stejac\Zeitangaben\Rule\SeasonTermRule;
 use Stejac\Zeitangaben\Rule\SingleFeastRule;
 use Stejac\Zeitangaben\Rule\ThisWeekendRule;
+use Stejac\Zeitangaben\Rule\WeekdayRule;
+use Stejac\Zeitangaben\Rule\WeekendRule;
 use Stejac\Zeitangaben\School\BundledSchoolHolidays;
 use Stejac\Zeitangaben\School\SchoolHolidayProvider;
 use Stejac\Zeitangaben\Text\Normalizer;
@@ -38,6 +48,10 @@ final class Resolver
         $this->rules = [
             new ExplicitDateRule(),
             new CalendarWeekRule(),
+            new LastHolidayWeekRule(),
+            new SeasonTermRule(),
+            new ChristmasRule(),
+            new RelativeToFeastRule(),
             new SchoolHolidayRule($lookup),
             new BridgeDayRule(),
             new SingleFeastRule($publicHolidays),
@@ -45,8 +59,14 @@ final class Resolver
             new PentecostRule($lookup),
             new FixedDayRule(),
             new ThisWeekendRule(),
+            new LongWeekendRule($publicHolidays),
+            new WeekendRule(),
+            new MonthPartRule(),
+            new SeasonRule(),
+            new RelativeWeekRule(),
             new RelativeDayRule(),
             new MonthRule(),
+            new WeekdayRule(),
         ];
     }
 
