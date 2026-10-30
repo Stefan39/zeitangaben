@@ -12,6 +12,7 @@ enum ClarificationReason: string
     case Vague = 'vague';
     case NotACalendarTerm = 'not_a_calendar_term';
     case OutOfData = 'out_of_data';
+    case NotInState = 'not_in_state';
     case InvalidDate = 'invalid_date';
     case MultipleExpressions = 'multiple_expressions';
 }

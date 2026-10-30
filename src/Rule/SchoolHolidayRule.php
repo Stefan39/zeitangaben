@@ -35,17 +35,17 @@ final class SchoolHolidayRule implements Rule
     {
         $expression = $match->expression;
         $state = $context->state;
-        if (null === $state) {
-            return Clarifications::missingState($expression);
-        }
         $year = FeastPeriod::yearOf($match);
-        if (null === $year && null === $context->referenceDate) {
-            return Clarifications::missingReferenceDate($expression);
+        if (null === $state || (null === $year && null === $context->referenceDate)) {
+            return null === $state
+                ? Clarifications::missingState($expression)
+                : Clarifications::missingReferenceDate($expression);
         }
 
         $type = $this->typeOf($match, $state);
-        if (SchoolHolidayType::Easter === $type && !$this->lookup->has($state, $type) && $this->lookup->has($state, SchoolHolidayType::Spring)) {
-            return $this->noEaster($expression, $state, $year, $context);
+        $unavailable = $this->unavailable($expression, $state, $type, $year, $context);
+        if (null !== $unavailable) {
+            return $unavailable;
         }
 
         $holiday = $this->find($state, $type, $year, $context);
@@ -53,6 +53,25 @@ final class SchoolHolidayRule implements Rule
         return null === $holiday
             ? Clarifications::outOfData($expression, $state)
             : new Resolved($holiday->period, $expression);
+    }
+
+    /**
+     * Tells "the state has no such holidays" apart from "no data for that year".
+     */
+    private function unavailable(string $expression, State $state, SchoolHolidayType $type, ?int $year, Context $context): ?Clarification
+    {
+        if ($this->lookup->has($state, $type)) {
+            return null;
+        }
+        if (SchoolHolidayType::Easter === $type && $this->lookup->has($state, SchoolHolidayType::Spring)) {
+            return $this->noEaster($expression, $state, $year, $context);
+        }
+
+        return new Clarification(
+            ClarificationReason::NotInState,
+            sprintf('%s hat keine %s. Welchen Zeitraum meinen Sie?', $state->germanName(), ucfirst($expression)),
+            $expression,
+        );
     }
 
     private function find(State $state, SchoolHolidayType $type, ?int $year, Context $context): ?SchoolHoliday
@@ -78,7 +97,7 @@ final class SchoolHolidayRule implements Rule
     /**
      * Hamburg has no Osterferien, only Frühjahrsferien: offer those instead of inventing a date.
      */
-    private function noEaster(string $expression, State $state, ?int $year, Context $context): Result
+    private function noEaster(string $expression, State $state, ?int $year, Context $context): Clarification
     {
         $spring = $this->find($state, SchoolHolidayType::Spring, $year, $context);
         if (null === $spring) {

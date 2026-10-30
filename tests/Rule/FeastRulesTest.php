@@ -6,6 +6,7 @@ namespace Stejac\Zeitangaben\Tests\Rule;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Stejac\Zeitangaben\Candidate;
 use Stejac\Zeitangaben\Clarification;
 use Stejac\Zeitangaben\ClarificationReason;
 use Stejac\Zeitangaben\Context;
@@ -138,6 +139,16 @@ final class FeastRulesTest extends TestCase
         self::assertSame(ClarificationReason::OutOfData, $result->reason);
     }
 
+    public function testTypeThatTheStateDoesNotHaveIsNotAGapInTheData(): void
+    {
+        $result = Resolver::create()->resolve('Pfingstferien 2027', new Context(null, State::HE));
+
+        self::assertInstanceOf(Clarification::class, $result);
+        self::assertSame(ClarificationReason::NotInState, $result->reason);
+        self::assertStringContainsString('Hessen hat keine', $result->question);
+        self::assertSame([], $result->candidates);
+    }
+
     public function testSchoolHolidayYearSelectsEntryStartingInThatYear(): void
     {
         $result = Resolver::create()->resolve('Weihnachtsferien 2026', new Context(null, State::NI));
@@ -152,7 +163,7 @@ final class FeastRulesTest extends TestCase
     private function ranges(Clarification $result): array
     {
         return array_map(
-            static fn ($c): array => [$c->period->start->format('Y-m-d'), $c->period->end->format('Y-m-d')],
+            static fn (Candidate $c): array => [$c->period->start->format('Y-m-d'), $c->period->end->format('Y-m-d')],
             $result->candidates,
         );
     }
