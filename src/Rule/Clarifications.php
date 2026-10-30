@@ -40,6 +40,29 @@ final class Clarifications
         );
     }
 
+    /**
+     * @param list<string> $expressions as the user wrote them
+     */
+    public static function multipleExpressions(array $expressions): Clarification
+    {
+        $quoted = implode(', ', array_map(static fn (string $e): string => sprintf('„%s“', $e), $expressions));
+
+        return new Clarification(
+            ClarificationReason::MultipleExpressions,
+            sprintf('Ihre Angabe enthält mehrere Zeitangaben: %s. Welche davon meinen Sie?', $quoted),
+            implode('; ', $expressions),
+        );
+    }
+
+    public static function vagueSpan(string $expression): Clarification
+    {
+        return new Clarification(
+            ClarificationReason::Vague,
+            sprintf('„%s“ ist kein genauer Zeitraum. Von welchem bis zu welchem Tag meinen Sie?', $expression),
+            $expression,
+        );
+    }
+
     public static function missingState(string $expression): Clarification
     {
         return new Clarification(

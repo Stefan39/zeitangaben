@@ -18,7 +18,7 @@ final class RelativeDayRule implements Rule
 
     public function pattern(): string
     {
-        return '\b(?<day>uebermorgen|morgen|heute)\b';
+        return '\b(?:(?<day>uebermorgen|morgen)|(?<today>heute)(?:\s+(?:morgen|frueh|vormittag|mittag|nachmittag|abend|nacht))?)\b';
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
@@ -27,7 +27,7 @@ final class RelativeDayRule implements Rule
             return Clarifications::missingReferenceDate($match->original);
         }
 
-        $offset = self::OFFSETS[$match->groups['day']];
+        $offset = self::OFFSETS[$match->groups['day'] ?? 'heute'];
 
         return new Resolved(Period::day($context->referenceDate->modify(sprintf('+%d days', $offset))), $match->original);
     }

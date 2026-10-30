@@ -6,6 +6,7 @@ namespace Stejac\Zeitangaben\Rule;
 
 use Stejac\Zeitangaben\Calendar\Easter;
 use Stejac\Zeitangaben\Calendar\LongWeekend;
+use Stejac\Zeitangaben\Calendar\Months;
 use Stejac\Zeitangaben\Calendar\YearlyDate;
 use Stejac\Zeitangaben\Candidate;
 use Stejac\Zeitangaben\Clarification;
@@ -22,27 +23,28 @@ final class BridgeDayRule implements Rule
 {
     public function pattern(): string
     {
-        return YearToken::around('\bbrueckentag(?:e)?\s+im\s+mai\b');
+        return YearToken::around('\bbrueckentag(?:e)?\s+im\s+mai\b').'|\bbrueckentag(?:e)?\b(?!\s+im\s+(?:'.Months::PATTERN.')\b)';
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
     {
         $expression = $match->original;
-        $span = FeastPeriod::find(
-            $expression,
-            $match->year,
-            $context,
-            fn (int $year): Period => $this->spanOf($this->candidatesIn($year)),
-        );
-        if (!$span instanceof Period) {
-            return $span;
+        if (!str_contains($match->expression, ' im ')) {
+            return new Clarification(
+                ClarificationReason::Vague,
+                sprintf('Welchen Tag meinen Sie mit „%s“? Bitte nennen Sie das Datum.', $expression),
+                $expression,
+            );
         }
 
-        return new Clarification(
+        return YearCandidates::clarify(
+            $expression,
+            $context,
             ClarificationReason::Ambiguous,
             sprintf('Welchen Brückentag im Mai meinen Sie? Bei „%s“ kommen mehrere in Frage.', $expression),
-            $expression,
-            $this->candidatesIn((int) $span->start->format('Y')),
+            fn (int $year): Period => $this->spanOf($this->candidatesIn($year)),
+            fn (int $year): array => $this->candidatesIn($year),
+            $match->year,
         );
     }
 

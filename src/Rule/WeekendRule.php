@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Stejac\Zeitangaben\Rule;
 
+use Stejac\Zeitangaben\Calendar\Months;
 use Stejac\Zeitangaben\Candidate;
 use Stejac\Zeitangaben\Clarification;
 use Stejac\Zeitangaben\ClarificationReason;
@@ -18,13 +19,14 @@ final class WeekendRule implements Rule
 {
     public function pattern(): string
     {
-        return '\b(?:(?<next>naechstes|kommendes)|(?<after>uebernaechstes)|(?<any>am|ein|uebers))\s+wochenende\b';
+        return '\b(?:(?:(?<next>naechstes|naechsten|kommendes|kommenden)|(?<after>uebernaechstes|uebernaechsten)|am|ein|uebers)\s+)?wochenende\b'
+            .'(?!\s+im\s+(?:'.Months::PATTERN.')\b)';
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result
     {
         $expression = $match->original;
-        if (isset($match->groups['any'])) {
+        if (!isset($match->groups['next']) && !isset($match->groups['after'])) {
             return new Clarification(
                 ClarificationReason::Ambiguous,
                 sprintf('Welches Wochenende meinen Sie mit „%s“? Bitte nennen Sie das Datum.', $expression),
@@ -35,21 +37,23 @@ final class WeekendRule implements Rule
             return Clarifications::missingReferenceDate($expression);
         }
 
-        $first = isset($match->groups['after']) ? 1 : 0;
+        [$first, $labels] = isset($match->groups['after'])
+            ? [1, ['Zweites kommendes Wochenende', 'Drittes kommendes Wochenende']]
+            : [0, ['Kommendes Wochenende', 'Wochenende danach']];
         $monday = $context->referenceDate->modify('monday this week');
 
         return new Clarification(
             ClarificationReason::Ambiguous,
             sprintf('Welches Wochenende meinen Sie mit „%s“? Das Wort lässt sich auf zwei Wochenenden beziehen.', $expression),
             $expression,
-            [$this->weekend($monday, $first), $this->weekend($monday, $first + 1)],
+            [$this->weekend($monday, $first, $labels[0]), $this->weekend($monday, $first + 1, $labels[1])],
         );
     }
 
-    private function weekend(\DateTimeImmutable $monday, int $weeksAhead): Candidate
+    private function weekend(\DateTimeImmutable $monday, int $weeksAhead, string $label): Candidate
     {
         $friday = $monday->modify(sprintf('+%d days', $weeksAhead * 7 + 4));
 
-        return new Candidate(new Period($friday, $friday->modify('+2 days')), 'Wochenende von Freitag bis Sonntag');
+        return new Candidate(new Period($friday, $friday->modify('+2 days')), $label);
     }
 }

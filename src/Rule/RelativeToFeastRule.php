@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Stejac\Zeitangaben\Rule;
 
-use Stejac\Zeitangaben\Clarification;
-use Stejac\Zeitangaben\ClarificationReason;
 use Stejac\Zeitangaben\Context;
 use Stejac\Zeitangaben\Result;
 
@@ -21,10 +19,6 @@ final class RelativeToFeastRule implements Rule
 
     public function evaluate(RuleMatch $match, Context $context): Result
     {
-        return new Clarification(
-            ClarificationReason::Vague,
-            sprintf('„%s“ ist kein genauer Zeitraum. Von welchem bis zu welchem Tag meinen Sie?', $match->original),
-            $match->original,
-        );
+        return Clarifications::vagueSpan($match->original);
     }
 }

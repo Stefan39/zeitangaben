@@ -45,6 +45,22 @@ enum State: string
         return reset($matches);
     }
 
+    /**
+     * Regular expression body for a state mentioned the way a state is mentioned: "in Bayern", "aus dem
+     * Saarland", "Bundesland Hessen". The bare name proves nothing: "Frau Berlin", "FC Bayern", "BW Bank".
+     *
+     * @internal
+     */
+    public static function mentionPattern(): string
+    {
+        $aliases = array_keys(self::aliases());
+        usort($aliases, static fn (string $a, string $b): int => strlen($b) <=> strlen($a));
+        $name = '(?:'.implode('|', $aliases).')(?![a-z0-9-])';
+
+        return '(?<![a-z0-9-])(?:in|im|aus|nach|fuer|von|vom|bundesland:?|land)\s+(?:(?:dem|das|den)\s+)?'
+            .'(?<states>'.$name.'(?:(?:\s*[,/]\s*|\s+und\s+|\s+oder\s+)'.$name.')*)';
+    }
+
     public function germanName(): string
     {
         return match ($this) {

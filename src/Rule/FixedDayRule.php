@@ -16,7 +16,7 @@ final class FixedDayRule implements Rule
 {
     public function pattern(): string
     {
-        return YearToken::around('\b(?:(?<silvester>silvester|jahreswechsel)|(?<neujahr>neujahr(?:stag)?)|(?<einheit>tag\s+der\s+deutschen\s+einheit)|(?<labour>tag\s+der\s+arbeit)|(?<eve>heiligabend)|(?<xmas1>(?:1\.|erster|ersten)\s+weihnachtstag)|(?<xmas2>(?:2\.|zweiter|zweiten)\s+weihnachtstag))\b');
+        return YearToken::around('\b(?:(?<silvester>silvester)|(?<neujahr>neujahr(?:stag)?)|(?<einheit>tag\s+der\s+deutschen\s+einheit)|(?<labour>tag\s+der\s+arbeit)|(?<eve>heiligabend)|(?<xmas1>(?:1\.|erster|ersten)\s+weihnachtstag)|(?<xmas2>(?:2\.|zweiter|zweiten)\s+weihnachtstag))\b');
     }
 
     public function evaluate(RuleMatch $match, Context $context): Result

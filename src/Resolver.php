@@ -10,6 +10,7 @@ use Stejac\Zeitangaben\Rule\BridgeDayRule;
 use Stejac\Zeitangaben\Rule\CalendarWeekRule;
 use Stejac\Zeitangaben\Rule\ChristmasRule;
 use Stejac\Zeitangaben\Rule\Clarifications;
+use Stejac\Zeitangaben\Rule\ContextGuard;
 use Stejac\Zeitangaben\Rule\EasterRule;
 use Stejac\Zeitangaben\Rule\ExplicitDateRule;
 use Stejac\Zeitangaben\Rule\FixedDayRule;
@@ -31,6 +32,7 @@ use Stejac\Zeitangaben\Rule\SeasonRule;
 use Stejac\Zeitangaben\Rule\SeasonTermRule;
 use Stejac\Zeitangaben\Rule\SingleFeastRule;
 use Stejac\Zeitangaben\Rule\ThisWeekendRule;
+use Stejac\Zeitangaben\Rule\TurnOfYearRule;
 use Stejac\Zeitangaben\Rule\WeekdayRule;
 use Stejac\Zeitangaben\Rule\WeekendRule;
 use Stejac\Zeitangaben\School\BundledSchoolHolidays;
@@ -41,6 +43,11 @@ use Stejac\Zeitangaben\Text\YearToken;
 
 final class Resolver
 {
+    private const string GREETINGS = '~\bguten\s+(?:morgen|tag|abend)\b'
+        .'|(?:^\s*|(?<=[.!?,;]\s))morgen\s+zusammen\b(?=\s*(?:[,.!?;:]|$))'
+        .'|\b(?:frohe|schoene|gesegnete)\s+(?:ostern|pfingsten|weihnachten)\b'
+        .'|\bschoenes\s+wochenende\b~';
+
     /** @var list<Rule> most specific first */
     private readonly array $rules;
 
@@ -62,6 +69,7 @@ final class Resolver
             new EasterRule($lookup),
             new PentecostRule($lookup),
             new FixedDayRule(),
+            new TurnOfYearRule(),
             new ThisWeekendRule(),
             new LongWeekendRule($publicHolidays),
             new WeekendRule(),
@@ -89,17 +97,18 @@ final class Resolver
             $context = $context->withState($state);
         }
 
-        $found = $this->findExpressions($normalized, $source);
+        $guard = new ContextGuard($source, $normalized);
+        [$found, $unclaimed] = $this->findExpressions($normalized, $source, $guard);
         if ([] === $found) {
             return new NoExpression();
         }
         if (count($found) > 1) {
-            return $this->multipleExpressions($found);
+            return Clarifications::multipleExpressions(array_values(array_map(static fn (array $f): string => $f[1]->original, $found)));
         }
 
         [$rule, $match] = reset($found);
 
-        return $this->evaluate($rule, $match, $context);
+        return $guard->clarificationFor($match, $unclaimed) ?? $this->evaluate($rule, $match, $context);
     }
 
     private function evaluate(Rule $rule, RuleMatch $match, Context $context): Result
@@ -114,7 +123,7 @@ final class Resolver
     private function stripGreetings(string $normalized): string
     {
         return preg_replace_callback(
-            '~\bguten\s+(?:morgen|tag|abend)\b~',
+            self::GREETINGS,
             static fn (array $m): string => str_repeat(' ', strlen($m[0])),
             $normalized,
         ) ?? $normalized;
@@ -122,21 +131,25 @@ final class Resolver
 
     /**
      * Runs the rules in order; every match is blanked so later rules cannot claim it again.
+     * A match the guard discards is blanked too: that text is a name, not a time expression.
      *
-     * @return array<string, array{Rule, RuleMatch}> keyed by rule class and expression, in text order
+     * @return array{array<string, array{Rule, RuleMatch}>, string} the matches keyed by rule class and expression
+     *                                                              in text order, and the text left unclaimed
      */
-    private function findExpressions(string $text, NormalizedText $source): array
+    private function findExpressions(string $text, NormalizedText $source, ContextGuard $guard): array
     {
         $found = [];
         foreach ($this->rules as $rule) {
             foreach ($this->matchesOf($rule, $text, $source) as $match) {
                 $text = substr_replace($text, str_repeat(' ', strlen($match->expression)), $match->offset, strlen($match->expression));
-                $found[$rule::class.'|'.$match->expression] ??= [$rule, $match];
+                if (!$guard->discards($match)) {
+                    $found[$rule::class.'|'.$match->expression] ??= [$rule, $match];
+                }
             }
         }
         uasort($found, static fn (array $a, array $b): int => $a[1]->offset <=> $b[1]->offset);
 
-        return $found;
+        return [$found, $text];
     }
 
     /**
@@ -161,20 +174,5 @@ final class Resolver
         }
 
         return $matches;
-    }
-
-    /**
-     * @param array<string, array{Rule, RuleMatch}> $found
-     */
-    private function multipleExpressions(array $found): Clarification
-    {
-        $expressions = array_values(array_map(static fn (array $f): string => $f[1]->original, $found));
-        $quoted = implode(', ', array_map(static fn (string $e): string => sprintf('„%s“', $e), $expressions));
-
-        return new Clarification(
-            ClarificationReason::MultipleExpressions,
-            sprintf('Ihre Angabe enthält mehrere Zeitangaben: %s. Welche davon meinen Sie?', $quoted),
-            implode('; ', $expressions),
-        );
     }
 }
