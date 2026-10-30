@@ -102,9 +102,19 @@ final class SchoolHolidayRule implements Rule
 
         return new Clarification(
             ClarificationReason::NotInState,
-            sprintf('%s hat keine %s. Welchen Zeitraum meinen Sie?', $state->germanName(), ucfirst($expression)),
+            sprintf('%s hat keine %s. Welchen Zeitraum meinen Sie?', $state->germanName(), self::termIn($expression)),
             $expression,
         );
+    }
+
+    /**
+     * The holiday word as the user wrote it, without a year next to it.
+     */
+    private static function termIn(string $expression): string
+    {
+        preg_match('~\p{L}*ferien~iu', $expression, $term);
+
+        return ucfirst($term[0] ?? $expression);
     }
 
     private function find(State $state, SchoolHolidayType $type, ?int $year, Context $context): ?SchoolHoliday

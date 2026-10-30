@@ -211,6 +211,14 @@ final class FeastRulesTest extends TestCase
         self::assertSame(ClarificationReason::OutOfData, $result->reason);
     }
 
+    public function testHolidayTheStateDoesNotHaveIsNamedWithoutTheYear(): void
+    {
+        $result = Resolver::create()->resolve('2028 pfingstferien', new Context(null, State::HE));
+
+        self::assertInstanceOf(Clarification::class, $result);
+        self::assertSame('Hessen hat keine Pfingstferien. Welchen Zeitraum meinen Sie?', $result->question);
+    }
+
     public function testTypeThatTheStateDoesNotHaveIsNotAGapInTheData(): void
     {
         $result = Resolver::create()->resolve('Pfingstferien 2027', new Context(null, State::HE));
