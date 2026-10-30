@@ -1,0 +1,14 @@
+{
+  "_comment": "Merge into composer.json of the new repo, then delete this file.",
+  "scripts": {
+    "test": "phpunit",
+    "phpstan": "phpstan analyse --memory-limit=1G",
+    "cs": "php-cs-fixer fix --dry-run --diff",
+    "cs-fix": "php-cs-fixer fix"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^12.0",
+    "phpstan/phpstan": "^2.1",
+    "friendsofphp/php-cs-fixer": "^3.75"
+  }
+}

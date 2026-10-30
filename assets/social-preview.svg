@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <rect width="1280" height="640" fill="#111827"/>
+  <rect x="0" y="0" width="16" height="640" fill="#E11367"/>
+  <circle cx="1120" cy="140" r="60" fill="#E11367"/>
+  <circle cx="1210" cy="140" r="30" fill="#4AB290"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+    <text x="96" y="300" font-size="88" font-weight="700" fill="#ffffff">REPO NAME</text>
+    <text x="96" y="380" font-size="40" fill="#d1d5db">One sentence: what it does for whom.</text>
+    <text x="96" y="560" font-size="32" fill="#4AB290">github.com/Stefan39 · www.jacomeit.de</text>
+  </g>
+</svg>
