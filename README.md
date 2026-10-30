@@ -1,65 +1,209 @@
-<!-- Template: replace every {{…}} placeholder. Delete sections that do not apply — never ship a placeholder. -->
-# {{project-name}}
+# zeitangaben
 
-> {{One sentence: what it does for whom. No buzzwords. Example: "Ask Claude about your open invoices — a read-only MCP server for Lexware Office, written in PHP."}}
+> Resolves colloquial German time expressions such as "in den Herbstferien", "über Ostern" or "morgen" to a concrete period, or to a clarifying question with the reason why it could not decide.
 
-[![CI](https://github.com/Stefan39/{{repo}}/actions/workflows/ci.yml/badge.svg)](https://github.com/Stefan39/{{repo}}/actions/workflows/ci.yml)
+[![CI](https://github.com/Stefan39/zeitangaben/actions/workflows/ci.yml/badge.svg)](https://github.com/Stefan39/zeitangaben/actions/workflows/ci.yml)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%208-brightgreen)](phpstan.neon)
-[![Latest version](https://img.shields.io/packagist/v/{{vendor}}/{{package}})](https://packagist.org/packages/{{vendor}}/{{package}})
+[![Latest version](https://img.shields.io/packagist/v/stejac/zeitangaben)](https://packagist.org/packages/stejac/zeitangaben)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 [Deutsche Version](README.de.md)
 
 <p align="center">
-  <img src="docs/demo/demo.gif" alt="{{What the GIF shows, in one sentence}}" width="720">
+  <img src="docs/demo/demo.gif" alt="Five German time expressions on the command line: two resolve to a date range, three produce a question with candidate periods" width="720">
 </p>
 
 ## Why this one?
 
-{{2–4 sentences. Name the alternatives honestly and say what is different. Only claims you can back up.}}
+"In den Herbstferien" has no single answer: the dates depend on the German state. "Über Ostern" can mean the public holidays or the school break. Most date parsers either guess or return nothing. To our knowledge, none of the common ones knows school holidays by state: Duckling knows public holidays only, and the documentation of dateparser and chrono does not mention holidays.
 
-- {{Differentiator 1, e.g. "Native PHP on the official MCP SDK"}}
-- {{Differentiator 2}}
-- {{Differentiator 3}}
+This library resolves what is certain and **asks when it is not**. Every answer is one of three results, so a chatbot, an agent or a form can handle it without guessing:
+
+- `Resolved`: one period, start and end inclusive.
+- `Clarification`: a reason, a ready-to-ask German `question` and, where possible, `candidates` the user can pick from.
+- `NoExpression`: no expression was recognised in the text (see [what `none` means](#what-none-means)).
+
+Further properties, all covered by tests:
+
+- The library never reads the system clock. Relative terms need an explicit reference date, so the same message gives the same answer whenever it is processed.
+- Public holidays come from [Yasumi](https://github.com/azuyalabs/yasumi), school holidays from a bundled data file (see [Data](#data)). No network access at runtime.
+- Pure PHP, PHP 8.3 or newer.
 
 ## Quickstart
 
 ```bash
-composer require {{vendor}}/{{package}}
+composer require stejac/zeitangaben
 ```
 
-{{Minimal working example — copy, paste, run. Under 15 lines.}}
+```php
+<?php
+require 'vendor/autoload.php';
+
+use Stejac\Zeitangaben\{Clarification, Context, Resolved, Resolver, State};
+
+$context = new Context(new DateTimeImmutable('2026-09-16'), State::NI);
+$result = Resolver::create()->resolve('in den Herbstferien', $context);
+
+if ($result instanceof Resolved) {
+    echo $result->period->start->format('d.m.Y'), ' bis ', $result->period->end->format('d.m.Y'), "\n";
+} elseif ($result instanceof Clarification) {
+    echo $result->question, "\n";
+}
+```
+
+Output:
+
+```text
+12.10.2026 bis 24.10.2026
+```
+
+The reference date is required for relative terms ("morgen", "nächstes Wochenende", "im Herbst") and for deciding which year is meant. It is a parameter on purpose: a message that is read a day later must still resolve to the same date. If it is missing, the result is a `Clarification` with the reason `missing_reference_date`. A state named in the text after a word such as "in", "aus" or "nach" ("Herbstferien in Bayern") takes precedence over the state in the context. A bare name ("Frau Berlin", "FC Bayern") is not read as the state: if the answer depends on the state, the library asks, and it also asks when two different states are named.
+
+### Sentences or expressions?
+
+Pass the time expression alone wherever you can, for example one extracted by an LLM. That gives the most answers, because `Resolved` means certain: it stands only if everything else in the input is known to be harmless. The input may hold a greeting, a state mention and a closed list of function words and common verbs ("Wir möchten gerne im Juli anreisen"). Any other word or number turns the result into a question with reason `unclear_context` and the found period as its only candidate, because the library cannot know what that word does to the meaning. With the reference date 2026-10-30:
+
+| Input | Result |
+| --- | --- |
+| `im Juli` | `Resolved` |
+| `Wir möchten gerne im Juli anreisen` | `Resolved` |
+| `Keine Termine im Juli` | `unclear_context`: „Meinen Sie „im Juli“, also 01.07.2027 bis 31.07.2027?“ |
+| `Silvester 2000 Euro` | `unclear_context`: „Meinen Sie „Silvester“, also 31.12.2026?“ |
+
+The list holds no negations, no numbers and no nouns that could name something else. A year next to the expression belongs to the expression. Two digits count as a year only from 00 to 69, and only directly after a numeric date, behind an apostrophe ("im Juli '27") or at the very end of the input.
+
+### Handling a clarification
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use Stejac\Zeitangaben\{Clarification, Context, Resolver, State};
+
+$context = new Context(new DateTimeImmutable('2026-09-16'), State::NI);
+$result = Resolver::create()->resolve('über Ostern', $context);
+
+if ($result instanceof Clarification) {
+    echo $result->reason->value, ': ', $result->question, "\n";
+    foreach ($result->candidates as $i => $candidate) {
+        echo $i + 1, ') ', $candidate->label, ', ', $candidate->period->start->format('Y-m-d'), ' to ', $candidate->period->end->format('Y-m-d'), "\n";
+    }
+}
+```
+
+Output:
+
+```text
+ambiguous: Meinen Sie bei „über Ostern“ die Feiertage (26.03. bis 29.03.2027) oder die Schulferien (22.03. bis 03.04.2027)?
+1) Karfreitag bis Ostermontag, 2027-03-26 to 2027-03-29
+2) Osterferien, 2027-03-22 to 2027-04-03
+```
+
+`question` is written for the end user and can be shown as it is, by a form or by an LLM that relays it. `candidates` are the valid answers: render them as buttons or a select, or hand them to the model as the allowed choices, then continue with the chosen period. For `missing_state` there are no candidates; ask the question, then call `resolve()` again with a `Context` that has the state. Every result is JSON-serialisable (`json_encode($result)`):
+
+```json
+{
+    "type": "clarification",
+    "reason": "ambiguous",
+    "question": "Meinen Sie bei „über Ostern“ die Feiertage (26.03. bis 29.03.2027) oder die Schulferien (22.03. bis 03.04.2027)?",
+    "expression": "über Ostern",
+    "candidates": [
+        {"start": "2027-03-26", "end": "2027-03-29", "label": "Karfreitag bis Ostermontag"},
+        {"start": "2027-03-22", "end": "2027-04-03", "label": "Osterferien"}
+    ]
+}
+```
+
+A resolved school holiday also says which state it was read for; `state` is `null` for everything else:
+
+```json
+{
+    "type": "resolved",
+    "start": "2026-10-12",
+    "end": "2026-10-24",
+    "expression": "Herbstferien",
+    "notes": [],
+    "state": "NI"
+}
+```
+
+### Command line
+
+```bash
+vendor/bin/zeitangaben "in den Herbstferien" --state=NI --date=2026-09-16
+vendor/bin/zeitangaben "Sommerferien" --date=2026-09-16 --json
+```
+
+Options: `--state=<code>` (two-letter state code such as `NI`, `BY`, `NW`), `--date=YYYY-MM-DD` (reference date), `--json`, `--help`. Exit code 0 for every result including a clarification, 2 for invalid arguments. The human-readable output is German.
+
+## What a result can be
+
+### Reasons for a clarification
+
+| Reason | Meaning |
+| --- | --- |
+| `missing_state` | The expression depends on the state ("Sommerferien") and none was given. |
+| `missing_reference_date` | A relative expression ("morgen") and no reference date was given. |
+| `ambiguous` | Two or more readings are plausible ("über Ostern": holidays or school break). `candidates` lists them. |
+| `vague` | The expression names no exact period ("Anfang Oktober", "Frühling"). `candidates` offers a likely reading. |
+| `not_a_calendar_term` | The term is jargon, not a calendar term ("Nebensaison"). |
+| `out_of_data` | School holidays are requested for a year the bundled data does not cover. |
+| `not_in_state` | The state has no such holidays, for example Pfingstferien in Hessen. |
+| `invalid_date` | The date does not exist ("31.2.", a calendar week 60), the weekday contradicts it ("Mo, 12.06.2027") or a range runs backwards ("vom 19. bis 12. Oktober"). |
+| `multiple_expressions` | The text contains several time expressions; the question names them. |
+| `unclear_context` | One expression was found, but the input holds a word or number the library does not know to be harmless ("Keine Termine im Juli"). The only candidate is the found period; see [Sentences or expressions?](#sentences-or-expressions) |
+
+### What `none` means
+
+`NoExpression` (`{"type": "none"}`) means the text was **not recognised**, not that it contains no date. Recognition is rule-based and has gaps. Not recognised for now, for example: „erste Juliwoche“, „Ende des Monats“, „in 3 Monaten“. Treat `none` as "ask the user or fall back", never as proof that no time was meant.
+
+Past tense is not modelled, so „Ostern war schön“ still asks about the next Easter.
+
+## Public API
+
+These types are the public API and follow semantic versioning: `Resolver`, `Context`, `State` (its cases, `germanName()` and `locative()`; the methods marked `@internal` are excluded), `Result` with `Resolved`, `Clarification` and `NoExpression`, `ClarificationReason`, `Candidate`, `Period`, `InvalidPeriodException`, and the provider interfaces `School\SchoolHolidayProvider` and `Holiday\PublicHolidayProvider` with their value types. Everything marked `@internal` (`Rule\*`, `Calendar\*`, `Text\*`, `Cli\*`) can change in any release.
 
 ## Features
 
 | Feature | Status |
 | --- | --- |
-| {{feature}} | stable |
-| {{feature}} | experimental |
-| {{feature}} | planned |
+| Explicit dates and calendar weeks ("am 3. Oktober", "KW 42") | beta |
+| Relative days, weeks and weekends ("morgen", "nächste Woche") | beta |
+| Months and parts of months, seasons | beta |
+| Feasts and long weekends (Ostern, Pfingsten, Weihnachten, Brückentage) | beta |
+| School holidays per state, 2026 to 2029 | beta |
+| Clarifications with reason, question and candidates | beta |
+| MCP tool for use from LLM clients | planned |
+| Stay length ("eine Woche im Herbst") | out of scope |
 
-## Configuration
+The rules are covered by unit tests and by a corpus test with 273 expressions (`tests/Corpus/`).
 
-{{Env vars / config keys as a table: name, default, description. Secrets only via environment.}}
+## Data
+
+School holidays come from the [OpenHolidays API](https://www.openholidaysapi.org) and are bundled in `data/school-holidays-de.json`. Public holidays are computed by [Yasumi](https://github.com/azuyalabs/yasumi).
+
+- Complete through 2029 for Easter (not Hamburg), summer, autumn and Christmas holidays. Pentecost and winter holidays exist only where the state has them, and gaps are possible. 2030 is partial; a gap or a later year gives `out_of_data`.
+- Mecklenburg-Vorpommern: dates of general schools. Schleswig-Holstein: dates of the mainland (not Sylt, Föhr, Amrum, Helgoland and the Halligen).
+- Hamburg has Frühjahrsferien instead of Osterferien; they are kept apart from Easter.
+
+Details, name mapping and known gaps are in [data/README.md](data/README.md). The data is licensed under the [ODbL 1.0](data/LICENSE) (attribution: OpenHolidays API); the code is MIT. If you redistribute the data or a derived database, the ODbL applies to it.
 
 ## Security
 
-Read [SECURITY.md](SECURITY.md) before reporting a vulnerability. {{Project-specific notes, e.g. "Read-only by default. Write tools must be enabled explicitly."}}
-
-## Used in production
-
-{{Only if true, with a link. Otherwise delete this section.}}
+Read [SECURITY.md](SECURITY.md) before reporting a vulnerability. The library processes text only and performs no I/O besides reading its bundled data file.
 
 ## Contributing
 
-Issues and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
+Issues and pull requests are welcome, see [CONTRIBUTING.md](CONTRIBUTING.md). A wrongly resolved or unrecognised expression is a useful bug report: include the text, the state and the reference date.
 
 ## About
 
-Built and maintained by [Stefan Jacomeit](https://www.jacomeit.de) — freelance PHP/Symfony developer with 25+ years of experience, building AI integrations for businesses.
+Built and maintained by [Stefan Jacomeit](https://www.jacomeit.de), freelance PHP/Symfony developer with 25+ years of experience, building AI integrations for businesses.
 
-{{Trademark note if a third-party product is named, e.g.: "Unofficial. Not affiliated with or endorsed by Haufe Group. Lexware and lexoffice are trademarks of Haufe Group."}}
+## Credits
+
+[OpenHolidays API](https://www.openholidaysapi.org) for the school holiday data and [Yasumi](https://github.com/azuyalabs/yasumi) for public holidays.
 
 ## License
 
-[MIT](LICENSE)
+Code: [MIT](LICENSE). Data in `data/`: [ODbL 1.0](data/LICENSE), see [NOTICE](NOTICE).

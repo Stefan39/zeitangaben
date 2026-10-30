@@ -1,13 +1,48 @@
-# Terminal demo recorded with charmbracelet/vhs — `vhs docs/demo/demo.tape`
-# Keep it 10–20 s. Show the benefit, not the installation.
+# Terminal demo recorded with charmbracelet/vhs: `vhs docs/demo/demo.tape` (run from the repository root).
+# Five inputs, fixed reference date, 10-20 s in total. Umlauts need zsh and the UTF-8 locale below.
 Output docs/demo/demo.gif
-Set FontSize 18
-Set Width 1200
-Set Height 640
+Set Shell zsh
+Set FontSize 20
+Set Width 1162
+Set Height 300
+Set Padding 24
 Set Theme "Catppuccin Mocha"
-Set TypingSpeed 40ms
+Set TypingSpeed 15ms
+Env LC_ALL "de_DE.UTF-8"
 
-Type "{{command that shows the value, e.g. bin/console app:demo}}"
-Sleep 500ms
+Hide
+Type "export PROMPT='$ ' PATH=$PWD/bin:$PATH"
 Enter
-Sleep 4s
+Type "clear"
+Enter
+Sleep 300ms
+Show
+
+Type `zeitangaben "in den Herbstferien" --state=NI --date=2026-09-16`
+Sleep 300ms
+Enter
+Sleep 2300ms
+Ctrl+L
+
+Type `zeitangaben "Sommerferien" --date=2026-09-16`
+Sleep 300ms
+Enter
+Sleep 2300ms
+Ctrl+L
+
+Type `zeitangaben "morgen" --date=2026-09-16`
+Sleep 300ms
+Enter
+Sleep 1800ms
+Ctrl+L
+
+Type `zeitangaben "über Ostern" --state=NI --date=2026-09-16`
+Sleep 300ms
+Enter
+Sleep 3000ms
+Ctrl+L
+
+Type `zeitangaben "nächstes Wochenende" --date=2026-09-16`
+Sleep 300ms
+Enter
+Sleep 3200ms

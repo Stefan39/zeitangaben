@@ -9,3 +9,5 @@
 /phpunit.xml.dist   export-ignore
 /renovate.json      export-ignore
 /CHANGELOG.md       export-ignore
+/tools              export-ignore
+/assets             export-ignore

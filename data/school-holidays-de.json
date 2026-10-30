@@ -1,0 +1,2891 @@
+{
+    "source": "OpenHolidays API (https://www.openholidaysapi.org)",
+    "license": "ODbL-1.0",
+    "retrieved": "2026-10-30",
+    "holidays": [
+        {
+            "state": "BB",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2025-12-22",
+            "end": "2026-01-02"
+        },
+        {
+            "state": "BB",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2026-02-02",
+            "end": "2026-02-07"
+        },
+        {
+            "state": "BB",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2026-03-30",
+            "end": "2026-04-10"
+        },
+        {
+            "state": "BB",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2026-05-26",
+            "end": "2026-05-26"
+        },
+        {
+            "state": "BB",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2026-07-09",
+            "end": "2026-08-22"
+        },
+        {
+            "state": "BB",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2026-10-19",
+            "end": "2026-10-30"
+        },
+        {
+            "state": "BB",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2026-12-23",
+            "end": "2027-01-02"
+        },
+        {
+            "state": "BB",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2027-02-01",
+            "end": "2027-02-06"
+        },
+        {
+            "state": "BB",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2027-03-22",
+            "end": "2027-04-03"
+        },
+        {
+            "state": "BB",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2027-05-18",
+            "end": "2027-05-18"
+        },
+        {
+            "state": "BB",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2027-07-01",
+            "end": "2027-08-14"
+        },
+        {
+            "state": "BB",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2027-10-11",
+            "end": "2027-10-23"
+        },
+        {
+            "state": "BB",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2027-12-23",
+            "end": "2027-12-31"
+        },
+        {
+            "state": "BB",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2028-01-31",
+            "end": "2028-02-05"
+        },
+        {
+            "state": "BB",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2028-04-10",
+            "end": "2028-04-22"
+        },
+        {
+            "state": "BB",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2028-06-29",
+            "end": "2028-08-12"
+        },
+        {
+            "state": "BB",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2028-10-02",
+            "end": "2028-10-14"
+        },
+        {
+            "state": "BB",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2028-12-22",
+            "end": "2029-01-02"
+        },
+        {
+            "state": "BB",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2029-01-29",
+            "end": "2029-02-03"
+        },
+        {
+            "state": "BB",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2029-03-26",
+            "end": "2029-04-06"
+        },
+        {
+            "state": "BB",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2029-05-22",
+            "end": "2029-05-22"
+        },
+        {
+            "state": "BB",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2029-06-28",
+            "end": "2029-08-11"
+        },
+        {
+            "state": "BB",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2029-10-01",
+            "end": "2029-10-12"
+        },
+        {
+            "state": "BB",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2029-12-21",
+            "end": "2030-01-04"
+        },
+        {
+            "state": "BB",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2030-02-04",
+            "end": "2030-02-09"
+        },
+        {
+            "state": "BB",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2030-04-15",
+            "end": "2030-04-26"
+        },
+        {
+            "state": "BB",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2030-07-04",
+            "end": "2030-08-17"
+        },
+        {
+            "state": "BE",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2025-12-22",
+            "end": "2026-01-02"
+        },
+        {
+            "state": "BE",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2026-02-02",
+            "end": "2026-02-07"
+        },
+        {
+            "state": "BE",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2026-03-30",
+            "end": "2026-04-10"
+        },
+        {
+            "state": "BE",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2026-05-26",
+            "end": "2026-05-26"
+        },
+        {
+            "state": "BE",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2026-07-09",
+            "end": "2026-08-22"
+        },
+        {
+            "state": "BE",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2026-10-19",
+            "end": "2026-10-31"
+        },
+        {
+            "state": "BE",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2026-12-23",
+            "end": "2027-01-02"
+        },
+        {
+            "state": "BE",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2027-02-01",
+            "end": "2027-02-06"
+        },
+        {
+            "state": "BE",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2027-03-22",
+            "end": "2027-04-02"
+        },
+        {
+            "state": "BE",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2027-05-18",
+            "end": "2027-05-19"
+        },
+        {
+            "state": "BE",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2027-07-01",
+            "end": "2027-08-14"
+        },
+        {
+            "state": "BE",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2027-10-11",
+            "end": "2027-10-23"
+        },
+        {
+            "state": "BE",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2027-12-22",
+            "end": "2027-12-31"
+        },
+        {
+            "state": "BE",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2028-01-31",
+            "end": "2028-02-05"
+        },
+        {
+            "state": "BE",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2028-04-10",
+            "end": "2028-04-22"
+        },
+        {
+            "state": "BE",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2028-06-01",
+            "end": "2028-06-02"
+        },
+        {
+            "state": "BE",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2028-07-01",
+            "end": "2028-08-12"
+        },
+        {
+            "state": "BE",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2028-10-02",
+            "end": "2028-10-14"
+        },
+        {
+            "state": "BE",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2028-12-22",
+            "end": "2029-01-02"
+        },
+        {
+            "state": "BE",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2029-01-29",
+            "end": "2029-02-03"
+        },
+        {
+            "state": "BE",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2029-03-26",
+            "end": "2029-04-06"
+        },
+        {
+            "state": "BE",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2029-05-22",
+            "end": "2029-05-25"
+        },
+        {
+            "state": "BE",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2029-07-01",
+            "end": "2029-08-11"
+        },
+        {
+            "state": "BE",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2029-10-01",
+            "end": "2029-10-12"
+        },
+        {
+            "state": "BE",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2029-12-21",
+            "end": "2030-01-04"
+        },
+        {
+            "state": "BE",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2030-02-04",
+            "end": "2030-02-09"
+        },
+        {
+            "state": "BE",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2030-04-15",
+            "end": "2030-04-26"
+        },
+        {
+            "state": "BE",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2030-06-07",
+            "end": "2030-06-07"
+        },
+        {
+            "state": "BE",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2030-07-04",
+            "end": "2030-08-17"
+        },
+        {
+            "state": "BW",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2025-12-22",
+            "end": "2026-01-05"
+        },
+        {
+            "state": "BW",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2026-03-30",
+            "end": "2026-04-11"
+        },
+        {
+            "state": "BW",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2026-05-26",
+            "end": "2026-06-05"
+        },
+        {
+            "state": "BW",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2026-07-30",
+            "end": "2026-09-12"
+        },
+        {
+            "state": "BW",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2026-10-26",
+            "end": "2026-10-30"
+        },
+        {
+            "state": "BW",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2026-12-23",
+            "end": "2027-01-09"
+        },
+        {
+            "state": "BW",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2027-03-30",
+            "end": "2027-04-03"
+        },
+        {
+            "state": "BW",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2027-05-18",
+            "end": "2027-05-29"
+        },
+        {
+            "state": "BW",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2027-07-29",
+            "end": "2027-09-11"
+        },
+        {
+            "state": "BW",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2027-11-02",
+            "end": "2027-11-06"
+        },
+        {
+            "state": "BW",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2027-12-23",
+            "end": "2028-01-08"
+        },
+        {
+            "state": "BW",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2028-04-18",
+            "end": "2028-04-22"
+        },
+        {
+            "state": "BW",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2028-06-06",
+            "end": "2028-06-17"
+        },
+        {
+            "state": "BW",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2028-07-27",
+            "end": "2028-09-09"
+        },
+        {
+            "state": "BW",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2028-10-30",
+            "end": "2028-11-03"
+        },
+        {
+            "state": "BW",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2028-12-23",
+            "end": "2029-01-05"
+        },
+        {
+            "state": "BW",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2029-03-26",
+            "end": "2029-04-07"
+        },
+        {
+            "state": "BW",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2029-05-22",
+            "end": "2029-06-01"
+        },
+        {
+            "state": "BW",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2029-07-26",
+            "end": "2029-09-08"
+        },
+        {
+            "state": "BW",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2029-10-29",
+            "end": "2029-11-02"
+        },
+        {
+            "state": "BW",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2029-12-22",
+            "end": "2030-01-05"
+        },
+        {
+            "state": "BW",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2030-04-15",
+            "end": "2030-04-26"
+        },
+        {
+            "state": "BW",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2030-06-11",
+            "end": "2030-06-21"
+        },
+        {
+            "state": "BW",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2030-07-25",
+            "end": "2030-09-07"
+        },
+        {
+            "state": "BY",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2025-12-22",
+            "end": "2026-01-05"
+        },
+        {
+            "state": "BY",
+            "type": "winter",
+            "name": "Frühjahrsferien",
+            "start": "2026-02-16",
+            "end": "2026-02-20"
+        },
+        {
+            "state": "BY",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2026-03-30",
+            "end": "2026-04-10"
+        },
+        {
+            "state": "BY",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2026-05-26",
+            "end": "2026-06-05"
+        },
+        {
+            "state": "BY",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2026-08-03",
+            "end": "2026-09-14"
+        },
+        {
+            "state": "BY",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2026-11-02",
+            "end": "2026-11-06"
+        },
+        {
+            "state": "BY",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2026-12-24",
+            "end": "2027-01-08"
+        },
+        {
+            "state": "BY",
+            "type": "winter",
+            "name": "Frühjahrsferien",
+            "start": "2027-02-08",
+            "end": "2027-02-12"
+        },
+        {
+            "state": "BY",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2027-03-22",
+            "end": "2027-04-02"
+        },
+        {
+            "state": "BY",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2027-05-18",
+            "end": "2027-05-28"
+        },
+        {
+            "state": "BY",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2027-08-02",
+            "end": "2027-09-13"
+        },
+        {
+            "state": "BY",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2027-11-02",
+            "end": "2027-11-05"
+        },
+        {
+            "state": "BY",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2027-12-24",
+            "end": "2028-01-07"
+        },
+        {
+            "state": "BY",
+            "type": "winter",
+            "name": "Frühjahrsferien",
+            "start": "2028-02-28",
+            "end": "2028-03-03"
+        },
+        {
+            "state": "BY",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2028-04-10",
+            "end": "2028-04-21"
+        },
+        {
+            "state": "BY",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2028-06-06",
+            "end": "2028-06-16"
+        },
+        {
+            "state": "BY",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2028-07-31",
+            "end": "2028-09-11"
+        },
+        {
+            "state": "BY",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2028-10-30",
+            "end": "2028-11-03"
+        },
+        {
+            "state": "BY",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2028-12-23",
+            "end": "2029-01-05"
+        },
+        {
+            "state": "BY",
+            "type": "winter",
+            "name": "Frühjahrsferien",
+            "start": "2029-02-12",
+            "end": "2029-02-16"
+        },
+        {
+            "state": "BY",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2029-03-26",
+            "end": "2029-04-06"
+        },
+        {
+            "state": "BY",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2029-05-22",
+            "end": "2029-06-01"
+        },
+        {
+            "state": "BY",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2029-07-30",
+            "end": "2029-09-10"
+        },
+        {
+            "state": "BY",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2029-10-29",
+            "end": "2029-11-02"
+        },
+        {
+            "state": "BY",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2029-12-24",
+            "end": "2030-01-04"
+        },
+        {
+            "state": "BY",
+            "type": "winter",
+            "name": "Frühjahrsferien",
+            "start": "2030-03-04",
+            "end": "2030-03-08"
+        },
+        {
+            "state": "BY",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2030-04-15",
+            "end": "2030-04-26"
+        },
+        {
+            "state": "BY",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2030-06-11",
+            "end": "2030-06-21"
+        },
+        {
+            "state": "BY",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2030-07-29",
+            "end": "2030-09-09"
+        },
+        {
+            "state": "HB",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2025-12-22",
+            "end": "2026-01-05"
+        },
+        {
+            "state": "HB",
+            "type": "winter",
+            "name": "Halbjahresferien",
+            "start": "2026-02-02",
+            "end": "2026-02-03"
+        },
+        {
+            "state": "HB",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2026-03-23",
+            "end": "2026-04-07"
+        },
+        {
+            "state": "HB",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2026-05-26",
+            "end": "2026-05-26"
+        },
+        {
+            "state": "HB",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2026-07-02",
+            "end": "2026-08-12"
+        },
+        {
+            "state": "HB",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2026-10-12",
+            "end": "2026-10-24"
+        },
+        {
+            "state": "HB",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2026-12-23",
+            "end": "2027-01-09"
+        },
+        {
+            "state": "HB",
+            "type": "winter",
+            "name": "Halbjahresferien",
+            "start": "2027-02-01",
+            "end": "2027-02-02"
+        },
+        {
+            "state": "HB",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2027-03-22",
+            "end": "2027-04-03"
+        },
+        {
+            "state": "HB",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2027-05-18",
+            "end": "2027-05-18"
+        },
+        {
+            "state": "HB",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2027-07-08",
+            "end": "2027-08-18"
+        },
+        {
+            "state": "HB",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2027-10-18",
+            "end": "2027-10-30"
+        },
+        {
+            "state": "HB",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2027-12-23",
+            "end": "2028-01-08"
+        },
+        {
+            "state": "HB",
+            "type": "winter",
+            "name": "Halbjahresferien",
+            "start": "2028-01-31",
+            "end": "2028-02-01"
+        },
+        {
+            "state": "HB",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2028-04-10",
+            "end": "2028-04-22"
+        },
+        {
+            "state": "HB",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2028-06-06",
+            "end": "2028-06-06"
+        },
+        {
+            "state": "HB",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2028-07-20",
+            "end": "2028-08-30"
+        },
+        {
+            "state": "HB",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2028-10-23",
+            "end": "2028-11-04"
+        },
+        {
+            "state": "HB",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2028-12-27",
+            "end": "2029-01-06"
+        },
+        {
+            "state": "HB",
+            "type": "winter",
+            "name": "Halbjahresferien",
+            "start": "2029-02-01",
+            "end": "2029-02-02"
+        },
+        {
+            "state": "HB",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2029-03-19",
+            "end": "2029-04-03"
+        },
+        {
+            "state": "HB",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2029-05-22",
+            "end": "2029-05-22"
+        },
+        {
+            "state": "HB",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2029-07-19",
+            "end": "2029-08-29"
+        },
+        {
+            "state": "HB",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2029-10-22",
+            "end": "2029-11-02"
+        },
+        {
+            "state": "HB",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2029-12-21",
+            "end": "2030-01-05"
+        },
+        {
+            "state": "HB",
+            "type": "winter",
+            "name": "Halbjahresferien",
+            "start": "2030-01-31",
+            "end": "2030-02-01"
+        },
+        {
+            "state": "HB",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2030-04-08",
+            "end": "2030-04-23"
+        },
+        {
+            "state": "HB",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2030-06-11",
+            "end": "2030-06-11"
+        },
+        {
+            "state": "HB",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2030-07-11",
+            "end": "2030-08-21"
+        },
+        {
+            "state": "HE",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2025-12-22",
+            "end": "2026-01-10"
+        },
+        {
+            "state": "HE",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2026-03-30",
+            "end": "2026-04-10"
+        },
+        {
+            "state": "HE",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2026-06-29",
+            "end": "2026-08-07"
+        },
+        {
+            "state": "HE",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2026-10-05",
+            "end": "2026-10-17"
+        },
+        {
+            "state": "HE",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2026-12-23",
+            "end": "2027-01-12"
+        },
+        {
+            "state": "HE",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2027-03-22",
+            "end": "2027-04-02"
+        },
+        {
+            "state": "HE",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2027-06-28",
+            "end": "2027-08-06"
+        },
+        {
+            "state": "HE",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2027-10-04",
+            "end": "2027-10-16"
+        },
+        {
+            "state": "HE",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2027-12-23",
+            "end": "2028-01-11"
+        },
+        {
+            "state": "HE",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2028-04-03",
+            "end": "2028-04-14"
+        },
+        {
+            "state": "HE",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2028-07-03",
+            "end": "2028-08-11"
+        },
+        {
+            "state": "HE",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2028-10-09",
+            "end": "2028-10-20"
+        },
+        {
+            "state": "HE",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2028-12-27",
+            "end": "2029-01-12"
+        },
+        {
+            "state": "HE",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2029-03-29",
+            "end": "2029-04-13"
+        },
+        {
+            "state": "HE",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2029-07-16",
+            "end": "2029-08-24"
+        },
+        {
+            "state": "HE",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2029-10-15",
+            "end": "2029-10-26"
+        },
+        {
+            "state": "HE",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2029-12-24",
+            "end": "2030-01-11"
+        },
+        {
+            "state": "HE",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2030-04-08",
+            "end": "2030-04-22"
+        },
+        {
+            "state": "HE",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2030-07-22",
+            "end": "2030-08-30"
+        },
+        {
+            "state": "HH",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2025-12-17",
+            "end": "2026-01-02"
+        },
+        {
+            "state": "HH",
+            "type": "winter",
+            "name": "Halbjahrespause",
+            "start": "2026-01-30",
+            "end": "2026-01-30"
+        },
+        {
+            "state": "HH",
+            "type": "spring",
+            "name": "Frühjahrsferien",
+            "start": "2026-03-02",
+            "end": "2026-03-13"
+        },
+        {
+            "state": "HH",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2026-05-11",
+            "end": "2026-05-15"
+        },
+        {
+            "state": "HH",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2026-07-09",
+            "end": "2026-08-19"
+        },
+        {
+            "state": "HH",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2026-10-19",
+            "end": "2026-10-30"
+        },
+        {
+            "state": "HH",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2026-12-21",
+            "end": "2027-01-01"
+        },
+        {
+            "state": "HH",
+            "type": "winter",
+            "name": "Halbjahrespause",
+            "start": "2027-01-29",
+            "end": "2027-01-29"
+        },
+        {
+            "state": "HH",
+            "type": "spring",
+            "name": "Frühjahrsferien",
+            "start": "2027-03-01",
+            "end": "2027-03-12"
+        },
+        {
+            "state": "HH",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2027-05-07",
+            "end": "2027-05-14"
+        },
+        {
+            "state": "HH",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2027-07-01",
+            "end": "2027-08-11"
+        },
+        {
+            "state": "HH",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2027-10-11",
+            "end": "2027-10-22"
+        },
+        {
+            "state": "HH",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2027-12-20",
+            "end": "2027-12-31"
+        },
+        {
+            "state": "HH",
+            "type": "winter",
+            "name": "Halbjahrespause",
+            "start": "2028-01-28",
+            "end": "2028-01-28"
+        },
+        {
+            "state": "HH",
+            "type": "spring",
+            "name": "Frühjahrsferien",
+            "start": "2028-03-06",
+            "end": "2028-03-17"
+        },
+        {
+            "state": "HH",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2028-05-22",
+            "end": "2028-05-26"
+        },
+        {
+            "state": "HH",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2028-07-03",
+            "end": "2028-08-11"
+        },
+        {
+            "state": "HH",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2028-10-02",
+            "end": "2028-10-13"
+        },
+        {
+            "state": "HH",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2028-12-18",
+            "end": "2028-12-29"
+        },
+        {
+            "state": "HH",
+            "type": "winter",
+            "name": "Halbjahrespause",
+            "start": "2029-02-02",
+            "end": "2029-02-02"
+        },
+        {
+            "state": "HH",
+            "type": "spring",
+            "name": "Frühjahrsferien",
+            "start": "2029-03-05",
+            "end": "2029-03-16"
+        },
+        {
+            "state": "HH",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2029-05-11",
+            "end": "2029-05-18"
+        },
+        {
+            "state": "HH",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2029-07-02",
+            "end": "2029-08-10"
+        },
+        {
+            "state": "HH",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2029-10-01",
+            "end": "2029-10-12"
+        },
+        {
+            "state": "HH",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2029-12-21",
+            "end": "2030-01-04"
+        },
+        {
+            "state": "HH",
+            "type": "winter",
+            "name": "Halbjahrespause",
+            "start": "2030-02-01",
+            "end": "2030-02-01"
+        },
+        {
+            "state": "HH",
+            "type": "spring",
+            "name": "Frühjahrsferien",
+            "start": "2030-03-04",
+            "end": "2030-03-15"
+        },
+        {
+            "state": "HH",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2030-05-20",
+            "end": "2030-05-24"
+        },
+        {
+            "state": "HH",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2030-07-04",
+            "end": "2030-08-14"
+        },
+        {
+            "state": "MV",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2025-12-20",
+            "end": "2026-01-03"
+        },
+        {
+            "state": "MV",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2026-02-09",
+            "end": "2026-02-20"
+        },
+        {
+            "state": "MV",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2026-03-30",
+            "end": "2026-04-08"
+        },
+        {
+            "state": "MV",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2026-05-22",
+            "end": "2026-05-26"
+        },
+        {
+            "state": "MV",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2026-07-13",
+            "end": "2026-08-22"
+        },
+        {
+            "state": "MV",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2026-10-15",
+            "end": "2026-10-24"
+        },
+        {
+            "state": "MV",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2026-12-21",
+            "end": "2027-01-02"
+        },
+        {
+            "state": "MV",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2027-02-08",
+            "end": "2027-02-19"
+        },
+        {
+            "state": "MV",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2027-03-24",
+            "end": "2027-04-02"
+        },
+        {
+            "state": "MV",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2027-05-14",
+            "end": "2027-05-18"
+        },
+        {
+            "state": "MV",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2027-07-05",
+            "end": "2027-08-14"
+        },
+        {
+            "state": "MV",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2027-10-14",
+            "end": "2027-10-23"
+        },
+        {
+            "state": "MV",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2027-12-22",
+            "end": "2028-01-04"
+        },
+        {
+            "state": "MV",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2028-02-05",
+            "end": "2028-02-17"
+        },
+        {
+            "state": "MV",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2028-04-12",
+            "end": "2028-04-21"
+        },
+        {
+            "state": "MV",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2028-06-02",
+            "end": "2028-06-06"
+        },
+        {
+            "state": "MV",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2028-06-26",
+            "end": "2028-08-05"
+        },
+        {
+            "state": "MV",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2028-10-23",
+            "end": "2028-10-28"
+        },
+        {
+            "state": "MV",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2028-12-22",
+            "end": "2029-01-02"
+        },
+        {
+            "state": "MV",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2029-02-05",
+            "end": "2029-02-16"
+        },
+        {
+            "state": "MV",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2029-03-28",
+            "end": "2029-04-06"
+        },
+        {
+            "state": "MV",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2029-05-18",
+            "end": "2029-05-22"
+        },
+        {
+            "state": "MV",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2029-06-18",
+            "end": "2029-07-28"
+        },
+        {
+            "state": "MV",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2029-10-22",
+            "end": "2029-10-27"
+        },
+        {
+            "state": "MV",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2029-12-21",
+            "end": "2030-01-04"
+        },
+        {
+            "state": "MV",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2030-02-04",
+            "end": "2030-02-15"
+        },
+        {
+            "state": "MV",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2030-04-17",
+            "end": "2030-04-26"
+        },
+        {
+            "state": "MV",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2030-06-07",
+            "end": "2030-06-11"
+        },
+        {
+            "state": "MV",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2030-07-01",
+            "end": "2030-08-10"
+        },
+        {
+            "state": "NI",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2025-12-22",
+            "end": "2026-01-05"
+        },
+        {
+            "state": "NI",
+            "type": "winter",
+            "name": "Halbjahresferien",
+            "start": "2026-02-02",
+            "end": "2026-02-03"
+        },
+        {
+            "state": "NI",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2026-03-23",
+            "end": "2026-04-07"
+        },
+        {
+            "state": "NI",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2026-05-26",
+            "end": "2026-05-26"
+        },
+        {
+            "state": "NI",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2026-07-02",
+            "end": "2026-08-12"
+        },
+        {
+            "state": "NI",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2026-10-12",
+            "end": "2026-10-24"
+        },
+        {
+            "state": "NI",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2026-12-23",
+            "end": "2027-01-09"
+        },
+        {
+            "state": "NI",
+            "type": "winter",
+            "name": "Halbjahresferien",
+            "start": "2027-02-01",
+            "end": "2027-02-02"
+        },
+        {
+            "state": "NI",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2027-03-22",
+            "end": "2027-04-03"
+        },
+        {
+            "state": "NI",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2027-05-18",
+            "end": "2027-05-18"
+        },
+        {
+            "state": "NI",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2027-07-08",
+            "end": "2027-08-18"
+        },
+        {
+            "state": "NI",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2027-10-16",
+            "end": "2027-10-30"
+        },
+        {
+            "state": "NI",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2027-12-23",
+            "end": "2028-01-08"
+        },
+        {
+            "state": "NI",
+            "type": "winter",
+            "name": "Halbjahresferien",
+            "start": "2028-01-31",
+            "end": "2028-02-01"
+        },
+        {
+            "state": "NI",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2028-04-10",
+            "end": "2028-04-22"
+        },
+        {
+            "state": "NI",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2028-06-06",
+            "end": "2028-06-06"
+        },
+        {
+            "state": "NI",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2028-07-20",
+            "end": "2028-08-30"
+        },
+        {
+            "state": "NI",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2028-10-23",
+            "end": "2028-11-04"
+        },
+        {
+            "state": "NI",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2028-12-27",
+            "end": "2029-01-06"
+        },
+        {
+            "state": "NI",
+            "type": "winter",
+            "name": "Halbjahresferien",
+            "start": "2029-02-01",
+            "end": "2029-02-02"
+        },
+        {
+            "state": "NI",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2029-03-19",
+            "end": "2029-04-03"
+        },
+        {
+            "state": "NI",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2029-05-22",
+            "end": "2029-05-22"
+        },
+        {
+            "state": "NI",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2029-07-19",
+            "end": "2029-08-29"
+        },
+        {
+            "state": "NI",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2029-10-22",
+            "end": "2029-11-02"
+        },
+        {
+            "state": "NI",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2029-12-21",
+            "end": "2030-01-05"
+        },
+        {
+            "state": "NI",
+            "type": "winter",
+            "name": "Halbjahresferien",
+            "start": "2030-01-31",
+            "end": "2030-02-01"
+        },
+        {
+            "state": "NI",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2030-04-08",
+            "end": "2030-04-23"
+        },
+        {
+            "state": "NI",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2030-06-11",
+            "end": "2030-06-11"
+        },
+        {
+            "state": "NI",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2030-07-11",
+            "end": "2030-08-21"
+        },
+        {
+            "state": "NW",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2025-12-22",
+            "end": "2026-01-06"
+        },
+        {
+            "state": "NW",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2026-03-30",
+            "end": "2026-04-11"
+        },
+        {
+            "state": "NW",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2026-05-26",
+            "end": "2026-05-26"
+        },
+        {
+            "state": "NW",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2026-07-20",
+            "end": "2026-09-01"
+        },
+        {
+            "state": "NW",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2026-10-17",
+            "end": "2026-10-31"
+        },
+        {
+            "state": "NW",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2026-12-23",
+            "end": "2027-01-06"
+        },
+        {
+            "state": "NW",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2027-03-22",
+            "end": "2027-04-03"
+        },
+        {
+            "state": "NW",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2027-05-18",
+            "end": "2027-05-18"
+        },
+        {
+            "state": "NW",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2027-07-19",
+            "end": "2027-08-31"
+        },
+        {
+            "state": "NW",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2027-10-23",
+            "end": "2027-11-06"
+        },
+        {
+            "state": "NW",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2027-12-24",
+            "end": "2028-01-08"
+        },
+        {
+            "state": "NW",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2028-04-10",
+            "end": "2028-04-22"
+        },
+        {
+            "state": "NW",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2028-07-10",
+            "end": "2028-08-22"
+        },
+        {
+            "state": "NW",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2028-10-23",
+            "end": "2028-11-04"
+        },
+        {
+            "state": "NW",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2028-12-21",
+            "end": "2029-01-05"
+        },
+        {
+            "state": "NW",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2029-03-26",
+            "end": "2029-04-07"
+        },
+        {
+            "state": "NW",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2029-05-22",
+            "end": "2029-05-22"
+        },
+        {
+            "state": "NW",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2029-07-02",
+            "end": "2029-08-14"
+        },
+        {
+            "state": "NW",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2029-10-15",
+            "end": "2029-10-27"
+        },
+        {
+            "state": "NW",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2029-12-20",
+            "end": "2030-01-04"
+        },
+        {
+            "state": "NW",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2030-04-15",
+            "end": "2030-04-27"
+        },
+        {
+            "state": "NW",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2030-06-24",
+            "end": "2030-08-06"
+        },
+        {
+            "state": "RP",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2025-12-22",
+            "end": "2026-01-07"
+        },
+        {
+            "state": "RP",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2026-03-30",
+            "end": "2026-04-10"
+        },
+        {
+            "state": "RP",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2026-06-29",
+            "end": "2026-08-07"
+        },
+        {
+            "state": "RP",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2026-10-05",
+            "end": "2026-10-16"
+        },
+        {
+            "state": "RP",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2026-12-23",
+            "end": "2027-01-08"
+        },
+        {
+            "state": "RP",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2027-03-22",
+            "end": "2027-04-02"
+        },
+        {
+            "state": "RP",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2027-06-28",
+            "end": "2027-08-06"
+        },
+        {
+            "state": "RP",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2027-10-04",
+            "end": "2027-10-15"
+        },
+        {
+            "state": "RP",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2027-12-23",
+            "end": "2028-01-07"
+        },
+        {
+            "state": "RP",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2028-04-10",
+            "end": "2028-04-21"
+        },
+        {
+            "state": "RP",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2028-07-03",
+            "end": "2028-08-11"
+        },
+        {
+            "state": "RP",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2028-10-09",
+            "end": "2028-10-20"
+        },
+        {
+            "state": "RP",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2028-12-21",
+            "end": "2029-01-08"
+        },
+        {
+            "state": "RP",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2029-03-26",
+            "end": "2029-04-06"
+        },
+        {
+            "state": "RP",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2029-07-16",
+            "end": "2029-08-24"
+        },
+        {
+            "state": "RP",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2029-10-22",
+            "end": "2029-11-02"
+        },
+        {
+            "state": "RP",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2029-12-24",
+            "end": "2030-01-09"
+        },
+        {
+            "state": "RP",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2030-04-15",
+            "end": "2030-04-30"
+        },
+        {
+            "state": "RP",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2030-07-22",
+            "end": "2030-08-30"
+        },
+        {
+            "state": "SH",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2025-12-19",
+            "end": "2026-01-06"
+        },
+        {
+            "state": "SH",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2026-03-26",
+            "end": "2026-04-10"
+        },
+        {
+            "state": "SH",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2026-07-04",
+            "end": "2026-08-15"
+        },
+        {
+            "state": "SH",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2026-10-12",
+            "end": "2026-10-24"
+        },
+        {
+            "state": "SH",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2026-12-21",
+            "end": "2027-01-06"
+        },
+        {
+            "state": "SH",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2027-03-30",
+            "end": "2027-04-10"
+        },
+        {
+            "state": "SH",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2027-07-03",
+            "end": "2027-08-14"
+        },
+        {
+            "state": "SH",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2027-10-11",
+            "end": "2027-10-23"
+        },
+        {
+            "state": "SH",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2027-12-23",
+            "end": "2028-01-08"
+        },
+        {
+            "state": "SH",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2028-04-03",
+            "end": "2028-04-15"
+        },
+        {
+            "state": "SH",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2028-06-24",
+            "end": "2028-08-04"
+        },
+        {
+            "state": "SH",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2028-10-16",
+            "end": "2028-10-30"
+        },
+        {
+            "state": "SH",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2028-12-21",
+            "end": "2029-01-05"
+        },
+        {
+            "state": "SH",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2029-03-23",
+            "end": "2029-04-06"
+        },
+        {
+            "state": "SH",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2029-06-23",
+            "end": "2029-08-03"
+        },
+        {
+            "state": "SH",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2029-10-08",
+            "end": "2029-10-19"
+        },
+        {
+            "state": "SH",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2029-12-21",
+            "end": "2030-01-08"
+        },
+        {
+            "state": "SH",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2030-04-08",
+            "end": "2030-04-20"
+        },
+        {
+            "state": "SH",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2030-07-08",
+            "end": "2030-08-17"
+        },
+        {
+            "state": "SH",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2030-10-14",
+            "end": "2030-10-25"
+        },
+        {
+            "state": "SH",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2030-12-20",
+            "end": "2031-01-06"
+        },
+        {
+            "state": "SH",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2031-03-28",
+            "end": "2031-04-10"
+        },
+        {
+            "state": "SL",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2025-12-22",
+            "end": "2026-01-02"
+        },
+        {
+            "state": "SL",
+            "type": "winter",
+            "name": "Fastnachtsferien",
+            "start": "2026-02-16",
+            "end": "2026-02-20"
+        },
+        {
+            "state": "SL",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2026-04-07",
+            "end": "2026-04-17"
+        },
+        {
+            "state": "SL",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2026-06-29",
+            "end": "2026-08-07"
+        },
+        {
+            "state": "SL",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2026-10-05",
+            "end": "2026-10-16"
+        },
+        {
+            "state": "SL",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2026-12-21",
+            "end": "2026-12-31"
+        },
+        {
+            "state": "SL",
+            "type": "winter",
+            "name": "Fastnachtsferien",
+            "start": "2027-02-08",
+            "end": "2027-02-12"
+        },
+        {
+            "state": "SL",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2027-03-30",
+            "end": "2027-04-09"
+        },
+        {
+            "state": "SL",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2027-06-28",
+            "end": "2027-08-06"
+        },
+        {
+            "state": "SL",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2027-10-04",
+            "end": "2027-10-15"
+        },
+        {
+            "state": "SL",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2027-12-20",
+            "end": "2027-12-31"
+        },
+        {
+            "state": "SL",
+            "type": "winter",
+            "name": "Fastnachtsferien",
+            "start": "2028-02-21",
+            "end": "2028-02-29"
+        },
+        {
+            "state": "SL",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2028-04-12",
+            "end": "2028-04-21"
+        },
+        {
+            "state": "SL",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2028-07-03",
+            "end": "2028-08-11"
+        },
+        {
+            "state": "SL",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2028-10-09",
+            "end": "2028-10-20"
+        },
+        {
+            "state": "SL",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2028-12-20",
+            "end": "2029-01-02"
+        },
+        {
+            "state": "SL",
+            "type": "winter",
+            "name": "Fastnachtsferien",
+            "start": "2029-02-12",
+            "end": "2029-02-16"
+        },
+        {
+            "state": "SL",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2029-03-26",
+            "end": "2029-04-06"
+        },
+        {
+            "state": "SL",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2029-05-22",
+            "end": "2029-05-25"
+        },
+        {
+            "state": "SL",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2029-07-16",
+            "end": "2029-08-24"
+        },
+        {
+            "state": "SL",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2029-10-22",
+            "end": "2029-11-02"
+        },
+        {
+            "state": "SL",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2029-12-21",
+            "end": "2030-01-04"
+        },
+        {
+            "state": "SL",
+            "type": "winter",
+            "name": "Fastnachtsferien",
+            "start": "2030-02-25",
+            "end": "2030-03-05"
+        },
+        {
+            "state": "SL",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2030-04-15",
+            "end": "2030-04-26"
+        },
+        {
+            "state": "SL",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2030-07-22",
+            "end": "2030-08-30"
+        },
+        {
+            "state": "SN",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2025-12-22",
+            "end": "2026-01-02"
+        },
+        {
+            "state": "SN",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2026-02-09",
+            "end": "2026-02-21"
+        },
+        {
+            "state": "SN",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2026-04-03",
+            "end": "2026-04-10"
+        },
+        {
+            "state": "SN",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2026-07-04",
+            "end": "2026-08-14"
+        },
+        {
+            "state": "SN",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2026-10-12",
+            "end": "2026-10-24"
+        },
+        {
+            "state": "SN",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2026-12-23",
+            "end": "2027-01-02"
+        },
+        {
+            "state": "SN",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2027-02-08",
+            "end": "2027-02-19"
+        },
+        {
+            "state": "SN",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2027-03-26",
+            "end": "2027-04-02"
+        },
+        {
+            "state": "SN",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2027-05-15",
+            "end": "2027-05-18"
+        },
+        {
+            "state": "SN",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2027-07-10",
+            "end": "2027-08-20"
+        },
+        {
+            "state": "SN",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2027-10-11",
+            "end": "2027-10-23"
+        },
+        {
+            "state": "SN",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2027-12-23",
+            "end": "2028-01-01"
+        },
+        {
+            "state": "SN",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2028-02-14",
+            "end": "2028-02-26"
+        },
+        {
+            "state": "SN",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2028-04-14",
+            "end": "2028-04-22"
+        },
+        {
+            "state": "SN",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2028-07-22",
+            "end": "2028-09-01"
+        },
+        {
+            "state": "SN",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2028-10-23",
+            "end": "2028-11-03"
+        },
+        {
+            "state": "SN",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2028-12-23",
+            "end": "2029-01-03"
+        },
+        {
+            "state": "SN",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2029-02-05",
+            "end": "2029-02-16"
+        },
+        {
+            "state": "SN",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2029-03-29",
+            "end": "2029-04-06"
+        },
+        {
+            "state": "SN",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2029-05-19",
+            "end": "2029-05-22"
+        },
+        {
+            "state": "SN",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2029-07-21",
+            "end": "2029-08-31"
+        },
+        {
+            "state": "SN",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2029-10-22",
+            "end": "2029-11-02"
+        },
+        {
+            "state": "SN",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2029-12-22",
+            "end": "2030-01-04"
+        },
+        {
+            "state": "SN",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2030-02-18",
+            "end": "2030-03-01"
+        },
+        {
+            "state": "SN",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2030-04-19",
+            "end": "2030-04-26"
+        },
+        {
+            "state": "SN",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2030-06-08",
+            "end": "2030-06-11"
+        },
+        {
+            "state": "SN",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2030-07-13",
+            "end": "2030-08-23"
+        },
+        {
+            "state": "ST",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2025-12-22",
+            "end": "2026-01-05"
+        },
+        {
+            "state": "ST",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2026-01-31",
+            "end": "2026-02-06"
+        },
+        {
+            "state": "ST",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2026-03-30",
+            "end": "2026-04-04"
+        },
+        {
+            "state": "ST",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2026-05-26",
+            "end": "2026-05-29"
+        },
+        {
+            "state": "ST",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2026-07-04",
+            "end": "2026-08-14"
+        },
+        {
+            "state": "ST",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2026-10-19",
+            "end": "2026-10-30"
+        },
+        {
+            "state": "ST",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2026-12-21",
+            "end": "2027-01-02"
+        },
+        {
+            "state": "ST",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2027-02-01",
+            "end": "2027-02-06"
+        },
+        {
+            "state": "ST",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2027-03-22",
+            "end": "2027-03-27"
+        },
+        {
+            "state": "ST",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2027-05-15",
+            "end": "2027-05-22"
+        },
+        {
+            "state": "ST",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2027-07-10",
+            "end": "2027-08-20"
+        },
+        {
+            "state": "ST",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2027-10-18",
+            "end": "2027-10-23"
+        },
+        {
+            "state": "ST",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2027-12-20",
+            "end": "2027-12-31"
+        },
+        {
+            "state": "ST",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2028-02-07",
+            "end": "2028-02-12"
+        },
+        {
+            "state": "ST",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2028-04-10",
+            "end": "2028-04-22"
+        },
+        {
+            "state": "ST",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2028-06-03",
+            "end": "2028-06-10"
+        },
+        {
+            "state": "ST",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2028-07-22",
+            "end": "2028-09-01"
+        },
+        {
+            "state": "ST",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2028-10-30",
+            "end": "2028-11-03"
+        },
+        {
+            "state": "ST",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2028-12-21",
+            "end": "2029-01-02"
+        },
+        {
+            "state": "ST",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2029-02-05",
+            "end": "2029-02-10"
+        },
+        {
+            "state": "ST",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2029-03-26",
+            "end": "2029-03-31"
+        },
+        {
+            "state": "ST",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2029-05-11",
+            "end": "2029-05-25"
+        },
+        {
+            "state": "ST",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2029-07-21",
+            "end": "2029-08-31"
+        },
+        {
+            "state": "ST",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2029-10-29",
+            "end": "2029-11-02"
+        },
+        {
+            "state": "ST",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2029-12-21",
+            "end": "2030-01-05"
+        },
+        {
+            "state": "ST",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2030-02-04",
+            "end": "2030-02-08"
+        },
+        {
+            "state": "ST",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2030-04-08",
+            "end": "2030-04-20"
+        },
+        {
+            "state": "ST",
+            "type": "pentecost",
+            "name": "Pfingstferien",
+            "start": "2030-06-03",
+            "end": "2030-06-08"
+        },
+        {
+            "state": "ST",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2030-07-13",
+            "end": "2030-08-23"
+        },
+        {
+            "state": "TH",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2025-12-22",
+            "end": "2026-01-03"
+        },
+        {
+            "state": "TH",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2026-02-16",
+            "end": "2026-02-21"
+        },
+        {
+            "state": "TH",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2026-04-07",
+            "end": "2026-04-17"
+        },
+        {
+            "state": "TH",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2026-07-04",
+            "end": "2026-08-14"
+        },
+        {
+            "state": "TH",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2026-10-12",
+            "end": "2026-10-24"
+        },
+        {
+            "state": "TH",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2026-12-23",
+            "end": "2027-01-02"
+        },
+        {
+            "state": "TH",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2027-02-01",
+            "end": "2027-02-06"
+        },
+        {
+            "state": "TH",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2027-03-22",
+            "end": "2027-04-03"
+        },
+        {
+            "state": "TH",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2027-07-10",
+            "end": "2027-08-20"
+        },
+        {
+            "state": "TH",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2027-10-09",
+            "end": "2027-10-23"
+        },
+        {
+            "state": "TH",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2027-12-23",
+            "end": "2027-12-31"
+        },
+        {
+            "state": "TH",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2028-02-07",
+            "end": "2028-02-12"
+        },
+        {
+            "state": "TH",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2028-04-03",
+            "end": "2028-04-15"
+        },
+        {
+            "state": "TH",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2028-07-22",
+            "end": "2028-09-01"
+        },
+        {
+            "state": "TH",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2028-10-23",
+            "end": "2028-11-03"
+        },
+        {
+            "state": "TH",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2028-12-23",
+            "end": "2029-01-05"
+        },
+        {
+            "state": "TH",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2029-02-12",
+            "end": "2029-02-17"
+        },
+        {
+            "state": "TH",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2029-03-26",
+            "end": "2029-04-07"
+        },
+        {
+            "state": "TH",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2029-07-21",
+            "end": "2029-08-31"
+        },
+        {
+            "state": "TH",
+            "type": "autumn",
+            "name": "Herbstferien",
+            "start": "2029-10-22",
+            "end": "2029-11-03"
+        },
+        {
+            "state": "TH",
+            "type": "christmas",
+            "name": "Weihnachtsferien",
+            "start": "2029-12-22",
+            "end": "2030-01-04"
+        },
+        {
+            "state": "TH",
+            "type": "winter",
+            "name": "Winterferien",
+            "start": "2030-02-11",
+            "end": "2030-02-16"
+        },
+        {
+            "state": "TH",
+            "type": "easter",
+            "name": "Osterferien",
+            "start": "2030-04-08",
+            "end": "2030-04-20"
+        },
+        {
+            "state": "TH",
+            "type": "summer",
+            "name": "Sommerferien",
+            "start": "2030-07-13",
+            "end": "2030-08-23"
+        }
+    ]
+}

@@ -1,0 +1,54 @@
+{
+    "name": "stejac/zeitangaben",
+    "description": "Resolves colloquial German time expressions such as Herbstferien, ueber Ostern or morgen to a period or a reasoned clarification.",
+    "type": "library",
+    "license": "(MIT and ODbL-1.0)",
+    "keywords": [
+        "php",
+        "german",
+        "date-parsing",
+        "school-holidays",
+        "public-holidays",
+        "llm"
+    ],
+    "homepage": "https://github.com/Stefan39/zeitangaben",
+    "authors": [
+        {
+            "name": "Stefan Jacomeit",
+            "email": "stefan@jacomeit.de",
+            "homepage": "https://www.jacomeit.de"
+        }
+    ],
+    "require": {
+        "php": ">=8.3",
+        "ext-json": "*",
+        "azuyalabs/yasumi": "^2.12"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.75",
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Stejac\\Zeitangaben\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Stejac\\Zeitangaben\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "phpstan": "phpstan analyse --memory-limit=1G",
+        "cs": "php-cs-fixer fix --dry-run --diff",
+        "cs-fix": "php-cs-fixer fix"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "bin": [
+        "bin/zeitangaben"
+    ]
+}
