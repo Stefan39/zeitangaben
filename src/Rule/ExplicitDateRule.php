@@ -132,7 +132,7 @@ final class ExplicitDateRule implements Rule
 
         return [
             'day' => (int) $m['day'],
-            'month' => isset($m['num']) && '' !== $m['num'] ? (int) $m['num'] : Months::number($m['name'] ?? ''),
+            'month' => '' !== ($m['num'] ?? '') ? (int) $m['num'] : Months::number($m['name'] ?? ''),
             'year' => isset($m['year']) ? (int) $m['year'] : null,
         ];
     }

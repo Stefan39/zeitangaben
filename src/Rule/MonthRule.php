@@ -24,22 +24,20 @@ final class MonthRule implements Rule
 
     public function evaluate(RuleMatch $match, Context $context): Result
     {
-        if (!isset($match->groups['year']) && null === $context->referenceDate) {
+        if (isset($match->groups['year'])) {
+            $period = self::monthOf((int) $match->groups['year'], Months::number($match->groups['month']));
+
+            return new Resolved($period, $match->expression);
+        }
+        if (null === $context->referenceDate) {
             return Clarifications::missingReferenceDate($match->expression);
         }
 
-        return new Resolved($this->periodOf($match, $context), $match->expression);
+        return new Resolved($this->upcomingPeriod($match, $context->referenceDate), $match->expression);
     }
 
-    private function periodOf(RuleMatch $match, Context $context): Period
+    private function upcomingPeriod(RuleMatch $match, \DateTimeImmutable $reference): Period
     {
-        $reference = $context->referenceDate;
-        if (isset($match->groups['year'])) {
-            return self::monthOf((int) $match->groups['year'], Months::number($match->groups['month']));
-        }
-        if (null === $reference) {
-            throw new \LogicException('A month without a year needs a reference date.');
-        }
         if (isset($match->groups['next'])) {
             $first = $reference->modify('first day of next month');
 

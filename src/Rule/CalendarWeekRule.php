@@ -42,7 +42,7 @@ final class CalendarWeekRule implements Rule
 
     private static function weekOf(int $year, int $week): ?Period
     {
-        $monday = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->setISODate($year, $week, 1);
+        $monday = (new \DateTimeImmutable('2000-01-01', new \DateTimeZone('UTC')))->setISODate($year, $week, 1);
         if ((int) $monday->format('o') !== $year || (int) $monday->format('W') !== $week) {
             return null;
         }

@@ -15,7 +15,7 @@ final class FixedDayRule implements Rule
 {
     public function pattern(): string
     {
-        return '\b(?:(?<silvester>silvester|jahreswechsel)|(?<neujahr>neujahr(?:stag)?)|(?<einheit>tag\s+der\s+deutschen\s+einheit))'
+        return '\b(?:(?<silvester>silvester|jahreswechsel)|(?<neujahr>neujahr(?:stag)?)|(?<einheit>tag\s+der\s+deutschen\s+einheit))\b'
             .'(?:\s+(?<year>\d{4})\b)?';
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Stejac\Zeitangaben\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Stejac\Zeitangaben\Clarification;
 use Stejac\Zeitangaben\ClarificationReason;
@@ -97,7 +98,7 @@ final class ResolverTest extends TestCase
         yield 'kw without year rolls over' => ['KW 2', '2026-09-16', '2027-01-11', '2027-01-17'];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('edgeCases')]
+    #[DataProvider('edgeCases')]
     public function testEdgeCases(string $text, string $reference, string $start, string $end): void
     {
         $context = new Context(new \DateTimeImmutable($reference, new \DateTimeZone('UTC')));
@@ -131,5 +132,13 @@ final class ResolverTest extends TestCase
 
         self::assertInstanceOf(Clarification::class, $result);
         self::assertSame('„31.02.2027“ ist kein gültiges Datum. Welches Datum meinen Sie?', $result->question);
+    }
+
+    public function testFeastWordsWithSuffixAreNotFixedDays(): void
+    {
+        $context = new Context(new \DateTimeImmutable('2026-09-16', new \DateTimeZone('UTC')));
+
+        self::assertInstanceOf(NoExpression::class, Resolver::create()->resolve('Neujahrsfeier', $context));
+        self::assertInstanceOf(NoExpression::class, Resolver::create()->resolve('Einheitsfeier', $context));
     }
 }
